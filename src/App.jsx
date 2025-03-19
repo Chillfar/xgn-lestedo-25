@@ -8,15 +8,15 @@ const games = [
   { name: "Street Fighter", cover: "https://i.3djuegos.com/juegos/18376/fotos/ficha/-5775675.webp" }
 ];
 
-const initialUsers = [
-  { id: 1, name: "Roxo", scores: { Fortnite: 0, Fifa: 0, "Mario Kart": 0, "Street Fighter": 0 } },
-  { id: 2, name: "Noya", scores: { Fortnite: 0, Fifa: 0, "Mario Kart": 0, "Street Fighter": 0 } },
-  { id: 3, name: "Danis", scores: { Fortnite: 0, Fifa: 0, "Mario Kart": 0, "Street Fighter": 0 } },
-  { id: 4, name: "Pablo", scores: { Fortnite: 0, Fifa: 0, "Mario Kart": 0, "Street Fighter": 0 } },
+const savedUsers = [
+  { id: 1, name: "Roxo", scores: { "Fortnite": 0, "Fifa": 0, "Mario Kart": 0, "Street Fighter": 0 } },
+  { id: 2, name: "Noya", scores: { "Fortnite": 0, "Fifa": 0, "Mario Kart": 0, "Street Fighter": 0 } },
+  { id: 3, name: "Danis", scores: { "Fortnite": 0, "Fifa": 0, "Mario Kart": 0, "Street Fighter": 0 } },
+  { id: 4, name: "Pablo", scores: { "Fortnite": 0, "Fifa": 0, "Mario Kart": 0, "Street Fighter": 0 } }
 ];
 
 export default function GameDashboard() {
-  const [users, setUsers] = useState(initialUsers);
+  const [users, setUsers] = useState(savedUsers);
   const [selectedGame, setSelectedGame] = useState(null);
 
   const handleOpenModal = (game) => {
@@ -28,29 +28,28 @@ export default function GameDashboard() {
   };
 
   const handleAssignPoints = (userId) => {
-    setUsers(prevUsers => {
-      const updatedUsers = prevUsers.map(user =>
+    setUsers(prevUsers =>
+      prevUsers.map(user =>
         user.id === userId
           ? { ...user, scores: { ...user.scores, [selectedGame.name]: user.scores[selectedGame.name] + 10 } }
           : user
-      );
-      return updatedUsers.sort((a, b) => 
+      ).sort((a, b) =>
         Object.values(b.scores).reduce((acc, score) => acc + score, 0) -
         Object.values(a.scores).reduce((acc, score) => acc + score, 0)
-      );
-    });
+      )
+    );
   };
 
   return (
-    <Container maxWidth="lg" style={{ padding: "16px" }}>
+    <Container maxWidth="lg" style={{ padding: "16px", backgroundColor: "#121212", color: "white", minHeight: "100vh" }}>
       <Typography variant="h4" align="center" gutterBottom>
-        Torneo de Videojuegos
+        XGN Lestedo '25
       </Typography>
       
       <Grid container spacing={3}>
         {/* Panel de Ranking */}
         <Grid item xs={12} md={8}>
-          <Paper style={{ padding: "16px" }}>
+          <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white" }}>
             <Typography variant="h5" gutterBottom>Ranking</Typography>
             <Table>
               <TableHead>
@@ -73,14 +72,14 @@ export default function GameDashboard() {
         
         {/* Panel de Juegos */}
         <Grid item xs={12} md={4}>
-          <Paper style={{ padding: "16px" }}>
+          <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white" }}>
             <Typography variant="h5" gutterBottom>Juegos</Typography>
             <Grid container spacing={2}>
               {games.map(game => (
                 <Grid item xs={6} key={game.name}>
-                  <Card onClick={() => handleOpenModal(game)} style={{ cursor: "pointer" }}>
-                    <CardContent style={{ textAlign: "center" }}>
-                      <img src={game.cover} alt={game.name} style={{ width: "100%", borderRadius: "8px" }} />
+                  <Card onClick={() => handleOpenModal(game)} style={{ cursor: "pointer", textAlign: "center", backgroundColor: "#2a2a2a", color: "white" }}>
+                    <CardContent>
+                      <img src={game.cover} alt={game.name} style={{ width: "100%", height: "180px", objectFit: "cover", borderRadius: "8px" }} />
                       <Typography variant="body1" style={{ marginTop: "8px" }}>{game.name}</Typography>
                     </CardContent>
                   </Card>
@@ -89,32 +88,39 @@ export default function GameDashboard() {
             </Grid>
           </Paper>
         </Grid>
-        
-        {/* Panel de Ubicación */}
+
+        {/* Panel del Mapa */}
         <Grid item xs={12}>
-          <Paper style={{ padding: "16px", textAlign: "center" }}>
+          <Paper style={{ padding: "16px", textAlign: "center", backgroundColor: "#1e1e1e", color: "white" }}>
             <Typography variant="h5" gutterBottom>Ubicación del Torneo</Typography>
             <iframe
+              title="Ubicación"
               width="100%"
               height="300"
-              src="https://www.google.com/maps/embed/v1/place?key=TU_API_KEY&q=Lugar+A+Picota,5,15881+Troitomil,A+Coruña"
+              style={{ border: 0 }}
+              loading="lazy"
               allowFullScreen
+              referrerPolicy="no-referrer-when-downgrade"
+              src="https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY&q=Lugar+A+Picota,+5,+15881+Troitomil,+A+Coruña"
             ></iframe>
           </Paper>
         </Grid>
       </Grid>
-      
-      {/* Modal para asignación de puntos */}
+
+      {/* Modal para asignar puntos */}
       <Modal open={!!selectedGame} onClose={handleCloseModal}>
-        <Box sx={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", bgcolor: "background.paper", p: 4, boxShadow: 24, borderRadius: 2 }}>
-          <Typography variant="h6" gutterBottom>Asignar puntos en {selectedGame?.name}</Typography>
-          {users.map(user => (
-            <Box key={user.id} display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-              <Typography>{user.name}</Typography>
-              <Button variant="contained" color="primary" onClick={() => handleAssignPoints(user.id)}>+10 Puntos</Button>
-            </Box>
-          ))}
-          <Button variant="outlined" onClick={handleCloseModal} fullWidth>Cerrar</Button>
+        <Box sx={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: 400, bgcolor: "#1e1e1e", color: "white", boxShadow: 24, p: 4, borderRadius: 2 }}>
+          {selectedGame && (
+            <>
+              <Box sx={{ backgroundImage: `url(${selectedGame.cover})`, backgroundSize: "cover", backgroundPosition: "center", height: "150px", borderRadius: "8px" }} />
+              <Typography variant="h6" align="center" gutterBottom>{selectedGame.name}</Typography>
+              {users.map(user => (
+                <Button key={user.id} variant="contained" color="primary" fullWidth sx={{ mt: 1 }} onClick={() => handleAssignPoints(user.id)}>
+                  {user.name} +10 Puntos
+                </Button>
+              ))}
+            </>
+          )}
         </Box>
       </Modal>
     </Container>
