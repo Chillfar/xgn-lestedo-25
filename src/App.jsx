@@ -1,5 +1,9 @@
 import { useState } from "react";
 import { Card, CardContent, Typography, Grid, Container, Table, TableHead, TableRow, TableCell, TableBody, Paper, Modal, Box, Button } from "@mui/material";
+import { Line } from "react-chartjs-2";
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
+
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 const games = [
   { name: "Fortnite", cover: "https://i.3djuegos.com/juegos/8298/fortnite/fotos/ficha/fortnite-5154590.webp" },
@@ -40,8 +44,18 @@ export default function GameDashboard() {
     );
   };
 
+  const chartData = {
+    labels: games.map(game => game.name),
+    datasets: users.map(user => ({
+      label: user.name,
+      data: games.map(game => user.scores[game.name]),
+      borderColor: "#fff",
+      backgroundColor: "rgba(255, 255, 255, 0.5)",
+    }))
+  };
+
   return (
-    <Container maxWidth="lg" style={{ padding: "16px", backgroundColor: "#121212", color: "white", minHeight: "100vh" }}>
+    <Container maxWidth={false} style={{ padding: "16px", backgroundColor: "#121212", color: "white", minHeight: "100vh", width: "100vw" }}>
       <Typography variant="h4" align="center" gutterBottom>
         XGN Lestedo '25
       </Typography>
@@ -54,26 +68,31 @@ export default function GameDashboard() {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell><strong>Jugador</strong></TableCell>
-                  <TableCell><strong>Puntos Totales</strong></TableCell>
+                  <TableCell style={{ color: "white" }}><strong>Jugador</strong></TableCell>
+                  {games.map(game => (
+                    <TableCell key={game.name} style={{ color: "white" }}><strong>{game.name}</strong></TableCell>
+                  ))}
+                  <TableCell style={{ color: "white" }}><strong>Puntos Totales</strong></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {users.map(user => (
                   <TableRow key={user.id}>
-                    <TableCell>{user.name}</TableCell>
-                    <TableCell>{Object.values(user.scores).reduce((acc, score) => acc + score, 0)}</TableCell>
+                    <TableCell style={{ color: "white" }}>{user.name}</TableCell>
+                    {games.map(game => (
+                      <TableCell key={game.name} style={{ color: "white" }}>{user.scores[game.name]}</TableCell>
+                    ))}
+                    <TableCell style={{ color: "white" }}>{Object.values(user.scores).reduce((acc, score) => acc + score, 0)}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
           </Paper>
         </Grid>
-        
         {/* Panel de Juegos */}
         <Grid item xs={12} md={4}>
           <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white" }}>
-            <Typography variant="h5" gutterBottom>Juegos</Typography>
+            <Typography variant="h5" gutterBottom>Selecciona un juego para puntuar</Typography>
             <Grid container spacing={2}>
               {games.map(game => (
                 <Grid item xs={6} key={game.name}>
@@ -88,11 +107,19 @@ export default function GameDashboard() {
             </Grid>
           </Paper>
         </Grid>
+        
+        {/* Panel de Evolución */}
+        <Grid item xs={12} md={4}>
+          <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white" }}>
+            <Typography variant="h5" gutterBottom>Evolución de Puntos</Typography>
+            <Line data={chartData} />
+          </Paper>
+        </Grid>
 
         {/* Panel del Mapa */}
         <Grid item xs={12}>
           <Paper style={{ padding: "16px", textAlign: "center", backgroundColor: "#1e1e1e", color: "white" }}>
-            <Typography variant="h5" gutterBottom>Ubicación del Torneo</Typography>
+            <Typography variant="h5" gutterBottom>Ubicación de LAN party</Typography>
             <iframe
               title="Ubicación"
               width="100%"
@@ -101,19 +128,19 @@ export default function GameDashboard() {
               loading="lazy"
               allowFullScreen
               referrerPolicy="no-referrer-when-downgrade"
-              src="https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY&q=Lugar+A+Picota,+5,+15881+Troitomil,+A+Coruña"
+              src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCQp9lnjB31CyDBNg49fo4oz15n976iz2Q&q=Lugar+A+Picota,+5,+15881+Troitomil,+A+Coruña"
             ></iframe>
           </Paper>
         </Grid>
       </Grid>
-
       {/* Modal para asignar puntos */}
       <Modal open={!!selectedGame} onClose={handleCloseModal}>
         <Box sx={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: 400, bgcolor: "#1e1e1e", color: "white", boxShadow: 24, p: 4, borderRadius: 2 }}>
           {selectedGame && (
             <>
-              <Box sx={{ backgroundImage: `url(${selectedGame.cover})`, backgroundSize: "cover", backgroundPosition: "center", height: "150px", borderRadius: "8px" }} />
-              <Typography variant="h6" align="center" gutterBottom>{selectedGame.name}</Typography>
+              <Box sx={{ backgroundImage: `url(${selectedGame.cover})`, backgroundSize: "cover", backgroundPosition: "center", height: "150px", borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <Typography variant="h5" sx={{ color: "white", fontWeight: "bold", textTransform: "uppercase", backgroundColor: "rgba(0, 0, 0, 0.5)", padding: "8px", borderRadius: "4px" }}>{selectedGame.name}</Typography>
+              </Box>
               {users.map(user => (
                 <Button key={user.id} variant="contained" color="primary" fullWidth sx={{ mt: 1 }} onClick={() => handleAssignPoints(user.id)}>
                   {user.name} +10 Puntos
