@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Rnd } from "react-rnd";
 import { Card, CardContent, Typography, Grid, Container, Table, TableHead, TableRow, TableCell, TableBody, Paper, Modal, Box, Button } from "@mui/material";
 import { Line } from "react-chartjs-2";
@@ -31,6 +31,16 @@ export default function GameDashboard() {
   const [users, setUsers] = useState(savedUsers);
   const [selectedGame, setSelectedGame] = useState(null);
   const [round, setRound] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const video = document.getElementById("intro-video");
+    if (video) {
+      video.currentTime = 0;
+      video.play().catch(() => console.log("Autoplay prevented"));
+      video.onended = () => setLoading(false);
+    }
+  }, []);
 
   const handleOpenModal = (game) => {
     setSelectedGame(game);
@@ -73,16 +83,26 @@ export default function GameDashboard() {
     }))
   };
 
+  if (loading) {
+    return (
+      <div style={{ position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", backgroundColor: "black", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <video id="intro-video" width="100%" height="100%" autoPlay muted playsInline>
+          <source src="/Imaginary Neon Cube_free.mp4" type="video/mp4" />
+        </video>
+      </div>
+    );
+  }
+
   return (
     <Container maxWidth={false} style={{ padding: "16px", backgroundColor: "#121212", color: "white", minHeight: "100vh", width: "100vw" }}>
-      <div style={{ textAlign: "left", marginLeft:"25px", marginBottom: "20px" }}>
+      <div style={{ textAlign: "left", marginLeft:"25px", marginBottom: "20px", position: "fixed", zIndex: 9999 }}>
         <img src="/logo.png" alt="Logo" style={{ maxWidth: "200px" }} />
       </div>
       
       {/* Panel de Ranking */}
-      <Rnd default={{ x: 40, y: 140, width: "40%", height: "auto" }}>
+      <Rnd default={{ x: 40, y: 120, width: "40%", height: "auto" }}>
         <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white" }}>
-          <Typography variant="h5" gutterBottom>Ranking</Typography>
+          <Typography style={{ textAlign: "center"}} variant="h5" gutterBottom>Ranking</Typography>
           <Table>
             <TableHead>
               <TableRow>
@@ -107,9 +127,18 @@ export default function GameDashboard() {
           </Table>
         </Paper>
       </Rnd>
+        
+      {/* Panel de Evolución */}
+      <Rnd default={{ x: 820, y: 120, width: "24%", height: "auto" }}>
+        <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white" }}>
+            <Typography variant="h5" gutterBottom>Evolución de Puntos</Typography>
+            <Line data={chartData} />
+            <Button variant="contained" color="secondary" fullWidth onClick={nextRound} sx={{ mt: 2 }}>Siguiente Ronda</Button>
+          </Paper>
+      </Rnd>
 
       {/* Panel de Juegos */}
-      <Rnd default={{ x: 1510, y: 140, width: "19%", height: "auto" }}>
+      <Rnd default={{ x: 1510, y: 120, width: "19%", height: "auto" }}>
         <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white" }}>
           <Typography variant="h5" gutterBottom>Selecciona un juego para puntuar</Typography>
           <Grid container spacing={2}>
@@ -126,18 +155,9 @@ export default function GameDashboard() {
           </Grid>
         </Paper>
       </Rnd>
-        
-      {/* Panel de Evolución */}
-      <Rnd default={{ x: 820, y: 140, width: "24%", height: "auto" }}>
-        <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white" }}>
-            <Typography variant="h5" gutterBottom>Evolución de Puntos</Typography>
-            <Line data={chartData} />
-            <Button variant="contained" color="secondary" fullWidth onClick={nextRound} sx={{ mt: 2 }}>Siguiente Ronda</Button>
-          </Paper>
-      </Rnd>
 
       {/* Panel de Vídeos */}
-      <Rnd default={{ x: 40, y: 500, width: "40%", height: "auto" }}>
+      <Rnd default={{ x: 40, y: 480, width: "40%", height: "auto" }}>
         <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white" }}>
           <Typography variant="h5" gutterBottom>Party Vídeos</Typography>
           <iframe width="100%" height="300" src="https://www.youtube.com/embed/videoseries?si=yt9cPirnyjTM-f3_&amp;list=PL2ihC4aJWkWpD8C2MJ62Cx80abK9l-I4L" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
@@ -145,9 +165,9 @@ export default function GameDashboard() {
       </Rnd>
 
       {/* Panel del Mapa */}
-      <Rnd default={{ x: 820, y: 500, width: "24%", height: "auto" }}>
+      <Rnd default={{ x: 820, y: 480, width: "24%", height: "auto" }}>
         <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white" }}>
-          <Typography variant="h5" gutterBottom>Ubicación de LAN party</Typography>
+          <Typography variant="h5" gutterBottom>Ubicación</Typography>
           <iframe
             title="Ubicación"
             width="100%"
