@@ -76,7 +76,7 @@ export default function GameDashboard() {
   return (
     <Container maxWidth={false} style={{ padding: "16px", backgroundColor: "#121212", color: "white", minHeight: "100vh", width: "100vw" }}>
       <div style={{ textAlign: "left", marginLeft:"25px", marginBottom: "20px" }}>
-        <img src="/logo.jpg" alt="Logo" style={{ maxWidth: "200px" }} />
+        <img src="/logo.png" alt="Logo" style={{ maxWidth: "200px" }} />
       </div>
       
       {/* Panel de Ranking */}
