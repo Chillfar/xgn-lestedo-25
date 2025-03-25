@@ -79,7 +79,7 @@ export default function GameDashboard() {
         XGN Lestedo '25
       </Typography>
       
-      <Rnd default={{ x: 20, y: 20, width: "60%", height: "auto" }}>
+      <Rnd default={{ x: 20, y: 100, width: "40%", height: "auto" }}>
         <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white" }}>
           <Typography variant="h5" gutterBottom>Ranking</Typography>
           <Table>
@@ -108,7 +108,7 @@ export default function GameDashboard() {
       </Rnd>
 
       {/* Panel de Juegos */}
-      <Rnd default={{ x: 20, y: 20, width: "60%", height: "auto" }}>
+      <Rnd default={{ x: 1400, y: 100, width: "19%", height: "auto" }}>
         <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white" }}>
           <Typography variant="h5" gutterBottom>Selecciona un juego para puntuar</Typography>
           <Grid container spacing={2}>
@@ -127,7 +127,7 @@ export default function GameDashboard() {
       </Rnd>
         
       {/* Panel de Evolución */}
-      <Rnd default={{ x: 20, y: 20, width: "60%", height: "auto" }}>
+      <Rnd default={{ x: 820, y: 100, width: "24%", height: "auto" }}>
         <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white" }}>
             <Typography variant="h5" gutterBottom>Evolución de Puntos</Typography>
             <Line data={chartData} />
@@ -135,8 +135,16 @@ export default function GameDashboard() {
           </Paper>
       </Rnd>
 
+      {/* Panel de Vídeos */}
+      <Rnd default={{ x: 20, y: 460, width: "40%", height: "auto" }}>
+        <Paper style={{ padding: "16px", textAlign: "center", backgroundColor: "#1e1e1e", color: "white" }}>
+          <Typography variant="h5" gutterBottom>Party Vídeos</Typography>
+          <iframe width="100%" height="300" src="https://www.youtube.com/embed/videoseries?si=yt9cPirnyjTM-f3_&amp;list=PL2ihC4aJWkWpD8C2MJ62Cx80abK9l-I4L" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </Paper>
+      </Rnd>
+
       {/* Panel del Mapa */}
-      <Rnd default={{ x: 20, y: 20, width: "60%", height: "auto" }}>
+      <Rnd default={{ x: 820, y: 460, width: "19%", height: "auto" }}>
         <Paper style={{ padding: "16px", textAlign: "center", backgroundColor: "#1e1e1e", color: "white" }}>
           <Typography variant="h5" gutterBottom>Ubicación de LAN party</Typography>
           <iframe
