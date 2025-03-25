@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Rnd } from "react-rnd";
 import { Card, CardContent, Typography, Grid, Container, Table, TableHead, TableRow, TableCell, TableBody, Paper, Modal, Box, Button } from "@mui/material";
 import { Line } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
@@ -13,15 +14,23 @@ const games = [
 ];
 
 const savedUsers = [
-  { id: 1, name: "Roxo", scores: { "Fortnite": 0, "Fifa": 0, "Mario Kart": 0, "Street Fighter": 0 } },
-  { id: 2, name: "Noya", scores: { "Fortnite": 0, "Fifa": 0, "Mario Kart": 0, "Street Fighter": 0 } },
-  { id: 3, name: "Danis", scores: { "Fortnite": 0, "Fifa": 0, "Mario Kart": 0, "Street Fighter": 0 } },
-  { id: 4, name: "Pablo", scores: { "Fortnite": 0, "Fifa": 0, "Mario Kart": 0, "Street Fighter": 0 } }
+  { id: 1, name: "Roxo", scores: { "Fortnite": 0, "Fifa": 0, "Mario Kart": 0, "Street Fighter": 0 }, history: [] },
+  { id: 2, name: "Noya", scores: { "Fortnite": 0, "Fifa": 0, "Mario Kart": 0, "Street Fighter": 0 }, history: [] },
+  { id: 3, name: "Danis", scores: { "Fortnite": 0, "Fifa": 0, "Mario Kart": 0, "Street Fighter": 0 }, history: [] },
+  { id: 4, name: "Pablo", scores: { "Fortnite": 0, "Fifa": 0, "Mario Kart": 0, "Street Fighter": 0 }, history: [] }
 ];
+
+const userColors = {
+  Roxo: "#FF5733",
+  Noya: "#33FF57",
+  Danis: "#3357FF",
+  Pablo: "#F3FF33"
+};
 
 export default function GameDashboard() {
   const [users, setUsers] = useState(savedUsers);
   const [selectedGame, setSelectedGame] = useState(null);
+  const [round, setRound] = useState(0);
 
   const handleOpenModal = (game) => {
     setSelectedGame(game);
@@ -32,25 +41,35 @@ export default function GameDashboard() {
   };
 
   const handleAssignPoints = (userId) => {
-    setUsers(prevUsers =>
-      prevUsers.map(user =>
-        user.id === userId
-          ? { ...user, scores: { ...user.scores, [selectedGame.name]: user.scores[selectedGame.name] + 10 } }
-          : user
-      ).sort((a, b) =>
-        Object.values(b.scores).reduce((acc, score) => acc + score, 0) -
-        Object.values(a.scores).reduce((acc, score) => acc + score, 0)
-      )
-    );
+    setUsers(prevUsers => {
+      return prevUsers.map(user => {
+        if (user.id === userId) {
+          const newScore = user.scores[selectedGame.name] + 10;
+          const newTotal = Object.values(user.scores).reduce((acc, score) => acc + score, 0) + 10;
+          const updatedHistory = [...user.history];
+          updatedHistory[round] = newTotal;
+          return { ...user, scores: { ...user.scores, [selectedGame.name]: newScore }, history: updatedHistory };
+        }
+        return user;
+      });
+    });
+  };
+
+  const nextRound = () => {
+    setRound(prev => prev + 1);
+    setUsers(prevUsers => prevUsers.map(user => ({
+      ...user,
+      history: [...user.history, Object.values(user.scores).reduce((acc, score) => acc + score, 0)]
+    })));
   };
 
   const chartData = {
-    labels: games.map(game => game.name),
+    labels: users[0]?.history.map((_, index) => `Ronda ${index + 1}`) || [],
     datasets: users.map(user => ({
       label: user.name,
-      data: games.map(game => user.scores[game.name]),
-      borderColor: "#fff",
-      backgroundColor: "rgba(255, 255, 255, 0.5)",
+      data: user.history,
+      borderColor: userColors[user.name],
+      backgroundColor: userColors[user.name]
     }))
   };
 
@@ -60,79 +79,79 @@ export default function GameDashboard() {
         XGN Lestedo '25
       </Typography>
       
-      <Grid container spacing={3}>
-        {/* Panel de Ranking */}
-        <Grid item xs={12} md={8}>
-          <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white" }}>
-            <Typography variant="h5" gutterBottom>Ranking</Typography>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell style={{ color: "white" }}><strong>Jugador</strong></TableCell>
-                  {games.map(game => (
-                    <TableCell key={game.name} style={{ color: "white" }}><strong>{game.name}</strong></TableCell>
-                  ))}
-                  <TableCell style={{ color: "white" }}><strong>Puntos Totales</strong></TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {users.map(user => (
-                  <TableRow key={user.id}>
-                    <TableCell style={{ color: "white" }}>{user.name}</TableCell>
-                    {games.map(game => (
-                      <TableCell key={game.name} style={{ color: "white" }}>{user.scores[game.name]}</TableCell>
-                    ))}
-                    <TableCell style={{ color: "white" }}>{Object.values(user.scores).reduce((acc, score) => acc + score, 0)}</TableCell>
-                  </TableRow>
+      <Rnd default={{ x: 20, y: 20, width: "60%", height: "auto" }}>
+        <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white" }}>
+          <Typography variant="h5" gutterBottom>Ranking</Typography>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell style={{ color: "white" }}><strong>Jugador</strong></TableCell>
+                {games.map(game => (
+                  <TableCell key={game.name} style={{ color: "white" }}><strong>{game.name}</strong></TableCell>
                 ))}
-              </TableBody>
-            </Table>
-          </Paper>
-        </Grid>
-        {/* Panel de Juegos */}
-        <Grid item xs={12} md={4}>
-          <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white" }}>
-            <Typography variant="h5" gutterBottom>Selecciona un juego para puntuar</Typography>
-            <Grid container spacing={2}>
-              {games.map(game => (
-                <Grid item xs={6} key={game.name}>
-                  <Card onClick={() => handleOpenModal(game)} style={{ cursor: "pointer", textAlign: "center", backgroundColor: "#2a2a2a", color: "white" }}>
-                    <CardContent>
-                      <img src={game.cover} alt={game.name} style={{ width: "100%", height: "180px", objectFit: "cover", borderRadius: "8px" }} />
-                      <Typography variant="body1" style={{ marginTop: "8px" }}>{game.name}</Typography>
-                    </CardContent>
-                  </Card>
-                </Grid>
+                <TableCell style={{ color: "white" }}><strong>Puntos Totales</strong></TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {users.map(user => (
+                <TableRow key={user.id}>
+                  <TableCell style={{ color: "white" }}>{user.name}</TableCell>
+                  {games.map(game => (
+                    <TableCell key={game.name} style={{ color: "white" }}>{user.scores[game.name]}</TableCell>
+                  ))}
+                  <TableCell style={{ color: "white" }}>{Object.values(user.scores).reduce((acc, score) => acc + score, 0)}</TableCell>
+                </TableRow>
               ))}
-            </Grid>
-          </Paper>
-        </Grid>
+            </TableBody>
+          </Table>
+        </Paper>
+      </Rnd>
+
+      {/* Panel de Juegos */}
+      <Rnd default={{ x: 20, y: 20, width: "60%", height: "auto" }}>
+        <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white" }}>
+          <Typography variant="h5" gutterBottom>Selecciona un juego para puntuar</Typography>
+          <Grid container spacing={2}>
+            {games.map(game => (
+              <Grid item xs={6} key={game.name}>
+                <Card onClick={() => handleOpenModal(game)} style={{ cursor: "pointer", textAlign: "center", backgroundColor: "#2a2a2a", color: "white" }}>
+                  <CardContent>
+                    <img src={game.cover} alt={game.name} style={{ width: "100%", height: "180px", objectFit: "cover", borderRadius: "8px" }} />
+                    <Typography variant="body1" style={{ marginTop: "8px" }}>{game.name}</Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        </Paper>
+      </Rnd>
         
-        {/* Panel de Evolución */}
-        <Grid item xs={12} md={4}>
-          <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white" }}>
+      {/* Panel de Evolución */}
+      <Rnd default={{ x: 20, y: 20, width: "60%", height: "auto" }}>
+        <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white" }}>
             <Typography variant="h5" gutterBottom>Evolución de Puntos</Typography>
             <Line data={chartData} />
+            <Button variant="contained" color="secondary" fullWidth onClick={nextRound} sx={{ mt: 2 }}>Siguiente Ronda</Button>
           </Paper>
-        </Grid>
+      </Rnd>
 
-        {/* Panel del Mapa */}
-        <Grid item xs={12}>
-          <Paper style={{ padding: "16px", textAlign: "center", backgroundColor: "#1e1e1e", color: "white" }}>
-            <Typography variant="h5" gutterBottom>Ubicación de LAN party</Typography>
-            <iframe
-              title="Ubicación"
-              width="100%"
-              height="300"
-              style={{ border: 0 }}
-              loading="lazy"
-              allowFullScreen
-              referrerPolicy="no-referrer-when-downgrade"
-              src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCQp9lnjB31CyDBNg49fo4oz15n976iz2Q&q=Lugar+A+Picota,+5,+15881+Troitomil,+A+Coruña"
-            ></iframe>
-          </Paper>
-        </Grid>
-      </Grid>
+      {/* Panel del Mapa */}
+      <Rnd default={{ x: 20, y: 20, width: "60%", height: "auto" }}>
+        <Paper style={{ padding: "16px", textAlign: "center", backgroundColor: "#1e1e1e", color: "white" }}>
+          <Typography variant="h5" gutterBottom>Ubicación de LAN party</Typography>
+          <iframe
+            title="Ubicación"
+            width="100%"
+            height="300"
+            style={{ border: 0 }}
+            loading="lazy"
+            allowFullScreen
+            referrerPolicy="no-referrer-when-downgrade"
+            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCQp9lnjB31CyDBNg49fo4oz15n976iz2Q&q=Lugar+A+Picota,+5,+15881+Troitomil,+A+Coruña"
+          ></iframe>
+        </Paper>
+      </Rnd>
+
       {/* Modal para asignar puntos */}
       <Modal open={!!selectedGame} onClose={handleCloseModal}>
         <Box sx={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: 400, bgcolor: "#1e1e1e", color: "white", boxShadow: 24, p: 4, borderRadius: 2 }}>
