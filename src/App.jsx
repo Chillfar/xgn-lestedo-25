@@ -32,6 +32,24 @@ export default function GameDashboard() {
   const [selectedGame, setSelectedGame] = useState(null);
   const [round, setRound] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [gifUrl, setGifUrl] = useState("https://media.giphy.com/media/xT9IgG50Fb7Mi0prBC/giphy.gif");
+
+  const fetchRandomGif = async () => {
+    try {
+      const response = await fetch("https://api.giphy.com/v1/gifs/random?api_key=JD0bZoUQ3cz56tCr8ndeAbteNP8SzTce&tag=fortnite");
+      const data = await response.json();
+      setGifUrl(data.data.images.original.url);
+    } catch (error) {
+      console.error("Error fetching GIF:", error);
+    }
+  };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchRandomGif();
+    }, 10000);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const video = document.getElementById("intro-video");
@@ -83,18 +101,19 @@ export default function GameDashboard() {
     }))
   };
 
-  if (loading) {
-    return (
-      <div style={{ position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", backgroundColor: "black", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <video id="intro-video" width="100%" height="100%" autoPlay muted playsInline>
-          <source src="/Imaginary Neon Cube_free.mp4" type="video/mp4" />
-        </video>
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div style={{ position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", backgroundColor: "black", display: "flex", alignItems: "center", justifyContent: "center" }}>
+  //       <video id="intro-video" width="100%" height="100%" autoPlay muted playsInline>
+  //         <source src="/Imaginary Neon Cube_free.mp4" type="video/mp4" />
+  //       </video>
+  //     </div>
+  //   );
+  // }
 
   return (
     <Container maxWidth={false} style={{ padding: "16px", backgroundColor: "#121212", color: "white", minHeight: "100vh", width: "100vw" }}>
+      <div style={{ width: "100%", height: "2px", backgroundColor: "#F363FA", position: "fixed", top: 0, left: 0, zIndex: 10000 }}></div>
       <div style={{ textAlign: "left", marginLeft:"25px", marginBottom: "20px", position: "fixed", zIndex: 9999 }}>
         <img src="/logo.png" alt="Logo" style={{ maxWidth: "200px" }} />
       </div>
@@ -135,6 +154,11 @@ export default function GameDashboard() {
             <Line data={chartData} />
             <Button variant="contained" color="secondary" fullWidth onClick={nextRound} sx={{ mt: 2 }}>Siguiente Ronda</Button>
           </Paper>
+      </Rnd>
+
+      {/* Panel de GIFs */}
+      <Rnd default={{ x: 1300, y: 120, width: "10%", height: "auto" }}>
+        <img src={gifUrl} alt="GIF" style={{ width: "100%", cursor: "pointer" }} onClick={fetchRandomGif} />
       </Rnd>
 
       {/* Panel de Juegos */}
