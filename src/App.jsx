@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { Rnd } from "react-rnd";
-import { Card, CardContent, Typography, Grid, Container, Table, TableHead, TableRow, TableCell, TableBody, Paper, Modal, Box, Button } from "@mui/material";
+import { Card, CardContent, Typography, Grid, Container, Table, TableHead, TableRow, TableCell, TableBody, Paper, Modal, Box, Button, TextField } from "@mui/material";
 import { Line } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-const games = [
+const initialGames = [
   { name: "Fortnite", cover: "https://i.3djuegos.com/juegos/8298/fortnite/fotos/ficha/fortnite-5154590.webp" },
   { name: "Fifa", cover: "https://i.3djuegos.com/juegos/19862/ea_sports_fc_25/fotos/ficha/ea_sports_fc_25-5908048.jpg" },
   { name: "Mario Kart", cover: "https://i.3djuegos.com/juegos/14356/mario_kart_8_switch/fotos/ficha/mario_kart_8_switch-3611054.jpg" },
@@ -14,10 +14,10 @@ const games = [
 ];
 
 const savedUsers = [
-  { id: 1, name: "Roxo", scores: { "Fortnite": 0, "Fifa": 0, "Mario Kart": 0, "Street Fighter": 0 }, history: [] },
-  { id: 2, name: "Noya", scores: { "Fortnite": 0, "Fifa": 0, "Mario Kart": 0, "Street Fighter": 0 }, history: [] },
-  { id: 3, name: "Danis", scores: { "Fortnite": 0, "Fifa": 0, "Mario Kart": 0, "Street Fighter": 0 }, history: [] },
-  { id: 4, name: "Pablo", scores: { "Fortnite": 0, "Fifa": 0, "Mario Kart": 0, "Street Fighter": 0 }, history: [] }
+  { id: 1, name: "Roxo", scores: {}, history: [] },
+  { id: 2, name: "Noya", scores: {}, history: [] },
+  { id: 3, name: "Danis", scores: {}, history: [] },
+  { id: 4, name: "Pablo", scores: {}, history: [] }
 ];
 
 const userColors = {
@@ -28,12 +28,26 @@ const userColors = {
 };
 
 export default function GameDashboard() {
+  const [games, setGames] = useState(initialGames);
   const [users, setUsers] = useState(savedUsers);
   const [selectedGame, setSelectedGame] = useState(null);
+  const [newGameName, setNewGameName] = useState("");
+  const [newGameCover, setNewGameCover] = useState("");
   const [round, setRound] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [gifUrl, setGifUrl] = useState("https://media.giphy.com/media/xT9IgG50Fb7Mi0prBC/giphy.gif");
+  const [openModal, setOpenModal] = useState(false);
+  const [gifUrl, setGifUrl] = useState("https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExcmd4M3pnMXhoeW95aXJvamg0dWhydTdkZGp4bjN1cGF1bjgwc3g0NCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/5tiNlHkA1WdUh3jRDW/giphy.gif");
 
+  const addNewGame = () => {
+    if (newGameName && newGameCover) {
+      const newGame = { name: newGameName, cover: newGameCover };
+      setGames([...games, newGame]);
+      setNewGameName("");
+      setNewGameCover("");
+      setOpenModal(false);
+    }
+  };
+  
   const fetchRandomGif = async () => {
     try {
       const response = await fetch("https://api.giphy.com/v1/gifs/random?api_key=JD0bZoUQ3cz56tCr8ndeAbteNP8SzTce&tag=fortnite");
@@ -44,12 +58,13 @@ export default function GameDashboard() {
     }
   };
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      fetchRandomGif();
-    }, 10000);
-    return () => clearInterval(interval);
-  }, []);
+  // Descomentar para activar el cambio automático de GIFs
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     fetchRandomGif();
+  //   }, 10000);
+  //   return () => clearInterval(interval);
+  // }, []);
 
   useEffect(() => {
     const video = document.getElementById("intro-video");
@@ -69,10 +84,12 @@ export default function GameDashboard() {
   };
 
   const handleAssignPoints = (userId) => {
+    if (!selectedGame) return;
+  
     setUsers(prevUsers => {
-      return prevUsers.map(user => {
+      const updatedUsers = prevUsers.map(user => {
         if (user.id === userId) {
-          const newScore = user.scores[selectedGame.name] + 10;
+          const newScore = (user.scores[selectedGame.name] || 0) + 10;
           const newTotal = Object.values(user.scores).reduce((acc, score) => acc + score, 0) + 10;
           const updatedHistory = [...user.history];
           updatedHistory[round] = newTotal;
@@ -80,8 +97,16 @@ export default function GameDashboard() {
         }
         return user;
       });
+  
+      // Ordenar por puntos totales de mayor a menor
+      return updatedUsers.sort((a, b) => {
+        const totalA = Object.values(a.scores).reduce((acc, score) => acc + score, 0);
+        const totalB = Object.values(b.scores).reduce((acc, score) => acc + score, 0);
+        return totalB - totalA;
+      });
     });
   };
+  
 
   const nextRound = () => {
     setRound(prev => prev + 1);
@@ -114,7 +139,7 @@ export default function GameDashboard() {
   return (
     <Container maxWidth={false} style={{ padding: "16px", backgroundColor: "#121212", color: "white", minHeight: "100vh", width: "100vw" }}>
       <div style={{ width: "100%", height: "2px", backgroundColor: "#F363FA", position: "fixed", top: 0, left: 0, zIndex: 10000 }}></div>
-      <div style={{ textAlign: "left", marginLeft:"25px", marginBottom: "20px", position: "fixed", zIndex: 9999 }}>
+      <div style={{ textAlign: "left", marginLeft:"25px", marginBottom: "20px", position: "relative", zIndex: 9999 }}>
         <img src="/logo.png" alt="Logo" style={{ maxWidth: "200px" }} />
       </div>
       
@@ -122,7 +147,7 @@ export default function GameDashboard() {
       <Rnd default={{ x: 40, y: 120, width: "40%", height: "auto" }}>
         <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white" }}>
           <Typography style={{ textAlign: "center"}} variant="h5" gutterBottom>Ranking</Typography>
-          <Table>
+          <Table style={{ overflowX: "scroll"}}>
             <TableHead>
               <TableRow>
                 <TableCell style={{ color: "white" }}><strong>Jugador</strong></TableCell>
@@ -165,10 +190,14 @@ export default function GameDashboard() {
       <Rnd default={{ x: 1510, y: 120, width: "19%", height: "auto" }}>
         <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white" }}>
           <Typography variant="h5" gutterBottom>Selecciona un juego para puntuar</Typography>
-          <Grid container spacing={2}>
-            {games.map(game => (
-              <Grid item xs={6} key={game.name}>
-                <Card onClick={() => handleOpenModal(game)} style={{ cursor: "pointer", textAlign: "center", backgroundColor: "#2a2a2a", color: "white" }}>
+          {/* Botón para abrir modal de agregar juego */}
+          <Button variant="contained" color="secondary" onClick={() => setOpenModal(true)} style={{ marginBottom: "10px", width: "100%" }}>
+            Añadir Nuevo Juego
+          </Button>
+          <Grid container spacing={2} style={{ marginTop: "20px", overflowY: "auto", height: "600px", scrollbarWidth: "thin", scrollbarColor: "#F363FA #1e1e1e" }}>
+            {games.map((game, index) => (
+              <Grid item xs={6} key={index}>
+                <Card onClick={() => setSelectedGame(game)} style={{ cursor: "pointer", textAlign: "center", backgroundColor: "#2a2a2a", color: "white" }}>
                   <CardContent>
                     <img src={game.cover} alt={game.name} style={{ width: "100%", height: "180px", objectFit: "cover", borderRadius: "8px" }} />
                     <Typography variant="body1" style={{ marginTop: "8px" }}>{game.name}</Typography>
@@ -220,6 +249,16 @@ export default function GameDashboard() {
               ))}
             </>
           )}
+        </Box>
+      </Modal>
+
+      {/* Modal para agregar juegos */}
+      <Modal open={openModal} onClose={() => setOpenModal(false)}>
+        <Box style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", backgroundColor: "#1e1e1e", padding: "20px", color: "white", borderRadius: "8px" }}>
+          <Typography variant="h6">Añadir nuevo juego</Typography>
+          <TextField label="Nombre del juego" fullWidth margin="normal" value={newGameName} onChange={(e) => setNewGameName(e.target.value)} style={{ backgroundColor: "white" }} />
+          <TextField label="URL de la portada" fullWidth margin="normal" value={newGameCover} onChange={(e) => setNewGameCover(e.target.value)} style={{ backgroundColor: "white" }} />
+          <Button variant="contained" color="primary" fullWidth onClick={addNewGame} style={{ marginTop: "10px" }}>Agregar Juego</Button>
         </Box>
       </Modal>
     </Container>
