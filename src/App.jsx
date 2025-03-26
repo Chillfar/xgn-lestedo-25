@@ -28,8 +28,16 @@ const userColors = {
 };
 
 export default function GameDashboard() {
-  const [games, setGames] = useState(initialGames);
-  const [users, setUsers] = useState(savedUsers);
+  const [games, setGames] = useState(() => {
+    const savedGames = localStorage.getItem("games");
+    return savedGames ? JSON.parse(savedGames) : initialGames;
+  });
+
+  const [users, setUsers] = useState(() => {
+    const savedUsers = localStorage.getItem("users");
+    return savedUsers ? JSON.parse(savedUsers) : savedUsers;
+  });
+
   const [selectedGame, setSelectedGame] = useState(null);
   const [newGameName, setNewGameName] = useState("");
   const [newGameCover, setNewGameCover] = useState("");
@@ -37,6 +45,20 @@ export default function GameDashboard() {
   const [loading, setLoading] = useState(true);
   const [openModal, setOpenModal] = useState(false);
   const [gifUrl, setGifUrl] = useState("https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExcmd4M3pnMXhoeW95aXJvamg0dWhydTdkZGp4bjN1cGF1bjgwc3g0NCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/5tiNlHkA1WdUh3jRDW/giphy.gif");
+
+  useEffect(() => {
+    const previousGames = localStorage.getItem("games");
+    if (JSON.stringify(games) !== previousGames) {
+      localStorage.setItem("games", JSON.stringify(games));
+    }
+  }, [games]);
+
+  useEffect(() => {
+    const previousUsers = localStorage.getItem("users");
+    if (JSON.stringify(users) !== previousUsers) {
+      localStorage.setItem("users", JSON.stringify(users));
+    }
+  }, [users]);
 
   const addNewGame = () => {
     if (newGameName && newGameCover) {
@@ -143,7 +165,7 @@ export default function GameDashboard() {
       <div style={{ textAlign: "left", marginLeft:"25px", marginBottom: "20px", position: "relative", zIndex: 9999 }}>
         <img src="/logo.png" alt="Logo" style={{ maxWidth: "200px" }} />
       </div>
-      
+
       {/* Panel de Ranking */}
       <Rnd default={{ x: 40, y: 120, width: "40%", height: "auto" }}>
         <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white" }}>
@@ -185,6 +207,22 @@ export default function GameDashboard() {
       {/* Panel de GIFs */}
       <Rnd default={{ x: 1300, y: 120, width: "10%", height: "auto" }}>
         <img src={gifUrl} alt="GIF" style={{ width: "100%", cursor: "pointer" }} onClick={fetchRandomGif} />
+      </Rnd>
+
+      {/* Panel de Spotify */}
+      <Rnd default={{ x: 1300, y: 332, width: "10%", height: "auto" }}>
+        <iframe style={{ border: "none" }}
+          src="https://open.spotify.com/embed/playlist/3YvgAU67nQK5XoaIP0aqSd?utm_source=generator" 
+          width="100%" 
+          height="522"
+          allowfullscreen=""
+          allow="autoplay;
+            clipboard-write;
+            encrypted-media;
+            fullscreen;
+            picture-in-picture"
+          loading="lazy">
+        </iframe>
       </Rnd>
 
       {/* Panel de Juegos */}
