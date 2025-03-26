@@ -204,17 +204,17 @@ export default function GameDashboard() {
           </Paper>
       </Rnd>
 
-      {/* Panel de GIFs */}
+      {/* Panel de GIPHY */}
       <Rnd default={{ x: 1300, y: 120, width: "10%", height: "auto" }}>
         <img src={gifUrl} alt="GIF" style={{ width: "100%", cursor: "pointer" }} onClick={fetchRandomGif} />
       </Rnd>
 
       {/* Panel de Spotify */}
-      <Rnd default={{ x: 1300, y: 332, width: "10%", height: "auto" }}>
+      <Rnd default={{ x: 820, y: 480, width: "24%", height: "auto" }}>
         <iframe style={{ border: "none" }}
           src="https://open.spotify.com/embed/playlist/3YvgAU67nQK5XoaIP0aqSd?utm_source=generator" 
           width="100%" 
-          height="522"
+          height="376"
           allowfullscreen=""
           allow="autoplay;
             clipboard-write;
@@ -257,13 +257,13 @@ export default function GameDashboard() {
       </Rnd>
 
       {/* Panel del Mapa */}
-      <Rnd default={{ x: 820, y: 480, width: "24%", height: "auto" }}>
+      <Rnd default={{ x: 1300, y: 332, width: "10%", height: "auto" }}>
         <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white" }}>
           <Typography variant="h5" gutterBottom>Ubicación</Typography>
           <iframe
             title="Ubicación"
             width="100%"
-            height="300"
+            height="450"
             style={{ border: 0 }}
             loading="lazy"
             allowFullScreen
