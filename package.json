@@ -56,5 +56,5 @@
     "vite": "^4.5.9",
     "vitest": "^0.34.6"
   },
-  "homepage": "/xgn-lestedo-25"
+  "homepage": "."
 }
