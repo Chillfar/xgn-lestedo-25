@@ -69,6 +69,12 @@ export default function GameDashboard() {
       setOpenModal(false);
     }
   };
+
+  const deleteGame = (selectedGame) => {
+    setGames(games.filter(game => game.name !== selectedGame.name));
+    setSelectedGame(null);
+    setOpenModal(false);
+  };
   
   const fetchRandomGif = async () => {
     try {
@@ -286,6 +292,9 @@ export default function GameDashboard() {
                   {user.name} +10 Puntos
                 </Button>
               ))}
+              <Button variant="contained" color="secondary" fullWidth sx={{ mt: 1 }} onClick={() => deleteGame(selectedGame)}>
+                Quitar juego
+              </Button>
             </>
           )}
         </Box>
