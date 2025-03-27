@@ -13,7 +13,7 @@ const initialGames = [
   { name: "Street Fighter", cover: "https://i.3djuegos.com/juegos/18376/fotos/ficha/-5775675.webp" }
 ];
 
-const savedUsers = [
+const initialUsers = [
   { id: 1, name: "Roxo", scores: {}, history: [] },
   { id: 2, name: "Noya", scores: {}, history: [] },
   { id: 3, name: "Danis", scores: {}, history: [] },
@@ -35,8 +35,8 @@ export default function GameDashboard() {
 
   const [users, setUsers] = useState(() => {
     const savedUsers = localStorage.getItem("users");
-    return savedUsers ? JSON.parse(savedUsers) : savedUsers;
-  });
+    return savedUsers ? JSON.parse(savedUsers) : initialUsers;
+  });  
 
   const [selectedGame, setSelectedGame] = useState(null);
   const [newGameName, setNewGameName] = useState("");
@@ -166,13 +166,13 @@ export default function GameDashboard() {
   };
 
   const chartData = {
-    labels: users[0]?.history.map((_, index) => `Ronda ${index + 1}`) || [],
-    datasets: users.map(user => ({
+    labels: Array.isArray(users) && users.length > 0 ? users[0].history.map((_, index) => `Ronda ${index + 1}`) : [],
+    datasets: Array.isArray(users) ? users.map(user => ({
       label: user.name,
-      data: user.history,
-      borderColor: userColors[user.name],
-      backgroundColor: userColors[user.name]
-    }))
+      data: user.history || [],
+      borderColor: userColors[user.name] || "#FFFFFF",
+      backgroundColor: userColors[user.name] || "#FFFFFF"
+    })) : []
   };
 
   // Descomentar para activar video intro
