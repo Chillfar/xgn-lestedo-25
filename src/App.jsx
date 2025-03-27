@@ -45,6 +45,8 @@ export default function GameDashboard() {
   const [loading, setLoading] = useState(true);
   const [openModal, setOpenModal] = useState(false);
   const [gifUrl, setGifUrl] = useState("https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExcmd4M3pnMXhoeW95aXJvamg0dWhydTdkZGp4bjN1cGF1bjgwc3g0NCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/5tiNlHkA1WdUh3jRDW/giphy.gif");
+  const [countdown, setCountdown] = useState("");
+  const [videoModalOpen, setVideoModalOpen] = useState(false);
 
   useEffect(() => {
     const previousGames = localStorage.getItem("games");
@@ -59,6 +61,26 @@ export default function GameDashboard() {
       localStorage.setItem("users", JSON.stringify(users));
     }
   }, [users]);
+
+  useEffect(() => {
+    const targetDate = new Date("2025-05-09T23:59:00").getTime();
+    const interval = setInterval(() => {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+
+      if (distance < 0) {
+        clearInterval(interval);
+        setCountdown("¡Party inaugurada!");
+      } else {
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        setCountdown(`${days}d ${hours}h ${minutes}m ${seconds}s`);
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   const addNewGame = () => {
     if (newGameName && newGameCover) {
@@ -86,13 +108,12 @@ export default function GameDashboard() {
     }
   };
 
-  // Descomentar para activar el cambio automático de GIFs
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     fetchRandomGif();
-  //   }, 10000);
-  //   return () => clearInterval(interval);
-  // }, []);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchRandomGif();
+    }, 60000);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const video = document.getElementById("intro-video");
@@ -168,9 +189,42 @@ export default function GameDashboard() {
   return (
     <Container maxWidth={false} style={{ padding: "16px", backgroundColor: "#121212", color: "white", minHeight: "100vh", width: "100vw" }}>
       <div style={{ width: "100%", height: "2px", backgroundColor: "#F363FA", position: "fixed", top: 0, left: 0, zIndex: 10000 }}></div>
-      <div style={{ textAlign: "left", marginLeft:"25px", marginBottom: "20px", position: "relative", zIndex: 9999 }}>
+      <div style={{ width: "10%", textAlign: "left", marginLeft:"25px", marginBottom: "20px", position: "relative", zIndex: 9999 }}>
         <img src="/logo.png" alt="Logo" style={{ maxWidth: "200px" }} />
       </div>
+
+      {/* Panel de Contador */}
+      <Rnd default={{ x: 1600, y: 35, width: "14%", height: "auto" }}>
+        <Paper 
+          onClick={() => setVideoModalOpen(true)}
+          style={{ 
+            cursor: "pointer",
+            padding: "16px", 
+            background: "linear-gradient(135deg, #ff4081, #ff80ab)", 
+            color: "white", 
+            textAlign: "center", 
+            borderRadius: "12px", 
+            boxShadow: "0 4px 10px rgba(255, 64, 129, 0.5)" 
+          }}
+        >
+          <Typography variant="h6" style={{ fontSize: "1.5rem", fontWeight: "bold" }}>{countdown}</Typography>
+        </Paper>
+      </Rnd>
+
+      {/* Modal de inauguración */}
+      <Modal open={videoModalOpen} onClose={() => setVideoModalOpen(false)}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: 'rgba(0, 0, 0, 0.8)' }}>
+        <iframe
+            width="80%"
+            height="80%"
+            src="https://www.youtube.com/embed/yS0Zz-D7pfA?autoplay=1"
+            title="Final Countdown Video"
+            frameBorder="0"
+            allow="autoplay; encrypted-media"
+            allowFullScreen
+          ></iframe>
+        </Box>
+      </Modal>
 
       {/* Panel de Ranking */}
       <Rnd default={{ x: 40, y: 120, width: "40%", height: "auto" }}>
