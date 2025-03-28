@@ -58,6 +58,5 @@
     "jsdom": "^22.1.0",
     "vite": "^4.5.9",
     "vitest": "^0.34.6"
-  },
-  "homepage": "https://chillfar.github.io/xgn-lestedo-25/"
+  }
 }
