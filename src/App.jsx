@@ -293,7 +293,7 @@ export default function GameDashboard() {
           <Button variant="contained" color="secondary" onClick={() => setOpenModal(true)} style={{ marginBottom: "10px", width: "100%" }}>
             Añadir Nuevo Juego
           </Button>
-          <Grid container spacing={2} style={{ marginTop: "20px", overflowY: "auto", height: "600px", scrollbarWidth: "thin", scrollbarColor: "#F363FA #1e1e1e" }}>
+          <Grid container spacing={2} style={{ overflowY: "auto", height: "600px", scrollbarWidth: "thin", scrollbarColor: "#F363FA #1e1e1e" }}>
             {games.map((game, index) => (
               <Grid item xs={6} key={index}>
                 <Card onClick={() => setSelectedGame(game)} style={{ cursor: "pointer", textAlign: "center", backgroundColor: "#2a2a2a", color: "white" }}>
