@@ -196,9 +196,9 @@ export default function GameDashboard() {
       {/* Panel de Contador */}
       <Rnd default={{ x: 1600, y: 35, width: "14%", height: "auto" }}>
         <Paper 
-          onClick={() => setVideoModalOpen(true)}
+          // onClick={() => setVideoModalOpen(true)}
           style={{ 
-            cursor: "pointer",
+            // cursor: "pointer",
             padding: "16px", 
             background: "linear-gradient(135deg, #ff4081, #ff80ab)", 
             color: "white", 
