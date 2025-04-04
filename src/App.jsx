@@ -46,7 +46,8 @@ export default function GameDashboard() {
   const [openModal, setOpenModal] = useState(false);
   const [gifUrl, setGifUrl] = useState("https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExcmd4M3pnMXhoeW95aXJvamg0dWhydTdkZGp4bjN1cGF1bjgwc3g0NCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/5tiNlHkA1WdUh3jRDW/giphy.gif");
   const [countdown, setCountdown] = useState("");
-  const [videoModalOpen, setVideoModalOpen] = useState(false);
+  const [videoCountdownModalOpen, setVideoCountdownModalOpen] = useState(false);
+  const [videoInaugurationModalOpen, setVideoInaugurationModalOpen] = useState(false);
 
   useEffect(() => {
     const previousGames = localStorage.getItem("games");
@@ -68,8 +69,12 @@ export default function GameDashboard() {
       const now = new Date().getTime();
       const distance = targetDate - now;
 
-      if (distance < 0) {
+      if (distance == 30) {
+        setVideoCountdownModalOpen(true);
+      } else if (distance < 0) {
         clearInterval(interval);
+        setVideoCountdownModalOpen(false);
+        setVideoInaugurationModalOpen(true);
         setCountdown("¡Party inaugurada!");
       } else {
         const days = Math.floor(distance / (1000 * 60 * 60 * 24));
@@ -211,14 +216,29 @@ export default function GameDashboard() {
         </Paper>
       </Rnd>
 
-      {/* Modal de inauguración */}
-      <Modal open={videoModalOpen} onClose={() => setVideoModalOpen(false)}>
+      {/* Modal de Countdown */}
+      <Modal open={videoCountdownModalOpen} onClose={() => setVideoModalOpen(false)}>
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: 'rgba(0, 0, 0, 0.8)' }}>
         <iframe
             width="80%"
             height="80%"
             src="https://www.youtube.com/embed/yS0Zz-D7pfA?autoplay=1"
             title="Final Countdown Video"
+            frameBorder="0"
+            allow="autoplay; encrypted-media"
+            allowFullScreen
+          ></iframe>
+        </Box>
+      </Modal>
+
+      {/* Modal de Inauguración */}
+      <Modal open={videoInaugurationModalOpen} onClose={() => setVideoInaugurationModalOpen(false)}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: 'rgba(0, 0, 0, 0.8)' }}>
+        <iframe
+            width="80%"
+            height="80%"
+            src="https://www.youtube.com/embed/gCYcHz2k5x0?si=n7ZUrSRdWn8LriXS&start=43&autoplay=1"
+            title="Final Inauguración Video"
             frameBorder="0"
             allow="autoplay; encrypted-media"
             allowFullScreen
