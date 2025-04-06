@@ -64,18 +64,26 @@ export default function GameDashboard() {
   }, [users]);
 
   useEffect(() => {
-    const targetDate = new Date("2025-05-09T23:59:00").getTime();
+    // 2025-05-09T23:59:00
+    const targetDate = new Date("2025-04-07T00:14:00").getTime();
     const interval = setInterval(() => {
       const now = new Date().getTime();
       const distance = targetDate - now;
 
-      if (distance == 30) {
+      if (distance <= 31000 && distance > -800) {
         setVideoCountdownModalOpen(true);
-      } else if (distance < 0) {
+        localStorage.setItem("countdown", '');
+      } else if (distance <= -800) {
         clearInterval(interval);
         setVideoCountdownModalOpen(false);
+        if(localStorage.getItem('countdown') === '¡Party inaugurada!') {
+          setCountdown("¡Party inaugurada!");
+          return;
+        }
+
         setVideoInaugurationModalOpen(true);
         setCountdown("¡Party inaugurada!");
+        localStorage.setItem("countdown", '¡Party inaugurada!');
       } else {
         const days = Math.floor(distance / (1000 * 60 * 60 * 24));
         const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -181,15 +189,15 @@ export default function GameDashboard() {
   };
 
   // Descomentar para activar video intro
-  // if (loading) {
-  //   return (
-  //     <div style={{ position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", backgroundColor: "black", display: "flex", alignItems: "center", justifyContent: "center" }}>
-  //       <video id="intro-video" width="100%" height="100%" autoPlay muted playsInline>
-  //         <source src="/Imaginary Neon Cube_free.mp4" type="video/mp4" />
-  //       </video>
-  //     </div>
-  //   );
-  // }
+  if (loading) {
+    return (
+      <div style={{ position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", backgroundColor: "black", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <video id="intro-video" width="100%" height="100%" autoPlay muted playsInline>
+          <source src="/Imaginary Neon Cube_free.mp4" type="video/mp4" />
+        </video>
+      </div>
+    );
+  }
 
   return (
     <Container maxWidth={false} style={{ padding: "16px", backgroundColor: "#121212", color: "white", minHeight: "100vh", width: "100vw" }}>
@@ -219,30 +227,30 @@ export default function GameDashboard() {
       {/* Modal de Countdown */}
       <Modal open={videoCountdownModalOpen} onClose={() => setVideoModalOpen(false)}>
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: 'rgba(0, 0, 0, 0.8)' }}>
-        <iframe
-            width="80%"
-            height="80%"
-            src="https://www.youtube.com/embed/yS0Zz-D7pfA?autoplay=1"
-            title="Final Countdown Video"
-            frameBorder="0"
-            allow="autoplay; encrypted-media"
-            allowFullScreen
-          ></iframe>
+          <iframe
+              width="100%"
+              height="100%"
+              src="https://www.youtube.com/embed/yS0Zz-D7pfA?autoplay=1"
+              title="Final Countdown Video"
+              frameBorder="0"
+              allow="autoplay; encrypted-media"
+              allowFullScreen
+            ></iframe>
         </Box>
       </Modal>
 
       {/* Modal de Inauguración */}
       <Modal open={videoInaugurationModalOpen} onClose={() => setVideoInaugurationModalOpen(false)}>
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: 'rgba(0, 0, 0, 0.8)' }}>
-        <iframe
-            width="80%"
-            height="80%"
-            src="https://www.youtube.com/embed/gCYcHz2k5x0?si=n7ZUrSRdWn8LriXS&start=43&autoplay=1"
-            title="Final Inauguración Video"
-            frameBorder="0"
-            allow="autoplay; encrypted-media"
-            allowFullScreen
-          ></iframe>
+          <iframe
+              width="100%"
+              height="100%"
+              src="https://www.youtube.com/embed/gCYcHz2k5x0?si=n7ZUrSRdWn8LriXS&start=43&autoplay=1"
+              title="Final Inauguración Video"
+              frameBorder="0"
+              allow="autoplay; encrypted-media"
+              allowFullScreen
+            ></iframe>
         </Box>
       </Modal>
 
