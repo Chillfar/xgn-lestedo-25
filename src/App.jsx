@@ -64,8 +64,7 @@ export default function GameDashboard() {
   }, [users]);
 
   useEffect(() => {
-    // 2025-05-09T23:59:00
-    const targetDate = new Date("2025-04-07T00:14:00").getTime();
+    const targetDate = new Date("2025-05-09T23:59:00").getTime();
     const interval = setInterval(() => {
       const now = new Date().getTime();
       const distance = targetDate - now;
