@@ -14,17 +14,21 @@ const initialGames = [
 ];
 
 const initialUsers = [
-  { id: 1, name: "Roxo", cover: '/roxo.JPG', scores: {}, history: [] },
-  { id: 2, name: "Noya", cover: '/noyas.JPG', scores: {}, history: [] },
-  { id: 3, name: "Danis", cover: '/danis.jpg', scores: {}, history: [] },
-  { id: 4, name: "Pablo", cover: '/pablo.JPG', scores: {}, history: [] }
+  { id: 1, name: "Chillfar", rol: "Rol: Informático de guardia y DJ espiritual del grupo.", description: "El hacker de la LAN y alma de fiesta digital. Fan del Fortnite, amante del software libre (y del no tan libre también). Su lema: “Si se puede crackear, se puede disfrutar“. Sueña con vivir en Ibiza, entre beats de house y scripts en Python. Tiene más pelis en el disco duro que Netflix en la nube.",
+    cover: '/xgn-lestedo-25/roxo.JPG', scores: {}, history: [] },
+  { id: 2, name: "El Noyas", rol: "Rol: Embajador de Nintendo y evangelizador oficial de la Switch.", description: "Francotirador honorífico del grupo… aunque el blanco suele salir ileso por pura suerte. Fan incondicional de Nintendo, especialmente de Zelda: si no ha hablado de Hyrule hoy, es que está enfermo. En misión personal para que todos se compren la Switch 2 (“porque esta vez sí que va a ser la buena”). Apunta con el sniper como Link con los ojos vendados, pero eso sí, con estilo.",
+    cover: '/xgn-lestedo-25/noyas.JPG', scores: {}, history: [] },
+  { id: 3, name: "Goku", rol: "Rol: Maestro de los Soulslike y gurú de las tecnologías de pantalla.", description: "El guerrero esporádico de la LAN, pero cuando aparece, deja el sofá para siempre. Dueño orgulloso de una PS5, sufre (y disfruta) con juegos como Dark Souls, Xenoblade y Elden Ring. No siempre se pasa por la XGN, pero a la de XGN Lestedo no falta ni loco: allí es territorio sagrado. Amante de las teles con más siglas que un cohete: si no tiene 4K, HDR10 y Dolby Vision, no es digno de sus ojos.",
+    cover: '/xgn-lestedo-25/danis.jpg', scores: {}, history: [] },
+  { id: 4, name: "Eras", rol: "Rol: Guía oficial de excursiones y consejero gastronómico.", description: "El explorador del grupo, tanto en el juego como en la vida real. Juega al Fortnite cuando no está perdido en “The Forest” (literalmente). Dueño de la cuenta @gallegoviajero, conoce más rincones de Galicia que Google Maps. Experto en senderismo, comida rica y escapadas rurales con encanto. Si desaparece durante la LAN, probablemente esté buscando una ruta en Wikiloc o un pulpo á feira.",
+    cover: '/xgn-lestedo-25/pablo.JPG', scores: {}, history: [] }
 ];
 
 const userColors = {
-  Roxo: "#FF5733",
-  Noya: "#33FF57",
-  Danis: "#3357FF",
-  Pablo: "#F3FF33"
+  Chillfar: "#FF5733",
+  ElNoyas: "#33FF57",
+  Goku: "#3357FF",
+  Eras: "#F3FF33"
 };
 
 export default function GameDashboard() {
@@ -146,7 +150,6 @@ export default function GameDashboard() {
   };
 
   const handleUserModal = (user) => {
-    console.log(user);
     setSelectedUser(user);
   };
 
@@ -199,15 +202,15 @@ export default function GameDashboard() {
   };
 
   // Descomentar para activar video intro
-  // if (loading) {
-  //   return (
-  //     <div style={{ position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", backgroundColor: "black", display: "flex", alignItems: "center", justifyContent: "center" }}>
-  //       <video id="intro-video" width="100%" height="100%" autoPlay muted playsInline>
-  //         <source src="/xgn-lestedo-25/Imaginary Neon Cube_free.mp4" type="video/mp4" />
-  //       </video>
-  //     </div>
-  //   );
-  // }
+  if (loading) {
+    return (
+      <div style={{ position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", backgroundColor: "black", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <video id="intro-video" width="100%" height="100%" autoPlay muted playsInline>
+          <source src="/xgn-lestedo-25/Imaginary Neon Cube_free.mp4" type="video/mp4" />
+        </video>
+      </div>
+    );
+  }
 
   return (
     <Container maxWidth={false} style={{ padding: "16px", backgroundColor: "#121212", color: "white", minHeight: "100vh", width: "100vw" }}>
@@ -395,91 +398,47 @@ export default function GameDashboard() {
       {/* Modal datos jugador */}
       <Modal open={!!selectedUser} onClose={handleCloseUserModal}>
         <Box sx={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: 400, bgcolor: "#1e1e1e", color: "white", boxShadow: 24, p: 4, borderRadius: 2 }}>
-          {selectedUser && selectedUser.name === 'Roxo' && (
+          {selectedUser && selectedUser.name === 'Chillfar' && (
             <>
               <Box sx={{ backgroundImage: `url(${selectedUser.cover})`, backgroundSize: "cover", backgroundPositionY: "top !important", height: "150px", borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <Typography variant="h5" sx={{ color: "white", fontWeight: "bold", textTransform: "uppercase", backgroundColor: "rgba(0, 0, 0, 0.5)", padding: "8px", borderRadius: "4px" }}>{selectedUser.name}</Typography>
               </Box>
-
-              <Typography variant="body1" sx={{ mt: 2 }}>Puntos Totales: {Object.values(selectedUser.scores).reduce((acc, score) => acc + score, 0)}</Typography>
-              <Typography variant="body1" sx={{ mt: 2 }}>Puntos por juego:</Typography>
-              {games.map(game => (
-                <Typography key={game.name} variant="body2" sx={{ mt: 1 }}>{game.name}: {selectedUser.scores[game.name] || 0}</Typography>
-              ))}
-              <Typography variant="body1" sx={{ mt: 2 }}>Evolución:</Typography>
-              {selectedUser.history.map((score, index) => (
-                <Typography key={index} variant="body2" sx={{ mt: 1 }}>Ronda {index + 1}: {score}</Typography>
-              ))}
-              <Button variant="contained" color="secondary" fullWidth sx={{ mt: 1 }} onClick={handleCloseUserModal}>
-                Cerrar
-              </Button>
+              <Typography variant="body1" sx={{ mt: 2 }}>{selectedUser.description}</Typography>
+              <Typography variant="body1" sx={{ mt: 2 }}>{selectedUser.rol}</Typography>
               
             </>
           )}
 
-          {selectedUser && selectedUser.name === 'Pablo' && (
+          {selectedUser && selectedUser.name === 'Eras' && (
             <>
               <Box sx={{ backgroundImage: `url(${selectedUser.cover})`, backgroundSize: "cover", backgroundPosition: "center", height: "150px", borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <Typography variant="h5" sx={{ color: "white", fontWeight: "bold", textTransform: "uppercase", backgroundColor: "rgba(0, 0, 0, 0.5)", padding: "8px", borderRadius: "4px" }}>{selectedUser.name}</Typography>
               </Box>
 
-              <Typography variant="body1" sx={{ mt: 2 }}>Puntos Totales: {Object.values(selectedUser.scores).reduce((acc, score) => acc + score, 0)}</Typography>
-              <Typography variant="body1" sx={{ mt: 2 }}>Puntos por juego:</Typography>
-              {games.map(game => (
-                <Typography key={game.name} variant="body2" sx={{ mt: 1 }}>{game.name}: {selectedUser.scores[game.name] || 0}</Typography>
-              ))}
-              <Typography variant="body1" sx={{ mt: 2 }}>Evolución:</Typography>
-              {selectedUser.history.map((score, index) => (
-                <Typography key={index} variant="body2" sx={{ mt: 1 }}>Ronda {index + 1}: {score}</Typography>
-              ))}
-              <Button variant="contained" color="secondary" fullWidth sx={{ mt: 1 }} onClick={handleCloseUserModal}>
-                Cerrar
-              </Button>
-              
+              <Typography variant="body1" sx={{ mt: 2 }}>{selectedUser.description}</Typography>
+              <Typography variant="body1" sx={{ mt: 2 }}>{selectedUser.rol}</Typography>
             </>
           )}
 
-          {selectedUser && selectedUser.name === 'Danis' && (
+          {selectedUser && selectedUser.name === 'Goku' && (
             <>
               <Box sx={{ backgroundImage: `url(${selectedUser.cover})`, backgroundSize: "cover", backgroundPositionY: "top", height: "150px", borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <Typography variant="h5" sx={{ color: "white", fontWeight: "bold", textTransform: "uppercase", backgroundColor: "rgba(0, 0, 0, 0.5)", padding: "8px", borderRadius: "4px" }}>{selectedUser.name}</Typography>
               </Box>
 
-              <Typography variant="body1" sx={{ mt: 2 }}>Puntos Totales: {Object.values(selectedUser.scores).reduce((acc, score) => acc + score, 0)}</Typography>
-              <Typography variant="body1" sx={{ mt: 2 }}>Puntos por juego:</Typography>
-              {games.map(game => (
-                <Typography key={game.name} variant="body2" sx={{ mt: 1 }}>{game.name}: {selectedUser.scores[game.name] || 0}</Typography>
-              ))}
-              <Typography variant="body1" sx={{ mt: 2 }}>Evolución:</Typography>
-              {selectedUser.history.map((score, index) => (
-                <Typography key={index} variant="body2" sx={{ mt: 1 }}>Ronda {index + 1}: {score}</Typography>
-              ))}
-              <Button variant="contained" color="secondary" fullWidth sx={{ mt: 1 }} onClick={handleCloseUserModal}>
-                Cerrar
-              </Button>
-              
+              <Typography variant="body1" sx={{ mt: 2 }}>{selectedUser.description}</Typography>
+              <Typography variant="body1" sx={{ mt: 2 }}>{selectedUser.rol}</Typography>
             </>
           )}
 
-          {selectedUser && selectedUser.name === 'Noya' && (
+          {selectedUser && selectedUser.name === 'El Noyas' && (
             <>
               <Box sx={{ backgroundImage: `url(${selectedUser.cover})`, backgroundSize: "cover", backgroundPosition: "center", height: "150px", borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <Typography variant="h5" sx={{ color: "white", fontWeight: "bold", textTransform: "uppercase", backgroundColor: "rgba(0, 0, 0, 0.5)", padding: "8px", borderRadius: "4px" }}>{selectedUser.name}</Typography>
               </Box>
 
-              <Typography variant="body1" sx={{ mt: 2 }}>Puntos Totales: {Object.values(selectedUser.scores).reduce((acc, score) => acc + score, 0)}</Typography>
-              <Typography variant="body1" sx={{ mt: 2 }}>Puntos por juego:</Typography>
-              {games.map(game => (
-                <Typography key={game.name} variant="body2" sx={{ mt: 1 }}>{game.name}: {selectedUser.scores[game.name] || 0}</Typography>
-              ))}
-              <Typography variant="body1" sx={{ mt: 2 }}>Evolución:</Typography>
-              {selectedUser.history.map((score, index) => (
-                <Typography key={index} variant="body2" sx={{ mt: 1 }}>Ronda {index + 1}: {score}</Typography>
-              ))}
-              <Button variant="contained" color="secondary" fullWidth sx={{ mt: 1 }} onClick={handleCloseUserModal}>
-                Cerrar
-              </Button>
-              
+              <Typography variant="body1" sx={{ mt: 2 }}>{selectedUser.description}</Typography>
+              <Typography variant="body1" sx={{ mt: 2 }}>{selectedUser.rol}</Typography>
             </>
           )}
         </Box>
