@@ -14,10 +14,10 @@ const initialGames = [
 ];
 
 const initialUsers = [
-  { id: 1, name: "Roxo", scores: {}, history: [] },
-  { id: 2, name: "Noya", scores: {}, history: [] },
-  { id: 3, name: "Danis", scores: {}, history: [] },
-  { id: 4, name: "Pablo", scores: {}, history: [] }
+  { id: 1, name: "Roxo", cover: '/roxo.JPG', scores: {}, history: [] },
+  { id: 2, name: "Noya", cover: '/noyas.JPG', scores: {}, history: [] },
+  { id: 3, name: "Danis", cover: '/danis.jpg', scores: {}, history: [] },
+  { id: 4, name: "Pablo", cover: '/pablo.JPG', scores: {}, history: [] }
 ];
 
 const userColors = {
@@ -39,11 +39,12 @@ export default function GameDashboard() {
   });  
 
   const [selectedGame, setSelectedGame] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
   const [newGameName, setNewGameName] = useState("");
   const [newGameCover, setNewGameCover] = useState("");
   const [round, setRound] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [openModal, setOpenModal] = useState(false);
+  const [openNewGameModal, setOpenNewGameModal] = useState(false);
   const [gifUrl, setGifUrl] = useState("https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExcmd4M3pnMXhoeW95aXJvamg0dWhydTdkZGp4bjN1cGF1bjgwc3g0NCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/5tiNlHkA1WdUh3jRDW/giphy.gif");
   const [countdown, setCountdown] = useState("");
   const [videoCountdownModalOpen, setVideoCountdownModalOpen] = useState(false);
@@ -136,12 +137,22 @@ export default function GameDashboard() {
     }
   }, []);
 
-  const handleOpenModal = (game) => {
+  const handleOpenGamesModal = (game) => {
     setSelectedGame(game);
   };
 
-  const handleCloseModal = () => {
+  const handleCloseGamesModal = () => {
     setSelectedGame(null);
+  };
+
+  const handleUserModal = (user) => {
+    console.log(user);
+    setSelectedUser(user);
+  };
+
+  const handleCloseUserModal = () => {
+    console.log('sale');
+    setSelectedUser(null);
   };
 
   const handleAssignPoints = (userId) => {
@@ -188,21 +199,21 @@ export default function GameDashboard() {
   };
 
   // Descomentar para activar video intro
-  if (loading) {
-    return (
-      <div style={{ position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", backgroundColor: "black", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <video id="intro-video" width="100%" height="100%" autoPlay muted playsInline>
-          <source src="/Imaginary Neon Cube_free.mp4" type="video/mp4" />
-        </video>
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div style={{ position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", backgroundColor: "black", display: "flex", alignItems: "center", justifyContent: "center" }}>
+  //       <video id="intro-video" width="100%" height="100%" autoPlay muted playsInline>
+  //         <source src="/xgn-lestedo-25/Imaginary Neon Cube_free.mp4" type="video/mp4" />
+  //       </video>
+  //     </div>
+  //   );
+  // }
 
   return (
     <Container maxWidth={false} style={{ padding: "16px", backgroundColor: "#121212", color: "white", minHeight: "100vh", width: "100vw" }}>
       <div style={{ width: "100%", height: "2px", backgroundColor: "#F363FA", position: "fixed", top: 0, left: 0, zIndex: 10000 }}></div>
       <div style={{ width: "10%", textAlign: "left", marginLeft:"25px", marginBottom: "20px", position: "relative", zIndex: 9999 }}>
-        <img src="/logo.png" alt="Logo" style={{ maxWidth: "200px" }} />
+        <img src="/xgn-lestedo-25/logo.png" alt="Logo" style={{ maxWidth: "200px" }} />
       </div>
 
       {/* Panel de Contador */}
@@ -270,7 +281,7 @@ export default function GameDashboard() {
             <TableBody>
               {users.map(user => (
                 <TableRow key={user.id}>
-                  <TableCell style={{ color: "white" }}>{user.name}</TableCell>
+                  <TableCell style={{ color: "white", cursor: "pointer" }} onClick={() => handleUserModal(user)}>{user.name}</TableCell>
                   {games.map(game => (
                     <TableCell key={game.name} style={{ color: "white" }}>{user.scores[game.name]}</TableCell>
                   ))}
@@ -323,7 +334,7 @@ export default function GameDashboard() {
           <Grid container spacing={2} style={{ overflowY: "auto", height: "600px", scrollbarWidth: "thin", scrollbarColor: "#F363FA #1e1e1e" }}>
             {games.map((game, index) => (
               <Grid item xs={6} key={index}>
-                <Card onClick={() => setSelectedGame(game)} style={{ cursor: "pointer", textAlign: "center", backgroundColor: "#2a2a2a", color: "white" }}>
+                <Card onClick={() => handleOpenGamesModal(game)} style={{ cursor: "pointer", textAlign: "center", backgroundColor: "#2a2a2a", color: "white" }}>
                   <CardContent>
                     <img src={game.cover} alt={game.name} style={{ width: "100%", height: "180px", objectFit: "cover", borderRadius: "8px" }} />
                     <Typography variant="body1" style={{ marginTop: "8px" }}>{game.name}</Typography>
@@ -361,7 +372,7 @@ export default function GameDashboard() {
       </Rnd>
 
       {/* Modal para asignar puntos */}
-      <Modal open={!!selectedGame} onClose={handleCloseModal}>
+      <Modal open={!!selectedGame} onClose={handleCloseGamesModal}>
         <Box sx={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: 400, bgcolor: "#1e1e1e", color: "white", boxShadow: 24, p: 4, borderRadius: 2 }}>
           {selectedGame && (
             <>
@@ -381,8 +392,101 @@ export default function GameDashboard() {
         </Box>
       </Modal>
 
+      {/* Modal datos jugador */}
+      <Modal open={!!selectedUser} onClose={handleCloseUserModal}>
+        <Box sx={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: 400, bgcolor: "#1e1e1e", color: "white", boxShadow: 24, p: 4, borderRadius: 2 }}>
+          {selectedUser && selectedUser.name === 'Roxo' && (
+            <>
+              <Box sx={{ backgroundImage: `url(${selectedUser.cover})`, backgroundSize: "cover", backgroundPositionY: "top !important", height: "150px", borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <Typography variant="h5" sx={{ color: "white", fontWeight: "bold", textTransform: "uppercase", backgroundColor: "rgba(0, 0, 0, 0.5)", padding: "8px", borderRadius: "4px" }}>{selectedUser.name}</Typography>
+              </Box>
+
+              <Typography variant="body1" sx={{ mt: 2 }}>Puntos Totales: {Object.values(selectedUser.scores).reduce((acc, score) => acc + score, 0)}</Typography>
+              <Typography variant="body1" sx={{ mt: 2 }}>Puntos por juego:</Typography>
+              {games.map(game => (
+                <Typography key={game.name} variant="body2" sx={{ mt: 1 }}>{game.name}: {selectedUser.scores[game.name] || 0}</Typography>
+              ))}
+              <Typography variant="body1" sx={{ mt: 2 }}>Evolución:</Typography>
+              {selectedUser.history.map((score, index) => (
+                <Typography key={index} variant="body2" sx={{ mt: 1 }}>Ronda {index + 1}: {score}</Typography>
+              ))}
+              <Button variant="contained" color="secondary" fullWidth sx={{ mt: 1 }} onClick={handleCloseUserModal}>
+                Cerrar
+              </Button>
+              
+            </>
+          )}
+
+          {selectedUser && selectedUser.name === 'Pablo' && (
+            <>
+              <Box sx={{ backgroundImage: `url(${selectedUser.cover})`, backgroundSize: "cover", backgroundPosition: "center", height: "150px", borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <Typography variant="h5" sx={{ color: "white", fontWeight: "bold", textTransform: "uppercase", backgroundColor: "rgba(0, 0, 0, 0.5)", padding: "8px", borderRadius: "4px" }}>{selectedUser.name}</Typography>
+              </Box>
+
+              <Typography variant="body1" sx={{ mt: 2 }}>Puntos Totales: {Object.values(selectedUser.scores).reduce((acc, score) => acc + score, 0)}</Typography>
+              <Typography variant="body1" sx={{ mt: 2 }}>Puntos por juego:</Typography>
+              {games.map(game => (
+                <Typography key={game.name} variant="body2" sx={{ mt: 1 }}>{game.name}: {selectedUser.scores[game.name] || 0}</Typography>
+              ))}
+              <Typography variant="body1" sx={{ mt: 2 }}>Evolución:</Typography>
+              {selectedUser.history.map((score, index) => (
+                <Typography key={index} variant="body2" sx={{ mt: 1 }}>Ronda {index + 1}: {score}</Typography>
+              ))}
+              <Button variant="contained" color="secondary" fullWidth sx={{ mt: 1 }} onClick={handleCloseUserModal}>
+                Cerrar
+              </Button>
+              
+            </>
+          )}
+
+          {selectedUser && selectedUser.name === 'Danis' && (
+            <>
+              <Box sx={{ backgroundImage: `url(${selectedUser.cover})`, backgroundSize: "cover", backgroundPositionY: "top", height: "150px", borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <Typography variant="h5" sx={{ color: "white", fontWeight: "bold", textTransform: "uppercase", backgroundColor: "rgba(0, 0, 0, 0.5)", padding: "8px", borderRadius: "4px" }}>{selectedUser.name}</Typography>
+              </Box>
+
+              <Typography variant="body1" sx={{ mt: 2 }}>Puntos Totales: {Object.values(selectedUser.scores).reduce((acc, score) => acc + score, 0)}</Typography>
+              <Typography variant="body1" sx={{ mt: 2 }}>Puntos por juego:</Typography>
+              {games.map(game => (
+                <Typography key={game.name} variant="body2" sx={{ mt: 1 }}>{game.name}: {selectedUser.scores[game.name] || 0}</Typography>
+              ))}
+              <Typography variant="body1" sx={{ mt: 2 }}>Evolución:</Typography>
+              {selectedUser.history.map((score, index) => (
+                <Typography key={index} variant="body2" sx={{ mt: 1 }}>Ronda {index + 1}: {score}</Typography>
+              ))}
+              <Button variant="contained" color="secondary" fullWidth sx={{ mt: 1 }} onClick={handleCloseUserModal}>
+                Cerrar
+              </Button>
+              
+            </>
+          )}
+
+          {selectedUser && selectedUser.name === 'Noya' && (
+            <>
+              <Box sx={{ backgroundImage: `url(${selectedUser.cover})`, backgroundSize: "cover", backgroundPosition: "center", height: "150px", borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <Typography variant="h5" sx={{ color: "white", fontWeight: "bold", textTransform: "uppercase", backgroundColor: "rgba(0, 0, 0, 0.5)", padding: "8px", borderRadius: "4px" }}>{selectedUser.name}</Typography>
+              </Box>
+
+              <Typography variant="body1" sx={{ mt: 2 }}>Puntos Totales: {Object.values(selectedUser.scores).reduce((acc, score) => acc + score, 0)}</Typography>
+              <Typography variant="body1" sx={{ mt: 2 }}>Puntos por juego:</Typography>
+              {games.map(game => (
+                <Typography key={game.name} variant="body2" sx={{ mt: 1 }}>{game.name}: {selectedUser.scores[game.name] || 0}</Typography>
+              ))}
+              <Typography variant="body1" sx={{ mt: 2 }}>Evolución:</Typography>
+              {selectedUser.history.map((score, index) => (
+                <Typography key={index} variant="body2" sx={{ mt: 1 }}>Ronda {index + 1}: {score}</Typography>
+              ))}
+              <Button variant="contained" color="secondary" fullWidth sx={{ mt: 1 }} onClick={handleCloseUserModal}>
+                Cerrar
+              </Button>
+              
+            </>
+          )}
+        </Box>
+      </Modal>
+
       {/* Modal para agregar juegos */}
-      <Modal open={openModal} onClose={() => setOpenModal(false)}>
+      <Modal open={openNewGameModal} onClose={() => setOpenNewGameModal(false)}>
         <Box style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", backgroundColor: "#1e1e1e", padding: "20px", color: "white", borderRadius: "8px" }}>
           <Typography variant="h6">Añadir nuevo juego</Typography>
           <TextField label="Nombre del juego" fullWidth margin="normal" value={newGameName} onChange={(e) => setNewGameName(e.target.value)} style={{ backgroundColor: "white" }} />
