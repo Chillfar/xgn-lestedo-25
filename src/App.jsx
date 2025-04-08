@@ -49,6 +49,7 @@ export default function GameDashboard() {
   const [round, setRound] = useState(0);
   const [loading, setLoading] = useState(true);
   const [openNewGameModal, setOpenNewGameModal] = useState(false);
+  const [openResetModal, setOpenResetModal] = useState(false);
   const [gifUrl, setGifUrl] = useState("https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExcmd4M3pnMXhoeW95aXJvamg0dWhydTdkZGp4bjN1cGF1bjgwc3g0NCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/5tiNlHkA1WdUh3jRDW/giphy.gif");
   const [countdown, setCountdown] = useState("");
   const [videoCountdownModalOpen, setVideoCountdownModalOpen] = useState(false);
@@ -105,14 +106,14 @@ export default function GameDashboard() {
       setGames([...games, newGame]);
       setNewGameName("");
       setNewGameCover("");
-      setOpenModal(false);
+      setOpenNewGameModal(false);
     }
   };
 
   const deleteGame = (selectedGame) => {
     setGames(games.filter(game => game.name !== selectedGame.name));
     setSelectedGame(null);
-    setOpenModal(false);
+    setOpenNewGameModal(false);
   };
   
   const fetchRandomGif = async () => {
@@ -154,7 +155,6 @@ export default function GameDashboard() {
   };
 
   const handleCloseUserModal = () => {
-    console.log('sale');
     setSelectedUser(null);
   };
 
@@ -181,7 +181,6 @@ export default function GameDashboard() {
       });
     });
   };
-  
 
   const nextRound = () => {
     setRound(prev => prev + 1);
@@ -189,6 +188,21 @@ export default function GameDashboard() {
       ...user,
       history: [...user.history, Object.values(user.scores).reduce((acc, score) => acc + score, 0)]
     })));
+  };
+
+  const resetData = () => {
+    localStorage.setItem("games", JSON.stringify(initialGames));
+    localStorage.setItem("users", JSON.stringify(initialUsers));
+    window.location.reload();
+    setOpenResetModal(false);
+  };
+
+  const handleOpenResetModal = () => {
+    setOpenResetModal(true);
+  };
+
+  const handleCloseResetModal = () => {
+    setOpenResetModal(false);
   };
 
   const chartData = {
@@ -218,6 +232,7 @@ export default function GameDashboard() {
       <div style={{ width: "10%", textAlign: "left", marginLeft:"25px", marginBottom: "20px", position: "relative", zIndex: 9999 }}>
         <img src="/xgn-lestedo-25/logo.png" alt="Logo" style={{ maxWidth: "200px" }} />
       </div>
+
 
       {/* Panel de Contador */}
       <Rnd default={{ x: 1600, y: 35, width: "14%", height: "auto" }}>
@@ -271,6 +286,8 @@ export default function GameDashboard() {
       <Rnd default={{ x: 40, y: 120, width: "40%", height: "auto" }}>
         <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white" }}>
           <Typography style={{ textAlign: "center"}} variant="h5" gutterBottom>Ranking</Typography>
+          <Button variant="outlined" color="secondary" size="small" style={{ position: "absolute", right: "15px", top: "20px" }} onClick={() => handleOpenResetModal(true)}>Resetear datos</Button>
+
           <Table style={{ overflowX: "scroll"}}>
             <TableHead>
               <TableRow>
@@ -331,7 +348,7 @@ export default function GameDashboard() {
         <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white" }}>
           <Typography variant="h5" gutterBottom>Selecciona un juego para puntuar</Typography>
           {/* Botón para abrir modal de agregar juego */}
-          <Button variant="contained" color="secondary" onClick={() => setOpenModal(true)} style={{ marginBottom: "10px", width: "100%" }}>
+          <Button variant="contained" color="secondary" onClick={() => setOpenNewGameModal(true)} style={{ marginBottom: "10px", width: "100%" }}>
             Añadir Nuevo Juego
           </Button>
           <Grid container spacing={2} style={{ overflowY: "auto", height: "600px", scrollbarWidth: "thin", scrollbarColor: "#F363FA #1e1e1e" }}>
@@ -451,6 +468,14 @@ export default function GameDashboard() {
           <TextField label="Nombre del juego" fullWidth margin="normal" value={newGameName} onChange={(e) => setNewGameName(e.target.value)} style={{ backgroundColor: "white" }} />
           <TextField label="URL de la portada" fullWidth margin="normal" value={newGameCover} onChange={(e) => setNewGameCover(e.target.value)} style={{ backgroundColor: "white" }} />
           <Button variant="contained" color="primary" fullWidth onClick={addNewGame} style={{ marginTop: "10px" }}>Agregar Juego</Button>
+        </Box>
+      </Modal>
+
+      {/* Modal reseteo de datos */}
+      <Modal open={openResetModal} onClose={handleCloseResetModal}>
+        <Box sx={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: 400, bgcolor: "#1e1e1e", color: "white", boxShadow: 24, p: 4, borderRadius: 2 }}>
+          <Typography variant="body1">¿Seguro que deseas borrar los datos guardados?</Typography>
+          <Button variant="contained" color="primary" fullWidth onClick={resetData} style={{ marginTop: "10px" }}>Borrar datos</Button>
         </Box>
       </Modal>
     </Container>
