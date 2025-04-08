@@ -270,7 +270,7 @@ export default function GameDashboard() {
       </Rnd>)}
 
       {/* Panel de Contador móvil*/}
-      {isMobile && (<Rnd default={{ x: 0, y: 0, width: "92%", height: "auto" }}>
+      {isMobile && (<Rnd default={{ x: 0, y: 0, width: "92%", height: "auto" }} enableResizing={false} disableDragging={true}>
         <Paper 
           // onClick={() => setVideoModalOpen(true)}
           style={{ 
@@ -348,7 +348,7 @@ export default function GameDashboard() {
           </Table>
         </Paper>
       </Rnd>)}
-      {isMobile && (<Rnd default={{ x: 0, y: 100, width: "92%", height: "auto" }}>
+      {isMobile && (<Rnd default={{ x: 0, y: 100, width: "92%", height: "auto" }} enableResizing={false} disableDragging={true}>
         <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white", overflow: "scroll", scrollbarWidth: "thin", scrollbarColor: "#F363FA #1e1e1e"}}>
           <Typography style={{ textAlign: "center"}} variant="h5" gutterBottom>Ranking</Typography>
           <Button variant="outlined" color="secondary" size="small" style={{ position: "absolute", right: "15px", top: "20px" }} onClick={() => handleOpenResetModal(true)}>↻</Button>
@@ -386,7 +386,7 @@ export default function GameDashboard() {
             <Button variant="contained" color="secondary" fullWidth onClick={nextRound} sx={{ mt: 2 }}>Siguiente Ronda</Button>
           </Paper>
       </Rnd>)}
-      {isMobile && (<Rnd default={{ x: 0, y: 500, width: "92%", height: "auto" }}>
+      {isMobile && (<Rnd default={{ x: 0, y: 510, width: "92%", height: "auto" }} enableResizing={false} disableDragging={true}>
         <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white" }}>
             <Typography variant="h5" gutterBottom>Evolución de Puntos</Typography>
             <Line data={chartData} />
@@ -414,7 +414,7 @@ export default function GameDashboard() {
           loading="lazy">
         </iframe>
       </Rnd>)}
-      {isMobile && (<Rnd default={{ x: 0, y: 1890, width: "92%", height: "auto" }}>
+      {isMobile && (<Rnd default={{ x: 0, y: 1900, width: "92%", height: "auto" }} enableResizing={false} disableDragging={true}>
         <iframe style={{ border: "none" }}
           src="https://open.spotify.com/embed/playlist/3YvgAU67nQK5XoaIP0aqSd?utm_source=generator" 
           width="100%" 
@@ -451,7 +451,7 @@ export default function GameDashboard() {
           </Grid>
         </Paper>
       </Rnd>)}
-      {isMobile && (<Rnd default={{ x: 0, y: 800, width: "92%", height: "auto" }}>
+      {isMobile && (<Rnd default={{ x: 0, y: 810, width: "92%", height: "auto" }} enableResizing={false} disableDragging={true}>
         <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white"}}>
           <Typography variant="h5" gutterBottom>Selecciona un juego para puntuar</Typography>
           {/* Botón para abrir modal de agregar juego */}
@@ -480,7 +480,7 @@ export default function GameDashboard() {
           <iframe width="100%" height="300" src="https://www.youtube.com/embed/videoseries?si=yt9cPirnyjTM-f3_&amp;list=PL2ihC4aJWkWpD8C2MJ62Cx80abK9l-I4L" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </Paper>
       </Rnd>)}
-      {isMobile && (<Rnd default={{ x: 0, y: 2285, width: "92%", height: "auto" }}>
+      {isMobile && (<Rnd default={{ x: 0, y: 2295, width: "92%", height: "auto" }} enableResizing={false} disableDragging={true}>
         <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white" }}>
           <Typography variant="h5" gutterBottom>Party Vídeos</Typography>
           <iframe width="100%" height="300" src="https://www.youtube.com/embed/videoseries?si=yt9cPirnyjTM-f3_&amp;list=PL2ihC4aJWkWpD8C2MJ62Cx80abK9l-I4L" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
@@ -503,7 +503,7 @@ export default function GameDashboard() {
           ></iframe>
         </Paper>
       </Rnd>)}
-      {isMobile && (<Rnd default={{ x: 0, y: 1550, width: "92%", height: "auto" }}>
+      {isMobile && (<Rnd default={{ x: 0, y: 1560, width: "92%", height: "auto" }} enableResizing={false} disableDragging={true}>
         <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white" }}>
           <Typography variant="h5" gutterBottom>Ubicación</Typography>
           <iframe
