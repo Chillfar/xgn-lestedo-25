@@ -54,6 +54,20 @@ export default function GameDashboard() {
   const [countdown, setCountdown] = useState("");
   const [videoCountdownModalOpen, setVideoCountdownModalOpen] = useState(false);
   const [videoInaugurationModalOpen, setVideoInaugurationModalOpen] = useState(false);
+  const [width, setWidth] = useState(window.innerWidth);
+
+  const handleWindowSizeChange = () => {
+    setWidth(window.innerWidth);
+  }
+
+  useEffect(() => {
+      window.addEventListener('resize', handleWindowSizeChange);
+      return () => {
+          window.removeEventListener('resize', handleWindowSizeChange);
+      }
+  }, []);
+
+  const isMobile = width <= 768;
 
   useEffect(() => {
     const previousGames = localStorage.getItem("games");
@@ -216,26 +230,29 @@ export default function GameDashboard() {
   };
 
   // Descomentar para activar video intro
-  if (loading) {
-    return (
-      <div style={{ position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", backgroundColor: "black", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <video id="intro-video" width="100%" height="100%" autoPlay muted playsInline>
-          <source src="/xgn-lestedo-25/Imaginary Neon Cube_free.mp4" type="video/mp4" />
-        </video>
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div style={{ position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", backgroundColor: "black", display: "flex", alignItems: "center", justifyContent: "center" }}>
+  //       <video id="intro-video" width="100%" height="100%" autoPlay muted playsInline>
+  //         <source src="/xgn-lestedo-25/Imaginary Neon Cube_free.mp4" type="video/mp4" />
+  //       </video>
+  //     </div>
+  //   );
+  // }
 
   return (
-    <Container maxWidth={false} style={{ padding: "16px", backgroundColor: "#121212", color: "white", minHeight: "100vh", width: "100vw" }}>
-      <div style={{ width: "100%", height: "2px", backgroundColor: "#F363FA", position: "fixed", top: 0, left: 0, zIndex: 10000 }}></div>
-      <div style={{ width: "10%", textAlign: "left", marginLeft:"25px", marginBottom: "20px", position: "relative", zIndex: 9999 }}>
-        <img src="/xgn-lestedo-25/logo.png" alt="Logo" style={{ maxWidth: "200px" }} />
-      </div>
+    <Container maxWidth={false} >
+      {!isMobile && (<div style={{ width: "100%", height: "2px", backgroundColor: "#F363FA", position: "fixed", top: 0, left: 0, zIndex: 10000 }}></div>)}
+      {!isMobile && (<div style={{ width: "10%", textAlign: "left", marginLeft:"25px", marginBottom: "20px", position: "relative", zIndex: 9999 }}>
+        <img src="/logo.png" alt="Logo" style={{ maxWidth: "200px" }} />
+      </div>)}
+      {isMobile && (<div style={{ width: "10%", textAlign: "center", position: "relative", zIndex: 9999 }}>
+        <img src="/logo.png" alt="Logo" style={{ maxWidth: "100px" }} />
+      </div>)}
 
 
       {/* Panel de Contador */}
-      <Rnd default={{ x: 1600, y: 35, width: "14%", height: "auto" }}>
+      {!isMobile && (<Rnd default={{ x: 1600, y: 35, width: "14%", height: "auto" }}>
         <Paper 
           // onClick={() => setVideoModalOpen(true)}
           style={{ 
@@ -250,7 +267,26 @@ export default function GameDashboard() {
         >
           <Typography variant="h6" style={{ fontSize: "1.5rem", fontWeight: "bold" }}>{countdown}</Typography>
         </Paper>
-      </Rnd>
+      </Rnd>)}
+
+      {/* Panel de Contador móvil*/}
+      {isMobile && (<Rnd default={{ x: 0, y: 0, width: "92%", height: "auto" }}>
+        <Paper 
+          // onClick={() => setVideoModalOpen(true)}
+          style={{ 
+            // cursor: "pointer",
+            padding: "16px", 
+            background: "linear-gradient(135deg, #ff4081, #ff80ab)", 
+            color: "white", 
+            textAlign: "right", 
+            paddingRight: "30px",
+            borderRadius: "12px", 
+            boxShadow: "0 4px 10px rgba(255, 64, 129, 0.5)" 
+          }}
+        >
+          <Typography variant="h6" style={{ fontSize: "1.5rem", fontWeight: "bold" }}>{countdown}</Typography>
+        </Paper>
+      </Rnd>)}
 
       {/* Modal de Countdown */}
       <Modal open={videoCountdownModalOpen} onClose={() => setVideoModalOpen(false)}>
@@ -283,7 +319,7 @@ export default function GameDashboard() {
       </Modal>
 
       {/* Panel de Ranking */}
-      <Rnd default={{ x: 40, y: 120, width: "40%", height: "auto" }}>
+      {!isMobile && (<Rnd default={{ x: 40, y: 120, width: "40%", height: "auto" }}>
         <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white" }}>
           <Typography style={{ textAlign: "center"}} variant="h5" gutterBottom>Ranking</Typography>
           <Button variant="outlined" color="secondary" size="small" style={{ position: "absolute", right: "15px", top: "20px" }} onClick={() => handleOpenResetModal(true)}>Resetear datos</Button>
@@ -311,24 +347,60 @@ export default function GameDashboard() {
             </TableBody>
           </Table>
         </Paper>
-      </Rnd>
+      </Rnd>)}
+      {isMobile && (<Rnd default={{ x: 0, y: 100, width: "92%", height: "auto" }}>
+        <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white", overflow: "scroll", scrollbarWidth: "thin", scrollbarColor: "#F363FA #1e1e1e"}}>
+          <Typography style={{ textAlign: "center"}} variant="h5" gutterBottom>Ranking</Typography>
+          <Button variant="outlined" color="secondary" size="small" style={{ position: "absolute", right: "15px", top: "20px" }} onClick={() => handleOpenResetModal(true)}>↻</Button>
+
+          <Table style={{ overflow: "scroll", scrollbarWidth: "thin", scrollbarColor: "#F363FA #1e1e1e"}}>
+            <TableHead>
+              <TableRow>
+                <TableCell style={{ color: "white" }}><strong>Jugador</strong></TableCell>
+                {games.map(game => (
+                  <TableCell key={game.name} style={{ color: "white" }}><strong>{game.name}</strong></TableCell>
+                ))}
+                <TableCell style={{ color: "white" }}><strong>Puntos Totales</strong></TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {users.map(user => (
+                <TableRow key={user.id}>
+                  <TableCell style={{ color: "white", cursor: "pointer" }} onClick={() => handleUserModal(user)}>{user.name}</TableCell>
+                  {games.map(game => (
+                    <TableCell key={game.name} style={{ color: "white" }}>{user.scores[game.name]}</TableCell>
+                  ))}
+                  <TableCell style={{ color: "white" }}>{Object.values(user.scores).reduce((acc, score) => acc + score, 0)}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Paper>
+      </Rnd>)}
         
       {/* Panel de Evolución */}
-      <Rnd default={{ x: 820, y: 120, width: "24%", height: "auto" }}>
+      {!isMobile && (<Rnd default={{ x: 820, y: 120, width: "24%", height: "auto" }}>
         <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white" }}>
             <Typography variant="h5" gutterBottom>Evolución de Puntos</Typography>
             <Line data={chartData} />
             <Button variant="contained" color="secondary" fullWidth onClick={nextRound} sx={{ mt: 2 }}>Siguiente Ronda</Button>
           </Paper>
-      </Rnd>
+      </Rnd>)}
+      {isMobile && (<Rnd default={{ x: 0, y: 500, width: "92%", height: "auto" }}>
+        <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white" }}>
+            <Typography variant="h5" gutterBottom>Evolución de Puntos</Typography>
+            <Line data={chartData} />
+            <Button variant="contained" color="secondary" fullWidth onClick={nextRound} sx={{ mt: 2 }}>Siguiente Ronda</Button>
+          </Paper>
+      </Rnd>)}
 
       {/* Panel de GIPHY */}
-      <Rnd default={{ x: 1300, y: 120, width: "10%", height: "auto" }}>
+      {!isMobile && (<Rnd default={{ x: 1300, y: 120, width: "10%", height: "auto" }}>
         <img src={gifUrl} alt="GIF" style={{ width: "100%", cursor: "pointer" }} onClick={fetchRandomGif} />
-      </Rnd>
+      </Rnd>)}
 
       {/* Panel de Spotify */}
-      <Rnd default={{ x: 820, y: 480, width: "24%", height: "auto" }}>
+      {!isMobile && (<Rnd default={{ x: 820, y: 480, width: "24%", height: "auto" }}>
         <iframe style={{ border: "none" }}
           src="https://open.spotify.com/embed/playlist/3YvgAU67nQK5XoaIP0aqSd?utm_source=generator" 
           width="100%" 
@@ -341,10 +413,24 @@ export default function GameDashboard() {
             picture-in-picture"
           loading="lazy">
         </iframe>
-      </Rnd>
+      </Rnd>)}
+      {isMobile && (<Rnd default={{ x: 0, y: 1890, width: "92%", height: "auto" }}>
+        <iframe style={{ border: "none" }}
+          src="https://open.spotify.com/embed/playlist/3YvgAU67nQK5XoaIP0aqSd?utm_source=generator" 
+          width="100%" 
+          height="376"
+          allowfullscreen=""
+          allow="autoplay;
+            clipboard-write;
+            encrypted-media;
+            fullscreen;
+            picture-in-picture"
+          loading="lazy">
+        </iframe>
+      </Rnd>)}
 
       {/* Panel de Juegos */}
-      <Rnd default={{ x: 1510, y: 120, width: "19%", height: "auto" }}>
+      {!isMobile && (<Rnd default={{ x: 1510, y: 120, width: "19%", height: "auto" }}>
         <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white" }}>
           <Typography variant="h5" gutterBottom>Selecciona un juego para puntuar</Typography>
           {/* Botón para abrir modal de agregar juego */}
@@ -364,18 +450,45 @@ export default function GameDashboard() {
             ))}
           </Grid>
         </Paper>
-      </Rnd>
+      </Rnd>)}
+      {isMobile && (<Rnd default={{ x: 0, y: 800, width: "92%", height: "auto" }}>
+        <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white"}}>
+          <Typography variant="h5" gutterBottom>Selecciona un juego para puntuar</Typography>
+          {/* Botón para abrir modal de agregar juego */}
+          <Button variant="contained" color="secondary" onClick={() => setOpenNewGameModal(true)} style={{ marginBottom: "10px", width: "100%" }}>
+            Añadir Nuevo Juego
+          </Button>
+          <Grid container spacing={2} style={{ overflowY: "auto", height: "600px", scrollbarWidth: "thin", scrollbarColor: "#F363FA #1e1e1e" }}>
+            {games.map((game, index) => (
+              <Grid item xs={6} key={index}>
+                <Card onClick={() => handleOpenGamesModal(game)} style={{ cursor: "pointer", textAlign: "center", backgroundColor: "#2a2a2a", color: "white" }}>
+                  <CardContent>
+                    <img src={game.cover} alt={game.name} style={{ width: "100%", height: "180px", objectFit: "cover", borderRadius: "8px" }} />
+                    <Typography variant="body1" style={{ marginTop: "8px" }}>{game.name}</Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        </Paper>
+      </Rnd>)}
 
       {/* Panel de Vídeos */}
-      <Rnd default={{ x: 40, y: 480, width: "40%", height: "auto" }}>
+      {!isMobile && (<Rnd default={{ x: 40, y: 480, width: "40%", height: "auto" }}>
         <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white" }}>
           <Typography variant="h5" gutterBottom>Party Vídeos</Typography>
           <iframe width="100%" height="300" src="https://www.youtube.com/embed/videoseries?si=yt9cPirnyjTM-f3_&amp;list=PL2ihC4aJWkWpD8C2MJ62Cx80abK9l-I4L" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </Paper>
-      </Rnd>
+      </Rnd>)}
+      {isMobile && (<Rnd default={{ x: 0, y: 2285, width: "92%", height: "auto" }}>
+        <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white" }}>
+          <Typography variant="h5" gutterBottom>Party Vídeos</Typography>
+          <iframe width="100%" height="300" src="https://www.youtube.com/embed/videoseries?si=yt9cPirnyjTM-f3_&amp;list=PL2ihC4aJWkWpD8C2MJ62Cx80abK9l-I4L" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </Paper>
+      </Rnd>)}
 
       {/* Panel del Mapa */}
-      <Rnd default={{ x: 1300, y: 332, width: "10%", height: "auto" }}>
+      {!isMobile && (<Rnd default={{ x: 1300, y: 332, width: "10%", height: "auto" }}>
         <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white" }}>
           <Typography variant="h5" gutterBottom>Ubicación</Typography>
           <iframe
@@ -389,7 +502,22 @@ export default function GameDashboard() {
             src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCQp9lnjB31CyDBNg49fo4oz15n976iz2Q&q=Lugar+A+Picota,+5,+15881+Troitomil,+A+Coruña"
           ></iframe>
         </Paper>
-      </Rnd>
+      </Rnd>)}
+      {isMobile && (<Rnd default={{ x: 0, y: 1550, width: "92%", height: "auto" }}>
+        <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white" }}>
+          <Typography variant="h5" gutterBottom>Ubicación</Typography>
+          <iframe
+            title="Ubicación"
+            width="100%"
+            height="250"
+            style={{ border: 0 }}
+            loading="lazy"
+            allowFullScreen
+            referrerPolicy="no-referrer-when-downgrade"
+            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCQp9lnjB31CyDBNg49fo4oz15n976iz2Q&q=Lugar+A+Picota,+5,+15881+Troitomil,+A+Coruña"
+          ></iframe>
+        </Paper>
+      </Rnd>)}
 
       {/* Modal para asignar puntos */}
       <Modal open={!!selectedGame} onClose={handleCloseGamesModal}>
