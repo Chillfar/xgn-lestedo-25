@@ -3,6 +3,7 @@ import { Rnd } from "react-rnd";
 import { Card, CardContent, Typography, Grid, Container, Table, TableHead, TableRow, TableCell, TableBody, Paper, Modal, Box, Button, TextField } from "@mui/material";
 import { Line } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
+import "./App.css";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -31,6 +32,34 @@ const userColors = {
   Eras: "#F3FF33"
 };
 
+const geekQuotes = [
+  "Porque hoy se decide quién es digno de empuñar el ratón legendario.",
+  "Porque la conexión LAN es nuestro vínculo sagrado.",
+  "Porque los dragones no se matan solos, ¡necesitamos al escuadrón!",
+  "Porque hoy no hay respawn en la vida real, pero aquí sí.",
+  "Porque nada une más que un GG bien gritado en la cara del rival.",
+  "Porque es el único día del año donde comemos pizza sin culpa y matamos zombis con estilo.",
+  "Porque nuestras tarjetas gráficas necesitan sentirse vivas.",
+  "Porque sin LAN party no hay gloria, solo lag.",
+  "Porque el destino del universo gamer depende de esta sesión.",
+  "Porque es el día sagrado en que honramos a nuestros ancestros frikis.",
+  "Porque solo juntos derrotaremos al jefe final... y al sueño.",
+  "Porque el WiFi es para los débiles. Hoy es LAN o nada.",
+  "Porque formateamos el PC solo para este día. ¡Con drivers y todo!",
+  "Porque el café fluye por nuestras venas como el maná en Azeroth.",
+  "Porque el que no juega, ¡castea!",
+  "Porque un teclado mecánico es música para nuestros oídos... de acero.",
+  "Porque aquí no hay lag, solo decisiones mal tomadas.",
+  "Porque el botón de escape hoy no existe.",
+  "Porque no hay mejor frag que el que haces delante de tus colegas.",
+  "Porque el ventilador suena como un reactor, y eso nos pone.",
+  "Porque en este cuarto se mide la verdadera habilidad, no los FPS.",
+  "Porque hoy la realidad se pausa y la fantasía se ejecuta.",
+  "Porque los NPCs tienen miedo de que entremos al servidor.",
+  "Porque solo en una LAN party puedes gritar '¡cura!' y que te oigan de verdad.",
+  "Porque el que apaga el router... será desterrado para siempre."
+];
+
 export default function GameDashboard() {
   const [games, setGames] = useState(() => {
     const savedGames = localStorage.getItem("games");
@@ -55,10 +84,17 @@ export default function GameDashboard() {
   const [videoCountdownModalOpen, setVideoCountdownModalOpen] = useState(false);
   const [videoInaugurationModalOpen, setVideoInaugurationModalOpen] = useState(false);
   const [width, setWidth] = useState(window.innerWidth);
+  const [quote, setQuote] = useState("");
 
   const handleWindowSizeChange = () => {
     setWidth(window.innerWidth);
   }
+
+  const handleGenerateQuote = () => {
+    const randomIndex = Math.floor(Math.random() * geekQuotes.length);
+    const random = geekQuotes[randomIndex];
+    setQuote(random);
+  };
 
   useEffect(() => {
       window.addEventListener('resize', handleWindowSizeChange);
@@ -144,6 +180,13 @@ export default function GameDashboard() {
     const interval = setInterval(() => {
       fetchRandomGif();
     }, 60000);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      handleGenerateQuote();
+    }, 20000);
     return () => clearInterval(interval);
   }, []);
 
@@ -250,6 +293,16 @@ export default function GameDashboard() {
         <img src="/logo.png" alt="Logo" style={{ maxWidth: "100px" }} />
       </div>)}
 
+      {/* Panel Quotes */}
+      {!isMobile && (<Rnd default={{ x: 224, y: 30, width: "74%", height: "auto" }}>
+        <div className="flex flex-col items-center justify-center" style={{ padding: "16px", color: "white" }}>
+          {quote && (
+            <div className="panel-container">
+              <div className="panel-text">{quote}</div>
+            </div>
+          )}
+        </div>
+      </Rnd>)}
 
       {/* Panel de Contador */}
       {!isMobile && (<Rnd default={{ x: 1600, y: 35, width: "14%", height: "auto" }}>
