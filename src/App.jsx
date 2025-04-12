@@ -179,7 +179,7 @@ export default function GameDashboard() {
   useEffect(() => {
     const interval = setInterval(() => {
       fetchRandomGif();
-    }, 60000);
+    }, 70000);
     return () => clearInterval(interval);
   }, []);
 
@@ -304,7 +304,7 @@ export default function GameDashboard() {
       </div>)}
 
       {/* Panel Quotes */}
-      {!isMobile && (<Rnd default={{ x: 224, y: 30, width: "74%", height: "auto" }}>
+      {!isMobile && (<Rnd default={{ x: 224, y: 30, width: "74%", height: "auto" }} enableResizing={false} disableDragging={true}>
         <div className="flex flex-col items-center justify-center" style={{ padding: "16px", color: "white" }}>
           {quote && (
             <div className="panel-container">
