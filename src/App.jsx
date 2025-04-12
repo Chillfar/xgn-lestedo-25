@@ -199,6 +199,15 @@ export default function GameDashboard() {
     }
   }, []);
 
+  const skipIntro = () => {
+    const video = document.getElementById("intro-video");
+    if (video) {
+      video.currentTime = video.duration;
+      video.pause();
+      setLoading(false);
+    }
+  };
+
   const handleOpenGamesModal = (game) => {
     setSelectedGame(game);
   };
@@ -273,15 +282,16 @@ export default function GameDashboard() {
   };
 
   // Descomentar para activar video intro
-  // if (loading) {
-  //   return (
-  //     <div style={{ position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", backgroundColor: "black", display: "flex", alignItems: "center", justifyContent: "center" }}>
-  //       <video id="intro-video" width="100%" height="100%" autoPlay muted playsInline>
-  //         <source src="/xgn-lestedo-25/Imaginary Neon Cube_free.mp4" type="video/mp4" />
-  //       </video>
-  //     </div>
-  //   );
-  // }
+  if (loading) {
+    return (
+      <div style={{ position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", backgroundColor: "black", alignItems: "center", justifyContent: "center" }}>
+        <Button variant="contained" color="secondary" onClick={skipIntro} sx={{ mt: 2 }} style={{ zIndex: 10000 }}>Saltar intro</Button>
+        <video id="intro-video" width="100%" height="100%" autoPlay muted playsInline>
+          <source src="/Imaginary Neon Cube_free.mp4" type="video/mp4" />
+        </video>
+      </div>
+    );
+  }
 
   return (
     <Container maxWidth={false} >
@@ -504,7 +514,7 @@ export default function GameDashboard() {
           </Grid>
         </Paper>
       </Rnd>)}
-      {isMobile && (<Rnd default={{ x: 0, y: 810, width: "92%", height: "auto" }} enableResizing={false} disableDragging={true}>
+      {isMobile && (<Rnd default={{ x: 0, y: 840, width: "92%", height: "auto" }} enableResizing={false} disableDragging={true}>
         <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white"}}>
           <Typography variant="h5" gutterBottom>Selecciona un juego para puntuar</Typography>
           {/* Botón para abrir modal de agregar juego */}
@@ -534,7 +544,7 @@ export default function GameDashboard() {
         </Paper>
       </Rnd>)}
       {isMobile && (<Rnd default={{ x: 0, y: 2295, width: "92%", height: "auto" }} enableResizing={false} disableDragging={true}>
-        <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white" }}>
+        <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white", marginBottom: "20px"}}>
           <Typography variant="h5" gutterBottom>Party Vídeos</Typography>
           <iframe width="100%" height="300" src="https://www.youtube.com/embed/videoseries?si=yt9cPirnyjTM-f3_&amp;list=PL2ihC4aJWkWpD8C2MJ62Cx80abK9l-I4L" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </Paper>
