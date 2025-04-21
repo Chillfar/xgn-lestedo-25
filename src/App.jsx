@@ -85,6 +85,7 @@ export default function GameDashboard() {
   const [videoInaugurationModalOpen, setVideoInaugurationModalOpen] = useState(false);
   const [width, setWidth] = useState(window.innerWidth);
   const [quote, setQuote] = useState("");
+  const [openFaksModal, setOpenFaksModal] = useState(false);
 
   const handleWindowSizeChange = () => {
     setWidth(window.innerWidth);
@@ -351,6 +352,179 @@ export default function GameDashboard() {
         </Paper>
       </Rnd>)}
 
+      {/* Panel de FAKs */}
+      {!isMobile && (<Rnd default={{ x: 1780, y: -15, width: "5%", height: "auto" }} enableResizing={false} disableDragging={true} onClick={() => setOpenFaksModal(true)}>
+        <Paper style={{ padding: "16px", boxShadow: "none", cursor: "pointer", backgroundColor: "transparent", color: "white", textAlign: "center" }}>
+          <Typography style={{ fontSize: "1rem", fontWeight: "bold", border: "1px solid #9A26AE" }}>FAKs</Typography>
+        </Paper>
+      </Rnd>)}
+
+      {/* Modal FAKs */}
+      {!isMobile && (<Modal open={openFaksModal} onClose={() => setOpenFaksModal(false)}>
+        <Box sx={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: 800, bgcolor: "#1e1e1e", color: "white", boxShadow: 24, p: 4, borderRadius: 2, height: "85%", overflowY: "scroll", scrollbarWidth: "thin", scrollbarColor: "#F363FA #1e1e1e"}}>
+          <Box sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", padding: "10px", alignItems: "center", justifyContent: "center" }}>
+            <Typography variant="h3" sx={{ color: "white", fontWeight: "bold", backgroundColor: "rgba(0, 0, 0, 0.5)", padding: "8px", borderRadius: "4px" }}>💀 FAKs  LESTEDO LAN PARTY</Typography>
+          </Box>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "32px", paddingRight: "32px", paddingTop: "16px", paddingBottom: "16px" }}>
+            🎟️ <b>¿Hace falta registrarse o puedo aparecer como quien va a misa en Lestedo?</b><br/>
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
+            Esto no es la romería de San Campio, colega. Si no te registras, no entras. No hay hueco, no hay mesa, y lo único que te vas a llevar es una caminata por el polígono y una empanada triste.
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "32px", paddingRight: "32px", paddingTop: "16px", paddingBottom: "16px" }}>
+            🖥️ <b>¿Qué tengo que llevar?</b><br/>
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
+            Tu torre, pantalla, cables, teclado, ratón, regleta, orgullo y paciencia. Y si vienes con un portátil de cuando Fraga era joven, tráete también una vela y una estampita de San Razer a ver si arranca.          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "32px", paddingRight: "32px", paddingTop: "16px", paddingBottom: "16px" }}>
+            🧠 <b>¿Y si soy malo jugando?</b><br/>
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
+            Da igual, aquí aceptamos a mancos, feeders, y hasta al que se compró el LoL por Amazon. Pero prepárate: esto es Galicia, donde los piques duran más que una sobremesa de mariscada. Si pierdes, que sea con arte.
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "32px", paddingRight: "32px", paddingTop: "16px", paddingBottom: "16px" }}>
+            🍕 <b>¿Habrá comida o me llevo una tortilla de Betanzos en el bolsillo?</b><br/>
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
+            Habrá comida, pero no esperes que la cocine tu abuela. Bocatas, pizzas, snacks... la dieta del gamer de verdad. Si quieres caldo, pulpo o filloas, llama a tu madre. Y no, no hay albariño (de momento).
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "32px", paddingRight: "32px", paddingTop: "16px", paddingBottom: "16px" }}>
+            🕹️ <b>¿Qué juegos se van a jugar?</b><br/>
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
+            Los que levantan pasiones y bajan autoestima: LoL, CS2, Valorant, Rocket League, Age of Empires II (en honor a los veteranos), y alguno más que salga a gritos. Si propones un torneo de FIFA, mejor sal al campo a correr tú.          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "32px", paddingRight: "32px", paddingTop: "16px", paddingBottom: "16px" }}>
+            🏆 <b>¿Hay premios o solo sufrimiento y olor a Monster caliente?</b><br/>
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
+            Hay premios, sí. Y si no ganas nada, al menos te llevas trauma, sueño atrasado y una experiencia que ni el Camino de Santiago. Algún trofeo habrá, pero el verdadero premio es no salir en los memes del grupo.
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "32px", paddingRight: "32px", paddingTop: "16px", paddingBottom: "16px" }}>
+            🛌 <b>¿Puedo dormir allí o tengo que buscar paja en un pajar gallego?</b><br/>
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
+            Hay zona para dormir, pero dormirás poco. Entre ronquidos, gritos de victoria y olor a humanidad, descansarás como en una rave rural. Recomendamos antifaz, tapones y una capacidad extrema de adaptación.
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "32px", paddingRight: "32px", paddingTop: "16px", paddingBottom: "16px" }}>
+            📶 <b>¿Hay buen Internet o esto va por señales de humo desde el Monte do Gozo?</b><br/>
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
+            Tranquilo, la conexión va fina, como percebe de primera. Pero si abusas con el torrent, se activa el Protocolo Apagón y te desconectamos más rápido que un político en campaña por Lestedo.
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "32px", paddingRight: "32px", paddingTop: "16px", paddingBottom: "16px" }}>
+            🧍 <b>¿Puedo ir solo o es obligatorio traer a mi primo del pueblo?</b><br/>
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
+            Ven como quieras. Aquí haces colegas en menos de lo que canta un gallo de corral. Eso sí, si vas de sobrado, acabas como los que aparcan en dirección prohibida en Santiago: solo, observado y malquerido.
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "32px", paddingRight: "32px", paddingTop: "16px", paddingBottom: "16px" }}>
+            🛑 <b>¿Hay normas o esto es como un botellón en el campillo?</b><br/>
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
+            Sí, hay normas:
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
+            - No abuses del Wi-Fi o se te aparece el meigallo digital.
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
+            - No pongas reguetón en altavoces, por respeto a la humanidad.
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
+            - No ocupes más mesa de la que necesitas, que esto no es un pulpeiro.
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
+            - Respeta a todo el mundo, incluso al que juega con mando.
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
+            - Si pierdes, asume tu derrota como buen gallego: y cagate en todos los santos.
+          </Typography>
+        </Box>
+      </Modal>
+      )}
+
+      {/* Modal FAKs */}
+      {isMobile && (<Modal open={openFaksModal} onClose={() => setOpenFaksModal(false)} style={{ zIndex: 9999 }}>
+        <Box sx={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: "60%", bgcolor: "#1e1e1e", color: "white", boxShadow: 24, p: 4, borderRadius: 2, height: "85%", overflowY: "scroll", scrollbarWidth: "thin", scrollbarColor: "#F363FA #1e1e1e"}}>
+          <Box sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingTop: "10px", paddingBottom: "10px", alignItems: "center", justifyContent: "center" }}>
+            <Typography variant="h4" sx={{ color: "white", fontWeight: "bold", backgroundColor: "rgba(0, 0, 0, 0.5)", padding: "8px", borderRadius: "4px" }}>💀 FAKs  LESTEDO LAN PARTY</Typography>
+          </Box>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingTop: "16px", paddingBottom: "16px" }}>
+            🎟️ <b>¿Hace falta registrarse o puedo aparecer como quien va a misa en Lestedo?</b><br/>
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "10px", paddingRight: "12px" }}>
+            Esto no es la romería de San Campio, colega. Si no te registras, no entras. No hay hueco, no hay mesa, y lo único que te vas a llevar es una caminata por el polígono y una empanada triste.
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingTop: "16px", paddingBottom: "16px" }}>
+            🖥️ <b>¿Qué tengo que llevar?</b><br/>
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "10px", paddingRight: "12px" }}>
+            Tu torre, pantalla, cables, teclado, ratón, regleta, orgullo y paciencia. Y si vienes con un portátil de cuando Fraga era joven, tráete también una vela y una estampita de San Razer a ver si arranca.          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingTop: "16px", paddingBottom: "16px" }}>
+            🧠 <b>¿Y si soy malo jugando?</b><br/>
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "10px", paddingRight: "12px" }}>
+            Da igual, aquí aceptamos a mancos, feeders, y hasta al que se compró el LoL por Amazon. Pero prepárate: esto es Galicia, donde los piques duran más que una sobremesa de mariscada. Si pierdes, que sea con arte.
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingTop: "16px", paddingBottom: "16px" }}>
+            🍕 <b>¿Habrá comida o me llevo una tortilla de Betanzos en el bolsillo?</b><br/>
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "10px", paddingRight: "12px" }}>
+            Habrá comida, pero no esperes que la cocine tu abuela. Bocatas, pizzas, snacks... la dieta del gamer de verdad. Si quieres caldo, pulpo o filloas, llama a tu madre. Y no, no hay albariño (de momento).
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingTop: "16px", paddingBottom: "16px" }}>
+            🕹️ <b>¿Qué juegos se van a jugar?</b><br/>
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "10px", paddingRight: "12px" }}>
+            Los que levantan pasiones y bajan autoestima: LoL, CS2, Valorant, Rocket League, Age of Empires II (en honor a los veteranos), y alguno más que salga a gritos. Si propones un torneo de FIFA, mejor sal al campo a correr tú.          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingTop: "16px", paddingBottom: "16px" }}>
+            🏆 <b>¿Hay premios o solo sufrimiento y olor a Monster caliente?</b><br/>
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "10px", paddingRight: "12px" }}>
+            Hay premios, sí. Y si no ganas nada, al menos te llevas trauma, sueño atrasado y una experiencia que ni el Camino de Santiago. Algún trofeo habrá, pero el verdadero premio es no salir en los memes del grupo.
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingTop: "16px", paddingBottom: "16px" }}>
+            🛌 <b>¿Puedo dormir allí o tengo que buscar paja en un pajar gallego?</b><br/>
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "10px", paddingRight: "12px" }}>
+            Hay zona para dormir, pero dormirás poco. Entre ronquidos, gritos de victoria y olor a humanidad, descansarás como en una rave rural. Recomendamos antifaz, tapones y una capacidad extrema de adaptación.
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingTop: "16px", paddingBottom: "16px" }}>
+            📶 <b>¿Hay buen Internet o esto va por señales de humo desde el Monte do Gozo?</b><br/>
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "10px", paddingRight: "12px" }}>
+            Tranquilo, la conexión va fina, como percebe de primera. Pero si abusas con el torrent, se activa el Protocolo Apagón y te desconectamos más rápido que un político en campaña por Lestedo.
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingTop: "16px", paddingBottom: "16px" }}>
+            🧍 <b>¿Puedo ir solo o es obligatorio traer a mi primo del pueblo?</b><br/>
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "10px", paddingRight: "12px" }}>
+            Ven como quieras. Aquí haces colegas en menos de lo que canta un gallo de corral. Eso sí, si vas de sobrado, acabas como los que aparcan en dirección prohibida en Santiago: solo, observado y malquerido.
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingTop: "16px", paddingBottom: "16px" }}>
+            🛑 <b>¿Hay normas o esto es como un botellón en el campillo?</b><br/>
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "10px", paddingRight: "12px" }}>
+            Sí, hay normas:
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "10px", paddingRight: "12px" }}>
+            - No abuses del Wi-Fi o se te aparece el meigallo digital.
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "10px", paddingRight: "12px" }}>
+            - No pongas reguetón en altavoces, por respeto a la humanidad.
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "10px", paddingRight: "12px" }}>
+            - No ocupes más mesa de la que necesitas, que esto no es un pulpeiro.
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "10px", paddingRight: "12px" }}>
+            - Respeta a todo el mundo, incluso al que juega con mando.
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "10px", paddingRight: "12px" }}>
+            - Si pierdes, asume tu derrota como buen gallego: y cagate en todos los santos.
+          </Typography>
+        </Box>
+      </Modal>
+      )}
+
       {/* Modal de Countdown */}
       <Modal open={videoCountdownModalOpen} onClose={() => setVideoModalOpen(false)}>
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: 'rgba(0, 0, 0, 0.8)' }}>
@@ -414,7 +588,8 @@ export default function GameDashboard() {
       {isMobile && (<Rnd default={{ x: 0, y: 100, width: "92%", height: "auto" }} enableResizing={false} disableDragging={true}>
         <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white", overflow: "scroll", scrollbarWidth: "thin", scrollbarColor: "#F363FA #1e1e1e"}}>
           <Typography style={{ textAlign: "center"}} variant="h5" gutterBottom>Ranking</Typography>
-          <Button variant="outlined" color="secondary" size="small" style={{ position: "absolute", right: "15px", top: "20px" }} onClick={() => handleOpenResetModal(true)}>↻</Button>
+          <Button variant="outlined" color="secondary" size="small" style={{ position: "absolute", left: "15px", top: "20px", color: "white" }} onClick={() => setOpenFaksModal(true)}>FAKs</Button>
+          <Button variant="outlined" color="secondary" size="small" style={{ position: "absolute", right: "15px", top: "20px", color: "white" }} onClick={() => handleOpenResetModal(true)}>↻</Button>
 
           <Table style={{ overflow: "scroll", scrollbarWidth: "thin", scrollbarColor: "#F363FA #1e1e1e"}}>
             <TableHead>
