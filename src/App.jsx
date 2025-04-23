@@ -298,10 +298,10 @@ export default function GameDashboard() {
     <Container maxWidth={false} >
       {!isMobile && (<div style={{ width: "100%", height: "2px", backgroundColor: "#F363FA", position: "fixed", top: 0, left: 0, zIndex: 10000 }}></div>)}
       {!isMobile && (<div style={{ width: "10%", textAlign: "left", marginLeft:"25px", marginBottom: "20px", position: "relative", zIndex: 9999 }}>
-        <img src="/logo.png" alt="Logo" style={{ maxWidth: "200px" }} />
+        <img src="/logo_party_hd-removebg-preview.png" alt="Logo" style={{ maxWidth: "200px" }} />
       </div>)}
       {isMobile && (<div style={{ width: "10%", textAlign: "center", position: "relative", zIndex: 9999 }}>
-        <img src="/logo.png" alt="Logo" style={{ maxWidth: "100px" }} />
+        <img src="/logo_party_hd-removebg-preview.png" alt="Logo" style={{ maxWidth: "100px" }} />
       </div>)}
 
       {/* Panel Quotes */}
