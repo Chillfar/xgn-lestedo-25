@@ -86,6 +86,8 @@ export default function GameDashboard() {
   const [width, setWidth] = useState(window.innerWidth);
   const [quote, setQuote] = useState("");
   const [openFaksModal, setOpenFaksModal] = useState(false);
+  const [openMapModal, setOpenMapModal] = useState(false);
+  const [openTimetableModal, setOpenTimetableModal] = useState(false);
 
   const handleWindowSizeChange = () => {
     setWidth(window.innerWidth);
@@ -297,11 +299,11 @@ export default function GameDashboard() {
   return (
     <Container maxWidth={false} >
       {!isMobile && (<div style={{ width: "100%", height: "2px", backgroundColor: "#F363FA", position: "fixed", top: 0, left: 0, zIndex: 10000 }}></div>)}
-      {!isMobile && (<div style={{ width: "10%", textAlign: "left", marginLeft:"25px", marginBottom: "20px", position: "relative", zIndex: 9999 }}>
-        <img src="/logo_party_hd-removebg-preview.png" alt="Logo" style={{ maxWidth: "200px" }} />
+      {!isMobile && (<div style={{ width: "10%", textAlign: "left", marginLeft:"25px", marginBottom: "30px", position: "relative", zIndex: 9999 }}>
+        <img src="/logo_party_hd-removebg-preview.png" alt="Logo" style={{ maxWidth: "200px", marginTop: "-12px" }} />
       </div>)}
       {isMobile && (<div style={{ width: "10%", textAlign: "center", position: "relative", zIndex: 9999 }}>
-        <img src="/logo_party_hd-removebg-preview.png" alt="Logo" style={{ maxWidth: "100px" }} />
+        <img src="/logo_party_hd-removebg-preview.png" alt="Logo" style={{ maxWidth: "100px", marginTop: "-12px" }} />
       </div>)}
 
       {/* Panel Quotes */}
@@ -520,6 +522,182 @@ export default function GameDashboard() {
           </Typography>
           <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "10px", paddingRight: "12px" }}>
             - Si pierdes, asume tu derrota como buen gallego: y cagate en todos los santos.
+          </Typography>
+        </Box>
+      </Modal>
+      )}
+
+      {/* Panel de Mapa */}
+      {!isMobile && (<Rnd default={{ x: 1705, y: -15, width: "5%", height: "auto" }} enableResizing={false} disableDragging={true} onClick={() => setOpenMapModal(true)}>
+        <Paper style={{ padding: "16px", boxShadow: "none", cursor: "pointer", backgroundColor: "transparent", color: "white", textAlign: "center" }}>
+          <Typography style={{ fontSize: "1rem", fontWeight: "bold", border: "1px solid #9A26AE" }}>Mapa</Typography>
+        </Paper>
+      </Rnd>)}
+
+      {/* Modal Mapa */}
+      {!isMobile && (<Modal open={openMapModal} onClose={() => setOpenMapModal(false)}>
+        <Box sx={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: 900, bgcolor: "#1e1e1e", color: "white", boxShadow: 24, p: 4, borderRadius: 2, height: "85%", overflowY: "scroll", scrollbarWidth: "thin", scrollbarColor: "#F363FA #1e1e1e"}}>
+          <Box sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", padding: "10px", alignItems: "center", justifyContent: "center" }}>
+            <Typography variant="h3" sx={{ color: "white", fontWeight: "bold", backgroundColor: "rgba(0, 0, 0, 0.5)", padding: "8px", borderRadius: "4px" }}>🏟️ MAPA NOYA'S HOUSE VENUE</Typography>
+          </Box>
+
+          <iframe
+            src="XGN PLANO.pdf"
+            title="Mapa XGN Lestedo"
+            width="100%"
+            height="87%">
+          </iframe>
+        </Box>
+      </Modal>
+      )}
+
+      {/* Panel de Horarios */}
+      {!isMobile && (<Rnd default={{ x: 1611, y: -15, width: "6%", height: "auto" }} enableResizing={false} disableDragging={true} onClick={() => setOpenTimetableModal(true)}>
+        <Paper style={{ padding: "16px", boxShadow: "none", cursor: "pointer", backgroundColor: "transparent", color: "white", textAlign: "center" }}>
+          <Typography style={{ fontSize: "1rem", fontWeight: "bold", border: "1px solid #9A26AE" }}>Horarios</Typography>
+        </Paper>
+      </Rnd>)}
+
+      {/* Modal Horarios */}
+      {!isMobile && (<Modal open={openTimetableModal} onClose={() => setOpenTimetableModal(false)}>
+        <Box sx={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: 800, bgcolor: "#1e1e1e", color: "white", boxShadow: 24, p: 4, borderRadius: 2, height: "85%", overflowY: "scroll", scrollbarWidth: "thin", scrollbarColor: "#F363FA #1e1e1e"}}>
+          <Box sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", padding: "10px", alignItems: "center", justifyContent: "center" }}>
+            <Typography variant="h3" sx={{ color: "white", fontWeight: "bold", backgroundColor: "rgba(0, 0, 0, 0.5)", padding: "8px", borderRadius: "4px" }}>🕒 HORARIOS</Typography>
+          </Box>
+          
+          <Typography variant="h5" sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "32px", paddingRight: "32px", paddingTop: "16px", paddingBottom: "16px" }}>
+            📅 Viernes
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
+            <b>Antes de la cena (18:30 - 21:00)</b>
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
+            <ul>
+              <li>Llegada de los participantes</li>
+              <li>Acreditación oficial y entrega del kit de bienvenida</li>
+              <li>Instalación de equipos y muestra de instalaciones</li>
+            </ul>
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
+            <b>Cena (21:00 - 22:00)</b>
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
+            <ul>
+              <li>Menú: 🥘 Arroz con huevos y salchichas ricas</li>
+            </ul>
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
+            <b>Noche (22:00 - 00:00)</b>
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
+            <ul>
+              <li>Juegos libres y pruebas de conexión</li>
+              <li>Preparativos para el gran inicio</li>
+            </ul>
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
+            <b>00:00 - INAUGURACIÓN OFICIAL</b>
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
+            <ul>
+              <li>Ceremonia del encendido oficial de la LAN Party 💡🎮🔥</li>
+            </ul>
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
+            00:00 en adelante
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
+            <ul>
+              <li>Noche de juegos non-stop hasta que el cuerpo aguante</li>
+            </ul>
+          </Typography>
+
+          <Typography variant="h5" sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "32px", paddingRight: "32px", paddingTop: "16px", paddingBottom: "16px" }}>
+            📅 Sábado
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
+            <b>Mañana</b>
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
+            <ul>
+              <li>Desayuno flexible: ☕ Café con galletas / 🥖 Lomo con pan</li>
+              <li>🎮 Juegos durante la mañana</li>
+              <li>11:30 → Roxo va a la peluquería</li>
+            </ul>
+          </Typography>
+
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
+            <b>12:00 - FASE BBQ ACTIVADA</b>
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
+            <ul>
+              <li>Se encienden las brasas para el churrasco</li>
+              <li>🍻 Cervezas y observación del Parrillero Supremo™</li>
+            </ul>
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
+            <b>14:00 - COMIDA: Churrasco time</b>
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
+            <ul>
+              <li>Post-comida: sobremesa, partidas ligeras o descanso breve</li>
+            </ul>
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
+            <b>Tarde</b>
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
+            <ul>
+              <li>Juegos en red toda la tarde (torneos, retos, etc.)</li>
+              <li>Opción de peli en la zona de consolas, sofá y tele 📺🍿</li>
+            </ul>
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
+            <b>Noche</b>
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
+            <ul>
+              <li>Cena: 🍽️ Risotto casero</li>
+              <li>Juegos toda la noche hasta el amanecer</li>
+            </ul>
+          </Typography>
+
+          <Typography variant="h5" sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "32px", paddingRight: "32px", paddingTop: "16px", paddingBottom: "16px" }}>
+            📅 Domingo
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
+            <b>Mañana</b>
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
+            <ul>
+              <li>Desayuno libre cuando cada uno despierte 💤☕</li>
+              <li>Última mañana de vicio gamer</li>
+            </ul>
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
+            <b>14:00 - COMIDA FINAL</b>
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
+            <ul>
+              <li>🍔 Noyas prepara sus hamburguesas legendarias</li>
+            </ul>
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
+            <b>16:30 - EVENTO ESPECIAL</b>
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
+            <ul>
+              <li>📺 Conexión IPTV de Danis: Barça - Madrid ⚽</li>
+            </ul>
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
+            <b>Después del partido (aprox. 18:30)</b>
+          </Typography>
+          <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
+            <ul>
+              <li>Recogida de equipos y zona de juego</li>
+              <li>Entrega de trofeo al MVP de la LAN (más puntos en juegos y minijuegos)</li>
+            </ul>
           </Typography>
         </Box>
       </Modal>
