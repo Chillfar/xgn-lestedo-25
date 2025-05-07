@@ -4,6 +4,8 @@ import { Card, CardContent, Typography, Grid, Container, Table, TableHead, Table
 import { Line } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
 import "./App.css";
+import { IoQrCodeOutline } from "react-icons/io5";
+
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -88,6 +90,7 @@ export default function GameDashboard() {
   const [openFaksModal, setOpenFaksModal] = useState(false);
   const [openMapModal, setOpenMapModal] = useState(false);
   const [openTimetableModal, setOpenTimetableModal] = useState(false);
+  const [openTicketsModal, setOpenTicketsModal] = useState(false);
 
   const handleWindowSizeChange = () => {
     setWidth(window.innerWidth);
@@ -123,7 +126,7 @@ export default function GameDashboard() {
   }, [users]);
 
   useEffect(() => {
-    const targetDate = new Date("2025-05-09T23:59:00").getTime();
+    const targetDate = new Date("2025-05-10T15:59:00").getTime();
     const interval = setInterval(() => {
       const now = new Date().getTime();
       const distance = targetDate - now;
@@ -182,7 +185,7 @@ export default function GameDashboard() {
   useEffect(() => {
     const interval = setInterval(() => {
       fetchRandomGif();
-    }, 70000);
+    }, 80000);
     return () => clearInterval(interval);
   }, []);
 
@@ -355,7 +358,7 @@ export default function GameDashboard() {
       </Rnd>)}
 
       {/* Panel de FAKs */}
-      {!isMobile && (<Rnd default={{ x: 1780, y: -15, width: "5%", height: "auto" }} enableResizing={false} disableDragging={true} onClick={() => setOpenFaksModal(true)}>
+      {!isMobile && (<Rnd default={{ x: 1788, y: -15, width: "5%", height: "auto" }} enableResizing={false} disableDragging={true} onClick={() => setOpenFaksModal(true)}>
         <Paper style={{ padding: "16px", boxShadow: "none", cursor: "pointer", backgroundColor: "transparent", color: "white", textAlign: "center" }}>
           <Typography style={{ fontSize: "1rem", fontWeight: "bold", border: "1px solid #9A26AE" }}>FAKs</Typography>
         </Paper>
@@ -528,7 +531,7 @@ export default function GameDashboard() {
       )}
 
       {/* Panel de Mapa */}
-      {!isMobile && (<Rnd default={{ x: 1705, y: -15, width: "5%", height: "auto" }} enableResizing={false} disableDragging={true} onClick={() => setOpenMapModal(true)}>
+      {!isMobile && (<Rnd default={{ x: 1714, y: -15, width: "5%", height: "auto" }} enableResizing={false} disableDragging={true} onClick={() => setOpenMapModal(true)}>
         <Paper style={{ padding: "16px", boxShadow: "none", cursor: "pointer", backgroundColor: "transparent", color: "white", textAlign: "center" }}>
           <Typography style={{ fontSize: "1rem", fontWeight: "bold", border: "1px solid #9A26AE" }}>Mapa</Typography>
         </Paper>
@@ -552,7 +555,7 @@ export default function GameDashboard() {
       )}
 
       {/* Panel de Horarios */}
-      {!isMobile && (<Rnd default={{ x: 1611, y: -15, width: "6%", height: "auto" }} enableResizing={false} disableDragging={true} onClick={() => setOpenTimetableModal(true)}>
+      {!isMobile && (<Rnd default={{ x: 1621, y: -15, width: "6%", height: "auto" }} enableResizing={false} disableDragging={true} onClick={() => setOpenTimetableModal(true)}>
         <Paper style={{ padding: "16px", boxShadow: "none", cursor: "pointer", backgroundColor: "transparent", color: "white", textAlign: "center" }}>
           <Typography style={{ fontSize: "1rem", fontWeight: "bold", border: "1px solid #9A26AE" }}>Horarios</Typography>
         </Paper>
@@ -583,7 +586,7 @@ export default function GameDashboard() {
           </Typography>
           <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
             <ul>
-              <li>Menú: 🥘 Arroz con huevos y salchichas ricas</li>
+              <li>Menú: 🥘 Pizzas frescas de Casa Tarradellas. Las de casa...</li>
             </ul>
           </Typography>
           <Typography sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", paddingLeft: "40px", paddingRight: "32px" }}>
@@ -699,6 +702,29 @@ export default function GameDashboard() {
               <li>Entrega de trofeo al MVP de la LAN (más puntos en juegos y minijuegos)</li>
             </ul>
           </Typography>
+        </Box>
+      </Modal>
+      )}
+
+      {/* Panel de Acreditaciones */}
+      {!isMobile && (<Rnd default={{ x: 1585, y: -15, width: "3%", height: "auto" }} enableResizing={false} disableDragging={true} onClick={() => setOpenTicketsModal(true)}>
+        <Paper style={{ padding: "16px", boxShadow: "none", cursor: "pointer", backgroundColor: "transparent", color: "white", textAlign: "center" }}>
+          <Typography style={{ fontSize: "1.3rem", fontWeight: "bold", border: "1px solid #9A26AE", padding: '2px' }}><IoQrCodeOutline /></Typography>
+        </Paper>
+      </Rnd>)}
+
+      {/* Modal Acreditaciones */}
+      {!isMobile && (<Modal open={openTicketsModal} onClose={() => setOpenTicketsModal(false)}>
+        <Box sx={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: 1300, bgcolor: "#1e1e1e", color: "white", boxShadow: 24, p: 4, borderRadius: 2, height: "85%", overflowY: "scroll", scrollbarWidth: "thin", scrollbarColor: "#F363FA #1e1e1e"}}>
+          <Box sx={{ width: "auto", height: "auto", borderRadius: "8px", display: "flex", padding: "10px", alignItems: "center", justifyContent: "center", marginBottom: "80px" }}>
+            <Typography variant="h4" sx={{ color: "white", fontWeight: "bold", backgroundColor: "rgba(0, 0, 0, 0.5)", padding: "8px", borderRadius: "4px" }}>🔖 Descarga tu acreditación digital!</Typography>
+          </Box>
+          
+          <img src={'/acreditacion-chillfar.jpg'} alt={'Acreditación Chillfar'} style={{ marginRight: '16px', width: "310px", height: "auto", borderRadius: "8px" }} />
+          <img src={'/acreditacion-eras.jpg'} alt={'Acreditación Eras'} style={{ marginRight: '16px', width: "310px", height: "auto", borderRadius: "8px" }} />
+          <img src={'/acreditacion-goku.jpg'} alt={'Acreditación Goku'} style={{ marginRight: '16px', width: "310px", height: "auto", borderRadius: "8px" }} />
+          <img src={'/acreditacion-noyas.jpg'} alt={'Acreditación Noyas'} style={{ width: "310px", height: "auto", borderRadius: "8px" }} />
+          
         </Box>
       </Modal>
       )}
