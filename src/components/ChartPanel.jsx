@@ -1,35 +1,23 @@
-import React from 'react';
-import { Line } from 'react-chartjs-2';
+import { Rnd } from "react-rnd";
+import { Paper, Typography, Button } from "@mui/material";
+import { Line } from "react-chartjs-2";
 
-const ChartPanel = ({ scores }) => {
-    const data = {
-        labels: scores.map((score, index) => `Day ${index + 1}`),
-        datasets: [
-            {
-                label: 'Score Evolution',
-                data: scores,
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1,
-            },
-        ],
-    };
+export default function ChartPanel({ chartData, isMobile, onNextRound }) {
+  const rndProps = isMobile
+    ? { x: 0, y: 510, width: "92%", height: "auto" }
+    : { x: 820, y: 120, width: "24%", height: "auto" };
 
-    const options = {
-        responsive: true,
-        scales: {
-            y: {
-                beginAtZero: true,
-            },
-        },
-    };
+  const rndOptions = isMobile
+    ? { enableResizing: false, disableDragging: true }
+    : {};
 
-    return (
-        <div>
-            <h2>Score Evolution</h2>
-            <Line data={data} options={options} />
-        </div>
-    );
-};
-
-export default ChartPanel;
+  return (
+    <Rnd default={rndProps} {...rndOptions}>
+      <Paper style={{ padding: "16px", backgroundColor: "#1e1e1e", color: "white" }}>
+        <Typography variant="h5" gutterBottom>Evolución de Puntos</Typography>
+        <Line data={chartData} />
+        <Button variant="contained" color="secondary" fullWidth onClick={onNextRound} sx={{ mt: 2 }}>Siguiente Ronda</Button>
+      </Paper>
+    </Rnd>
+  );
+}
