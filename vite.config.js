@@ -8,19 +8,9 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
   },
-  esbuild: {
-    loader: 'jsx',
-  },
   resolve: {
     alias: {
       './runtimeConfig': './runtimeConfig.browser',
-    },
-  },
-  optimizeDeps: {
-    esbuildOptions: {
-      loader: {
-        '.js': 'jsx',
-      },
     },
   },
 })
