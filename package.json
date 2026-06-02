@@ -59,8 +59,8 @@
     "cross-env": "^7.0.3",
     "jsdom": "^22.1.0",
     "typescript": "^6.0.3",
-    "vite": "^4.5.9",
-    "vitest": "^0.34.6"
+    "vite": "^8.0.16",
+    "vitest": "^4.1.8"
   },
   "homepage": "https://chillfar.github.io/xgn-lestedo-25/",
   "proxy": "http://localhost:5000"
