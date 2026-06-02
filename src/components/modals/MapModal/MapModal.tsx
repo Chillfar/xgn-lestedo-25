@@ -4,22 +4,23 @@ import { modalBoxSx, closeButtonStyle, titleContainerSx, titleTextSx } from "./M
 interface MapModalProps {
   open: boolean;
   onClose: () => void;
+  isMobile: boolean;
 }
 
-export default function MapModal({ open, onClose }: MapModalProps) {
+export default function MapModal({ open, onClose, isMobile }: MapModalProps) {
   return (
-    <Modal open={open} onClose={onClose} sx={{ zIndex: 99999 }}>
-      <Box sx={modalBoxSx}>
+    <Modal open={open} onClose={onClose} style={isMobile ? { zIndex: 99999 } : undefined} sx={{ zIndex: 99999 }}>
+      <Box sx={modalBoxSx(isMobile)}>
         <div onClick={onClose} style={closeButtonStyle}>✕</div>
         <Box sx={titleContainerSx}>
-          <Typography variant="h3" sx={titleTextSx}>🏟️ MAPA NOYA'S HOUSE VENUE</Typography>
+          <Typography variant={isMobile ? "h4" : "h3"} sx={titleTextSx}>🏟️ MAPA NOYA'S HOUSE VENUE</Typography>
         </Box>
 
         <iframe
           src="/xgn-lestedo-25/XGN PLANO.pdf"
           title="Mapa XGN Lestedo"
           width="100%"
-          height="87%">
+          height={isMobile ? "400px" : "87%"}>
         </iframe>
       </Box>
     </Modal>

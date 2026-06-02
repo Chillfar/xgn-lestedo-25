@@ -50,7 +50,7 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, T
 
 export default function GameDashboard() {
   // Auth
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, currentUser } = useAuth();
 
   // Firestore state (replaces localStorage)
   const { games: liveGames, addGame, removeGame } = useFirestoreGames();
@@ -199,7 +199,7 @@ export default function GameDashboard() {
         <NavButton label="Horarios" onClick={() => setOpenTimetableModal(true)} />
         <NavButton label="Mapa" onClick={() => setOpenMapModal(true)} />
         <NavButton label="FAKs" onClick={() => setOpenFaksModal(true)} />
-        {isAuthenticated && (
+        {!!currentUser && (
           <NavButton label="Ediciones" onClick={() => setOpenArchiveModal(true)} />
         )}
       </Header>
@@ -212,16 +212,16 @@ export default function GameDashboard() {
 
       {/* Content modals */}
       <FaksModal open={openFaksModal} onClose={() => setOpenFaksModal(false)} isMobile={isMobile} />
-      {!isMobile && <MapModal open={openMapModal} onClose={() => setOpenMapModal(false)} />}
-      {!isMobile && <TimetableModal open={openTimetableModal} onClose={() => setOpenTimetableModal(false)} />}
-      {!isMobile && <TicketsModal open={openTicketsModal} onClose={() => setOpenTicketsModal(false)} />}
+      <MapModal open={openMapModal} onClose={() => setOpenMapModal(false)} isMobile={isMobile} />
+      <TimetableModal open={openTimetableModal} onClose={() => setOpenTimetableModal(false)} isMobile={isMobile} />
+      <TicketsModal open={openTicketsModal} onClose={() => setOpenTicketsModal(false)} isMobile={isMobile} />
 
       {/* Video modals */}
       <CountdownVideoModal open={videoCountdownModalOpen} onClose={() => setVideoCountdownModalOpen(false)} />
       <InaugurationVideoModal open={videoInaugurationModalOpen} onClose={() => setVideoInaugurationModalOpen(false)} />
 
       {/* Login modal */}
-      <LoginModal open={openLoginModal} onClose={() => setOpenLoginModal(false)} />
+      <LoginModal open={openLoginModal} onClose={() => setOpenLoginModal(false)} isMobile={isMobile} />
 
       {/* Main panels */}
       <RankingPanel
@@ -285,9 +285,11 @@ export default function GameDashboard() {
         onClose={() => setOpenArchiveModal(false)}
         archives={archives}
         isAuthenticated={isAuthenticated}
+        hasData={liveUsers.some(u => (u.history && u.history.length > 0) || Object.values(u.scores).some(s => s > 0))}
         onCreateArchive={handleCreateArchive}
         onLoadArchive={handleLoadArchive}
         onDeleteArchive={deleteArchive}
+        isMobile={isMobile}
       />
     </Container>
   );

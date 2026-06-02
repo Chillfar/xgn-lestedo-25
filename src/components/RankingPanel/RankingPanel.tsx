@@ -1,10 +1,10 @@
 import { Rnd } from "react-rnd";
 import { Paper, Typography, Table, TableHead, TableRow, TableCell, TableBody, Button } from "@mui/material";
 import { Game, User } from "../../constants/initialData";
-import { 
-  paperStyle, headerContainerStyle, titleStyle, adminButtonsContainerStyle, 
-  adminButtonStyle, tableContainerStyle, headerCellStyle, firstPlaceStyle, 
-  scoreCellStyle, totalScoreCellStyle, mobileContainerStyle, getCellStyle 
+import {
+  paperStyle, headerContainerStyle, titleStyle, adminButtonsContainerStyle,
+  adminButtonStyle, tableContainerStyle, headerCellStyle, firstPlaceStyle,
+  scoreCellStyle, totalScoreCellStyle, mobileContainerStyle, getCellStyle
 } from "./RankingPanel.styles";
 
 const positionMedals = ["🥇", "🥈", "🥉"];
@@ -30,19 +30,24 @@ export default function RankingPanel({ users, games, isMobile, isAuthenticated, 
 
 
 
+  const hasData = users.some(u =>
+    (u.history && u.history.length > 0) ||
+    Object.values(u.scores).some(s => s > 0)
+  );
+
   const content = (
     <>
       <Paper style={paperStyle}>
         <div style={headerContainerStyle}>
-          <Typography 
-            className="drag-handle" 
-            style={titleStyle} 
+          <Typography
+            className="drag-handle"
+            style={titleStyle}
             variant="h5"
           >
             Ranking
           </Typography>
 
-          {isAuthenticated && (
+          {isAuthenticated && hasData && (
             <div style={adminButtonsContainerStyle}>
               {onArchiveClick && (
                 <Button

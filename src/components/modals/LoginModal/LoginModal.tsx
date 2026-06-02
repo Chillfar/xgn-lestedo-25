@@ -15,11 +15,12 @@ import { modalBoxSx, closeButtonStyle, titleSx, alertSx, textFieldSx, buttonSx }
 interface LoginModalProps {
   open: boolean;
   onClose: () => void;
+  isMobile: boolean;
 }
 
 // styles exported to LoginModal.styles.ts
 
-export default function LoginModal({ open, onClose }: LoginModalProps) {
+export default function LoginModal({ open, onClose, isMobile }: LoginModalProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -58,8 +59,8 @@ export default function LoginModal({ open, onClose }: LoginModalProps) {
   };
 
   return (
-    <Modal open={open} onClose={onClose} sx={{ zIndex: 99999 }}>
-      <Box sx={modalBoxSx}>
+    <Modal open={open} onClose={onClose} style={isMobile ? { zIndex: 99999 } : undefined} sx={{ zIndex: 99999 }}>
+      <Box sx={modalBoxSx(isMobile)}>
         <div onClick={onClose} style={closeButtonStyle}>✕</div>
         <Typography variant="h5" sx={titleSx}>
           🔐 Iniciar Sesión

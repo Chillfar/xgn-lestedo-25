@@ -19,9 +19,11 @@ interface ArchiveModalProps {
   onClose: () => void;
   archives: Archive[];
   isAuthenticated: boolean;
+  hasData: boolean;
   onCreateArchive: (label: string) => Promise<void>;
   onLoadArchive: (archiveId: string) => void;
   onDeleteArchive: (archiveId: string) => Promise<void>;
+  isMobile: boolean;
 }
 
 /** Format an ISO UTC date string as dd/mm/yyyy */
@@ -40,9 +42,11 @@ export default function ArchiveModal({
   onClose,
   archives,
   isAuthenticated,
+  hasData,
   onCreateArchive,
   onLoadArchive,
   onDeleteArchive,
+  isMobile,
 }: ArchiveModalProps) {
   const [label, setLabel] = useState("");
   const [creating, setCreating] = useState(false);
@@ -76,8 +80,8 @@ export default function ArchiveModal({
   };
 
   return (
-    <Modal open={open} onClose={onClose} sx={{ zIndex: 99999 }}>
-      <Box sx={modalBoxSx}>
+    <Modal open={open} onClose={onClose} style={isMobile ? { zIndex: 99999 } : undefined} sx={{ zIndex: 99999 }}>
+      <Box sx={modalBoxSx(isMobile)}>
         <div
           onClick={onClose}
           style={closeButtonStyle}
@@ -90,7 +94,7 @@ export default function ArchiveModal({
         </Typography>
 
         {/* Create archive — admin only */}
-        {isAuthenticated && (
+        {isAuthenticated && hasData && (
           <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
             <TextField
               label="Nombre de la edición"

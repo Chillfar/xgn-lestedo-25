@@ -4,15 +4,16 @@ import { modalBoxSx, closeButtonStyle, headerSx, titleTextSx, daySx, itemSx } fr
 interface TimetableModalProps {
   open: boolean;
   onClose: () => void;
+  isMobile: boolean;
 }
 
-export default function TimetableModal({ open, onClose }: TimetableModalProps) {
+export default function TimetableModal({ open, onClose, isMobile }: TimetableModalProps) {
   return (
-    <Modal open={open} onClose={onClose} sx={{ zIndex: 99999 }}>
-      <Box sx={modalBoxSx}>
+    <Modal open={open} onClose={onClose} style={isMobile ? { zIndex: 99999 } : undefined} sx={{ zIndex: 99999 }}>
+      <Box sx={modalBoxSx(isMobile)}>
         <div onClick={onClose} style={closeButtonStyle}>✕</div>
         <Box sx={headerSx}>
-          <Typography variant="h3" sx={titleTextSx}>🕒 HORARIOS</Typography>
+          <Typography variant={isMobile ? "h4" : "h3"} sx={titleTextSx}>🕒 HORARIOS</Typography>
         </Box>
         
         {/* Viernes */}

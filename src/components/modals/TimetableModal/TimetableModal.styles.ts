@@ -1,11 +1,11 @@
 import { CSSProperties } from "react";
 
-export const modalBoxSx = {
+export const modalBoxSx = (isMobile: boolean) => ({
   position: "absolute" as const,
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 800,
+  width: isMobile ? "60%" : 800,
   bgcolor: "#1e1e1e",
   color: "white",
   boxShadow: 24,
@@ -15,7 +15,7 @@ export const modalBoxSx = {
   overflowY: "scroll",
   scrollbarWidth: "thin",
   scrollbarColor: "#F363FA #1e1e1e"
-};
+});
 
 export const closeButtonStyle: CSSProperties = { position: "absolute", top: "10px", right: "15px", cursor: "pointer", fontSize: "1.2rem", zIndex: 50, color: "white" };
 export const headerSx = { width: "auto", height: "auto", borderRadius: "8px", display: "flex", padding: "10px", alignItems: "center", justifyContent: "center" };

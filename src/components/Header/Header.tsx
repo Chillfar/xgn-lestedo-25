@@ -26,7 +26,7 @@ interface HeaderProps {
 export default function Header({ isMobile, isAuthenticated, onLoginClick, children, bottomRightWidget }: HeaderProps) {
   const { currentUser, logout } = useAuth();
 
-  const authButton = isAuthenticated ? (
+  const authButton = !!currentUser ? (
     <button onClick={logout} style={authButtonStyle}>
       {currentUser?.email?.split("@")[0]}
     </button>
