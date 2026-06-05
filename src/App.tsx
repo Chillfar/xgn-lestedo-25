@@ -17,6 +17,7 @@ import useWindowSize from "./hooks/useWindowSize";
 import useCountdown from "./hooks/useCountdown";
 import useRandomGif from "./hooks/useRandomGif";
 import useRandomQuote from "./hooks/useRandomQuote";
+import useBuzzer from "./hooks/useBuzzer";
 
 // Components
 import IntroVideo from "./components/IntroVideo/IntroVideo";
@@ -31,6 +32,7 @@ import GiphyPanel from "./components/GiphyPanel/GiphyPanel";
 import SpotifyPanel from "./components/SpotifyPanel/SpotifyPanel";
 import VideosPanel from "./components/VideosPanel/VideosPanel";
 import LocationPanel from "./components/LocationPanel/LocationPanel";
+import BuzzerButton from "./components/BuzzerButton/BuzzerButton";
 
 // Modals
 import FaksModal from "./components/modals/FaksModal/FaksModal";
@@ -89,6 +91,7 @@ export default function GameDashboard() {
   } = useCountdown("2025-05-10T20:59:00");
   const { gifUrl, fetchRandomGif } = useRandomGif();
   const quote = useRandomQuote(geekQuotes);
+  const { triggerBuzzer } = useBuzzer();
 
   // Handlers
   const handleAssignPoints = async (userId: number) => {
@@ -195,6 +198,7 @@ export default function GameDashboard() {
           ) : undefined
         }
       >
+        <BuzzerButton onBuzz={triggerBuzzer} isMobile={isMobile} />
         <NavButton icon="qr" onClick={() => setOpenTicketsModal(true)} />
         <NavButton label="Horarios" onClick={() => setOpenTimetableModal(true)} />
         <NavButton label="Mapa" onClick={() => setOpenMapModal(true)} />

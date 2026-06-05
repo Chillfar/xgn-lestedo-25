@@ -1,5 +1,6 @@
 import { useAuth } from "../../contexts/AuthContext";
 import { Rnd } from "react-rnd";
+import NetworkStatus from "./NetworkStatus";
 import {
   authButtonStyle,
   loginButtonStyle,
@@ -39,7 +40,10 @@ export default function Header({ isMobile, isAuthenticated, onLoginClick, childr
   if (isMobile) {
     return (
       <div style={mobileHeaderContainer}>
-        <img src="/xgn-lestedo-25/logo_party_hd-removebg-preview.png" alt="Logo" style={mobileLogoStyle} />
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <img src="/xgn-lestedo-25/logo_party_hd-removebg-preview.png" alt="Logo" style={mobileLogoStyle} />
+          <NetworkStatus isMobile />
+        </div>
         <div style={mobileRightSideStyle}>
           {children}
           {authButton}
@@ -61,6 +65,7 @@ export default function Header({ isMobile, isAuthenticated, onLoginClick, childr
         <Rnd default={{ x: 1510, y: 5, width: "19%", height: "auto" }} enableResizing={false} disableDragging={true} style={{ zIndex: 9999 }}>
           <div style={desktopWidgetContainer}>
             <div style={desktopNavRow}>
+              <NetworkStatus />
               {children}
               {authButton}
             </div>
