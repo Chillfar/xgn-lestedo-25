@@ -29,7 +29,8 @@ export default function GamePanel({ games, isMobile, isAuthenticated, onGameClic
         <Button className="cancel-drag" variant="contained" color="secondary" onClick={onAddGameClick} style={{ ...buttonStyle, visibility: isAuthenticated ? "visible" : "hidden" }}>
           Añadir Nuevo Juego
         </Button>
-        <Grid container spacing={2} style={gridContainerStyle}>
+        <Grid container spacing={2} style={gridContainerStyle} className="game-grid-container">
+          <style>{`.game-grid-container::-webkit-scrollbar { display: none; }`}</style>
           {games.map((game, index) => (
             <Grid item xs={6} key={index}>
               <Card className="cancel-drag" onClick={() => onGameClick(game)} style={cardStyle}>

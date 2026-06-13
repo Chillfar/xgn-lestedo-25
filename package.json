@@ -29,7 +29,7 @@
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
-    "start": "cross-env BROWSER=none WDS_SOCKET_PORT=0 vite --port 3000",
+    "start": "vite --port 3000",
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest"
@@ -56,7 +56,7 @@
     "@types/node": "^25.9.1",
     "@types/react": "^19.2.15",
     "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^4.1.1",
+    "@vitejs/plugin-react": "^6.0.0",
     "cross-env": "^7.0.3",
     "jsdom": "^22.1.0",
     "typescript": "^6.0.3",

@@ -3,8 +3,8 @@ import { Paper, Typography, Table, TableHead, TableRow, TableCell, TableBody, Bu
 import { Game, User } from "../../constants/initialData";
 import {
   paperStyle, headerContainerStyle, titleStyle, adminButtonsContainerStyle,
-  adminButtonStyle, tableContainerStyle, headerCellStyle, firstPlaceStyle,
-  scoreCellStyle, totalScoreCellStyle, mobileContainerStyle, getCellStyle
+  adminButtonStyle, tableContainerStyle, headerCellStyle, stickyHeaderCellStyle, firstPlaceStyle,
+  scoreCellStyle, totalScoreCellStyle, mobileContainerStyle, getCellStyle, getStickyFirstPlaceCellStyle
 } from "./RankingPanel.styles";
 
 const positionMedals = ["🥇", "🥈", "🥉"];
@@ -73,11 +73,12 @@ export default function RankingPanel({ users, games, isMobile, isAuthenticated, 
           )}
         </div>
 
-        <div style={tableContainerStyle}>
+        <div style={tableContainerStyle} className="ranking-table-container">
+          <style>{`.ranking-table-container::-webkit-scrollbar { display: none; }`}</style>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell style={headerCellStyle}><strong>Jugador</strong></TableCell>
+                <TableCell style={stickyHeaderCellStyle}><strong>Jugador</strong></TableCell>
                 {games.map(game => (
                   <TableCell key={game.name} style={headerCellStyle}><strong>{game.name}</strong></TableCell>
                 ))}
@@ -90,7 +91,7 @@ export default function RankingPanel({ users, games, isMobile, isAuthenticated, 
                 const hasPoints = totalScore > 0;
                 return (
                   <TableRow key={user.id} style={index === 0 && hasPoints ? firstPlaceStyle : undefined}>
-                    <TableCell className="cancel-drag" style={getCellStyle(index, hasPoints)} onClick={() => onUserClick(user)}>
+                    <TableCell className="cancel-drag" style={getStickyFirstPlaceCellStyle(index, hasPoints)} onClick={() => onUserClick(user)}>
                       {hasPoints ? (positionMedals[index] || `${index + 1}.`) : ""} {user.name}
                     </TableCell>
                     {games.map(game => (
