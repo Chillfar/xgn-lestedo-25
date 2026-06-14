@@ -1,10 +1,11 @@
 import { Rnd } from "react-rnd";
-import { Paper, Typography, Table, TableHead, TableRow, TableCell, TableBody, Button } from "@mui/material";
+import { Paper, Typography, Table, TableHead, TableRow, TableCell, TableBody, Button, Tooltip } from "@mui/material";
 import { Game, User } from "../../constants/initialData";
 import {
   paperStyle, headerContainerStyle, titleStyle, adminButtonsContainerStyle,
   adminButtonStyle, tableContainerStyle, headerCellStyle, stickyHeaderCellStyle, firstPlaceStyle,
-  scoreCellStyle, totalScoreCellStyle, mobileContainerStyle, getCellStyle, getStickyFirstPlaceCellStyle
+  scoreCellStyle, totalScoreCellStyle, mobileContainerStyle, getStickyFirstPlaceCellStyle,
+  predictionCellStyle, predictionHeaderCellStyle,
 } from "./RankingPanel.styles";
 
 const positionMedals = ["🥇", "🥈", "🥉"];
@@ -28,12 +29,19 @@ export default function RankingPanel({ users, games, isMobile, isAuthenticated, 
     ? { enableResizing: false, disableDragging: true }
     : {};
 
-
-
   const hasData = users.some(u =>
     (u.history && u.history.length > 0) ||
     Object.values(u.scores).some(s => s > 0)
   );
+
+  const hasPredictions = true; // always show the 🎯 column
+
+  // Sort by total (game points + prediction points)
+  const sortedUsers = [...users].sort((a, b) => {
+    const totalA = Object.values(a.scores).reduce((acc, s) => acc + s, 0) + (a.predictionPoints || 0);
+    const totalB = Object.values(b.scores).reduce((acc, s) => acc + s, 0) + (b.predictionPoints || 0);
+    return totalB - totalA;
+  });
 
   const content = (
     <>
@@ -82,12 +90,19 @@ export default function RankingPanel({ users, games, isMobile, isAuthenticated, 
                 {games.map(game => (
                   <TableCell key={game.name} style={headerCellStyle}><strong>{game.name}</strong></TableCell>
                 ))}
-                <TableCell style={headerCellStyle}><strong>Puntos Totales</strong></TableCell>
+                {hasPredictions && (
+                  <Tooltip title="Puntos por predicciones acertadas (+5 por acierto)" placement="top">
+                    <TableCell style={predictionHeaderCellStyle}><strong>🎯</strong></TableCell>
+                  </Tooltip>
+                )}
+                <TableCell style={headerCellStyle}><strong>Total</strong></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {users.map((user, index) => {
-                const totalScore = Object.values(user.scores).reduce((acc, score) => acc + score, 0);
+              {sortedUsers.map((user, index) => {
+                const gameTotal = Object.values(user.scores).reduce((acc, score) => acc + score, 0);
+                const predPts = user.predictionPoints || 0;
+                const totalScore = gameTotal + predPts;
                 const hasPoints = totalScore > 0;
                 return (
                   <TableRow key={user.id} style={index === 0 && hasPoints ? firstPlaceStyle : undefined}>
@@ -97,6 +112,11 @@ export default function RankingPanel({ users, games, isMobile, isAuthenticated, 
                     {games.map(game => (
                       <TableCell key={game.name} style={scoreCellStyle}>{user.scores[game.name] || 0}</TableCell>
                     ))}
+                    {hasPredictions && (
+                      <TableCell style={predictionCellStyle}>
+                        {predPts > 0 ? `+${predPts}` : "—"}
+                      </TableCell>
+                    )}
                     <TableCell style={totalScoreCellStyle}>{totalScore}</TableCell>
                   </TableRow>
                 );

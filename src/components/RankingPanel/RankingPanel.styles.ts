@@ -12,6 +12,8 @@ export const firstPlaceStyle: CSSProperties = { backgroundColor: "rgba(255, 215,
 export const scoreCellStyle: CSSProperties = { color: "white" };
 export const totalScoreCellStyle: CSSProperties = { color: "white", fontWeight: "bold" };
 export const mobileContainerStyle: CSSProperties = { width: "100%", marginBottom: "20px" };
+export const predictionCellStyle: CSSProperties = { color: "#4fc3f7", fontWeight: 600, whiteSpace: "nowrap" };
+export const predictionHeaderCellStyle: CSSProperties = { color: "#4fc3f7", whiteSpace: "nowrap", cursor: "help" };
 
 export const getCellStyle = (index: number, hasPoints: boolean): CSSProperties => ({
   color: "white",

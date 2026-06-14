@@ -4,7 +4,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 import "./App.css";
 
 // Constants
-import { Game, User, userColors, geekQuotes } from "./constants/initialData";
+import { Game, User, userColors, geekQuotes, emailToPlayerId } from "./constants/initialData";
 
 // Auth
 import { useAuth } from "./contexts/AuthContext";
@@ -17,6 +17,7 @@ import useWindowSize from "./hooks/useWindowSize";
 import useCountdown from "./hooks/useCountdown";
 import useRandomGif from "./hooks/useRandomGif";
 import useRandomQuote from "./hooks/useRandomQuote";
+import { resolvePredictions as firestoreResolvePredictions } from "./hooks/useFirestorePredictions";
 
 
 // Components
@@ -52,18 +53,32 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, T
 
 export default function GameDashboard() {
   // Auth
-  const { isAuthenticated, currentUser } = useAuth();
+  const { isAuthenticated, isAdmin, currentUser } = useAuth();
+
+  // Resolve which player (from the fixed player list) the logged-in user is
+  const authenticatedPlayerId: number | null =
+    currentUser?.email ? (emailToPlayerId[currentUser.email] ?? null) : null;
 
   // Firestore state (replaces localStorage)
   const { games: liveGames, addGame, removeGame } = useFirestoreGames();
-  const { users: liveUsers, round: liveRound, assignPoints, nextRound, resetData } = useFirestoreUsers();
+  const {
+    users: liveUsers,
+    round,
+    activeGame,
+    playedGames,
+    loading: usersLoading,
+    assignPoints,
+    nextRound,
+    resetData,
+    addPredictionPoints,
+  } = useFirestoreUsers();
   const { archives, createArchive, loadArchive, deleteArchive } = useFirestoreArchives();
 
   // Archive viewing state
   const [viewingArchive, setViewingArchive] = useState<{ id: string; label: string; snapshot: ArchiveSnapshot } | null>(null);
 
   // Resolve which data to show: archived or live
-  const users = viewingArchive ? viewingArchive.snapshot.users : liveUsers;
+  const usersData = viewingArchive ? viewingArchive.snapshot.users : liveUsers;
   const games = viewingArchive ? viewingArchive.snapshot.games : liveGames;
   const isReadOnly = !!viewingArchive;
 
@@ -71,6 +86,7 @@ export default function GameDashboard() {
   const [selectedGame, setSelectedGame] = useState<Game | null>(null);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showConfetti, setShowConfetti] = useState(false);
   const [openNewGameModal, setOpenNewGameModal] = useState(false);
   const [openResetModal, setOpenResetModal] = useState(false);
   const [openFaksModal, setOpenFaksModal] = useState(false);
@@ -96,11 +112,13 @@ export default function GameDashboard() {
   // Handlers
   const handleAssignPoints = async (userId: number) => {
     if (!selectedGame) return;
-    await assignPoints(userId, selectedGame.name);
-  };
-
-  const handleNextRound = async () => {
-    await nextRound();
+    try {
+      await assignPoints(userId, selectedGame.name);
+      setShowConfetti(true);
+      setTimeout(() => setShowConfetti(false), 3000);
+    } catch (err: any) {
+      alert(`Error: ${err.message}`);
+    }
   };
 
   const handleAddNewGame = async (newGame: Game) => {
@@ -113,14 +131,49 @@ export default function GameDashboard() {
     setSelectedGame(null);
   };
 
+  const handleNextRound = async () => {
+    if (!window.confirm("¿Avanzar a la siguiente ronda?")) return;
+    
+    let winnersData: { winnerIds: number[], rewards: Record<number, number> } | undefined;
+
+    if (activeGame) {
+      // Find the winner(s) of the active game
+      const maxScore = Math.max(...liveUsers.map(u => u.scores[activeGame] || 0));
+      if (maxScore > 0) {
+        const winnerIds = liveUsers.filter(u => (u.scores[activeGame] || 0) === maxScore).map(u => u.id);
+        
+        try {
+          const rewards = await firestoreResolvePredictions(activeGame, winnerIds);
+          const rewardCount = Object.keys(rewards || {}).length;
+          if (rewardCount > 0) {
+            winnersData = { winnerIds, rewards };
+            console.log(`[Predictions] Added points for ${rewardCount} players due to game resolution.`);
+          }
+        } catch (e: any) {
+          console.error("[Predictions Error]", e);
+        }
+      }
+    }
+
+    await nextRound(winnersData);
+  };
+
   const handleResetData = async () => {
     await resetData();
     setOpenResetModal(false);
   };
 
+  const handleSelectGame = (game: Game) => {
+    setSelectedGame(game);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedGame(null);
+  };
+
   // Archive handlers
   const handleCreateArchive = async (label: string) => {
-    await createArchive(liveUsers, liveGames, liveRound, label);
+    await createArchive(liveUsers, liveGames, round, label);
   };
 
   const handleLoadArchive = async (archiveId: string) => {
@@ -137,8 +190,8 @@ export default function GameDashboard() {
 
   // Chart data
   const chartData = {
-    labels: Array.isArray(users) && users.length > 0 ? users[0].history.map((_, index) => `Ronda ${index + 1}`) : [],
-    datasets: Array.isArray(users) ? users.map(user => ({
+    labels: Array.isArray(usersData) && usersData.length > 0 ? usersData[0].history.map((_, index) => `Ronda ${index + 1}`) : [],
+    datasets: Array.isArray(usersData) ? usersData.map(user => ({
       label: user.name,
       data: user.history || [],
       borderColor: userColors[user.name as keyof typeof userColors] || "#FFFFFF",
@@ -204,7 +257,27 @@ export default function GameDashboard() {
         <NavButton label="Mapa" onClick={() => setOpenMapModal(true)} />
         <NavButton label="FAKs" onClick={() => setOpenFaksModal(true)} />
         {!!currentUser && (
-          <NavButton label="Ediciones" onClick={() => setOpenArchiveModal(true)} />
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px'
+            }}>
+              {activeGame && (
+                <div style={{
+                  color: '#4fc3f7',
+                  fontSize: '0.85rem',
+                  fontWeight: 'bold',
+                  background: 'rgba(79, 195, 247, 0.1)',
+                  padding: '4px 12px',
+                  borderRadius: '20px',
+                  border: '1px solid rgba(79, 195, 247, 0.3)',
+                }}>
+                  En juego: {activeGame}
+                </div>
+              )}
+              <div className="round-badge">Ronda {round + 1}</div>
+              <NavButton label="Ediciones" onClick={() => setOpenArchiveModal(true)} />
+            </div>
         )}
       </Header>
 
@@ -229,16 +302,16 @@ export default function GameDashboard() {
 
       {/* Main panels */}
       <RankingPanel
-        users={users}
+        users={usersData}
         games={games}
         isMobile={isMobile}
-        isAuthenticated={isReadOnly ? false : isAuthenticated}
+        isAuthenticated={isReadOnly ? false : isAdmin}
         onUserClick={setSelectedUser}
         onResetClick={() => setOpenResetModal(true)}
         onArchiveClick={() => setOpenArchiveModal(true)}
       />
 
-      <ChartPanel chartData={chartData} isMobile={isMobile} isAuthenticated={isReadOnly ? false : isAuthenticated} onNextRound={handleNextRound} users={users} />
+      <ChartPanel chartData={chartData} isMobile={isMobile} isAuthenticated={isReadOnly ? false : isAuthenticated} onNextRound={handleNextRound} users={usersData} />
 
       {!isMobile && <GiphyPanel gifUrl={gifUrl} onClickGif={fetchRandomGif} />}
 
@@ -246,9 +319,11 @@ export default function GameDashboard() {
 
       <GamePanel
         games={games}
+        activeGame={activeGame}
+        playedGames={playedGames}
+        onSelectGame={isReadOnly ? () => {} : handleSelectGame}
         isMobile={isMobile}
-        isAuthenticated={isReadOnly ? false : isAuthenticated}
-        onGameClick={setSelectedGame}
+        isAuthenticated={isReadOnly ? false : isAdmin}
         onAddGameClick={() => setOpenNewGameModal(true)}
       />
 
@@ -257,13 +332,17 @@ export default function GameDashboard() {
 
       {/* Action modals */}
       <GameScoreModal
-        open={!!selectedGame}
-        onClose={() => setSelectedGame(null)}
+        open={Boolean(selectedGame)}
         selectedGame={selectedGame}
-        users={users}
-        isAuthenticated={isReadOnly ? false : isAuthenticated}
+        users={usersData}
+        onClose={handleCloseModal}
         onAssignPoints={handleAssignPoints}
-        onDeleteGame={handleDeleteGame}
+        isAdmin={isAdmin}
+        isAuthenticated={isAuthenticated}
+        authenticatedPlayerId={authenticatedPlayerId}
+        onDeleteGame={removeGame}
+        playedGames={playedGames}
+        activeGame={activeGame}
       />
 
       <UserDetailModal
@@ -288,7 +367,7 @@ export default function GameDashboard() {
         open={openArchiveModal}
         onClose={() => setOpenArchiveModal(false)}
         archives={archives}
-        isAuthenticated={isAuthenticated}
+        isAuthenticated={isAdmin}
         hasData={liveUsers.some(u => (u.history && u.history.length > 0) || Object.values(u.scores).some(s => s > 0))}
         onCreateArchive={handleCreateArchive}
         onLoadArchive={handleLoadArchive}

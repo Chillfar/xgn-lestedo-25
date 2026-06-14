@@ -5,13 +5,15 @@ import { paperStyle, buttonStyle, gridContainerStyle, cardStyle, imageStyle, typ
 
 interface GamePanelProps {
   games: Game[];
+  activeGame: string | null;
+  playedGames: string[];
   isMobile: boolean;
   isAuthenticated: boolean;
-  onGameClick: (game: Game) => void;
+  onSelectGame: (game: Game) => void;
   onAddGameClick: () => void;
 }
 
-export default function GamePanel({ games, isMobile, isAuthenticated, onGameClick, onAddGameClick }: GamePanelProps) {
+export default function GamePanel({ games, activeGame, playedGames, isMobile, isAuthenticated, onSelectGame, onAddGameClick }: GamePanelProps) {
   const rndProps = isMobile
     ? { x: 0, y: 840, width: "92%", height: "auto" }
     : { x: 1510, y: 120, width: "19%", height: "auto" };
@@ -31,16 +33,34 @@ export default function GamePanel({ games, isMobile, isAuthenticated, onGameClic
         </Button>
         <Grid container spacing={2} style={gridContainerStyle} className="game-grid-container">
           <style>{`.game-grid-container::-webkit-scrollbar { display: none; }`}</style>
-          {games.map((game, index) => (
-            <Grid item xs={6} key={index}>
-              <Card className="cancel-drag" onClick={() => onGameClick(game)} style={cardStyle}>
-                <CardContent>
-                  <img src={game.cover} alt={game.name} style={imageStyle} loading="lazy" />
-                  <Typography variant="body1" style={typographyStyle}>{game.name}</Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
+          {games.map((game, index) => {
+            const isPlayed = playedGames.includes(game.name);
+            const isActive = activeGame === game.name;
+            const isLockedOut = activeGame && !isActive; // If there's an active game and this isn't it, we might still let them view it, but GameScoreModal will block points.
+
+            return (
+              <Grid item xs={6} key={index}>
+                <Card 
+                  className={isPlayed ? "" : "cancel-drag"} 
+                  onClick={() => {
+                    if (!isPlayed) onSelectGame(game);
+                  }} 
+                  style={{
+                    ...cardStyle, 
+                    opacity: isPlayed ? 0.4 : 1,
+                    cursor: isPlayed ? 'not-allowed' : 'pointer',
+                    border: isActive ? '2px solid #4fc3f7' : cardStyle.border,
+                    filter: isPlayed ? 'grayscale(100%)' : 'none'
+                  }}
+                >
+                  <CardContent>
+                    <img src={game.cover} alt={game.name} style={imageStyle} loading="lazy" />
+                    <Typography variant="body1" style={typographyStyle}>{game.name}</Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            );
+          })}
         </Grid>
       </Paper>
     </>

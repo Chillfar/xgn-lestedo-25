@@ -13,7 +13,8 @@ const ADMIN_EMAIL = "chillfar@gmail.com";
 
 interface AuthContextType {
   currentUser: FirebaseUser | null;
-  isAuthenticated: boolean;
+  isAuthenticated: boolean; // any logged-in user
+  isAdmin: boolean;         // only the admin email (Chillfar)
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
@@ -58,7 +59,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const value: AuthContextType = {
     currentUser,
-    isAuthenticated: !!currentUser && currentUser.email === ADMIN_EMAIL,
+    isAuthenticated: !!currentUser,
+    isAdmin: !!currentUser && currentUser.email === ADMIN_EMAIL,
     loading,
     login,
     logout,
