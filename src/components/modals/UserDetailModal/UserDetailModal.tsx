@@ -23,7 +23,7 @@ export default function UserDetailModal({ open, onClose, user }: UserDetailModal
 
   return (
     <Modal open={open} onClose={onClose} sx={{ zIndex: 99999 }}>
-      <Box sx={modalBoxSx}>
+      <Box sx={modalBoxSx} className="liquid-glass">
         <div onClick={onClose} style={closeButtonStyle}>✕</div>
         <Box sx={coverBoxSx(user.cover, positionStyle)}>
           <Typography variant="h5" sx={titleTextSx}>{user.name}</Typography>

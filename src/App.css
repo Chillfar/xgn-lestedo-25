@@ -58,7 +58,7 @@ body::after {
 
 .panel-text {
   display: inline-block;
-  padding-left: 100%;
+  padding-left: 20%;
   animation: scroll-left 20s linear infinite;
   font-size: 2rem;
   color: white;
@@ -66,7 +66,7 @@ body::after {
 }
 
 @keyframes scroll-left {
-  0%   { transform: translateX(100%); }
+  0%   { transform: translateX(calc(100% - 5px)); }
   100% { transform: translateX(-100%); }
 }
 
@@ -90,18 +90,18 @@ body::after {
       rgba(255, 255, 255, 0.05) 0%,
       transparent 60%
     ),
-    /* Base glass gradient (more transparent to let background show through) */
+    /* Base glass gradient (very subtle, less light) */
     linear-gradient(
       165deg,
       rgba(255, 255, 255, 0.08) 0%,
       rgba(255, 255, 255, 0.03) 30%,
       rgba(255, 255, 255, 0.01) 60%,
       rgba(255, 255, 255, 0.04) 100%
-    );
+    ) !important;
   backdrop-filter: blur(40px) saturate(200%) brightness(1.15) contrast(1.05);
   -webkit-backdrop-filter: blur(40px) saturate(200%) brightness(1.15) contrast(1.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-top-color: rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-top-color: rgba(255, 255, 255, 0.35);
   border-radius: 24px !important;
   box-shadow:
     0 24px 48px rgba(0, 0, 0, 0.4),
@@ -177,6 +177,21 @@ body::after {
     inset 0 -1px 0 rgba(255, 255, 255, 0.06);
 }
 
+/* ── Hide scrollbars for all liquid glass elements (modals, panels) ── */
+.liquid-glass::-webkit-scrollbar,
+.liquid-glass-card::-webkit-scrollbar,
+.liquid-glass *::-webkit-scrollbar,
+.liquid-glass-card *::-webkit-scrollbar {
+  display: none !important;
+}
+.liquid-glass,
+.liquid-glass-card,
+.liquid-glass *,
+.liquid-glass-card * {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
 /* All direct children sit above the pseudo-elements */
 .liquid-glass > * {
   position: relative;
@@ -194,11 +209,11 @@ body::after {
       rgba(255, 255, 255, 0.06) 0%,
       rgba(255, 255, 255, 0.02) 50%,
       rgba(255, 255, 255, 0.03) 100%
-    );
+    ) !important;
   backdrop-filter: blur(24px) saturate(180%) brightness(1.1);
   -webkit-backdrop-filter: blur(24px) saturate(180%) brightness(1.1);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-top-color: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-top-color: rgba(255, 255, 255, 0.25);
   border-radius: 16px !important;
   box-shadow:
     0 8px 24px rgba(0, 0, 0, 0.3),

@@ -1,5 +1,5 @@
 import { Modal, Box, Typography } from "@mui/material";
-import { modalBoxSx, closeButtonStyle, titleContainerSx } from "./TicketsModal.styles";
+import { modalBoxSx, closeButtonStyle, titleContainerSx, titleTextSx } from "./TicketsModal.styles";
 
 /** Maps player ID → accreditation image filename and player name */
 const playerAccreditations: Record<number, { src: string; name: string }> = {
@@ -22,8 +22,8 @@ export default function TicketsModal({ open, onClose, isMobile, isAuthenticated,
 
   return (
     <Modal open={open} onClose={onClose} style={isMobile ? { zIndex: 99999 } : undefined} sx={{ zIndex: 99999 }}>
-      <Box sx={modalBoxSx(isMobile)}>
-        <div onClick={onClose} style={closeButtonStyle}>✕</div>
+      <Box sx={{ ...modalBoxSx(isMobile), display: 'flex', flexDirection: 'column', overflow: 'hidden', padding: 0 }} className="liquid-glass">
+        <div onClick={onClose} style={{ ...closeButtonStyle, top: '16px', right: '16px', zIndex: 50 }}>✕</div>
 
         {!isAuthenticated ? (
           /* ── Not logged in ── */
@@ -32,8 +32,9 @@ export default function TicketsModal({ open, onClose, isMobile, isAuthenticated,
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            height: "80%",
+            flex: 1,
             gap: 3,
+            p: 4
           }}>
             <Typography variant="h2" sx={{ fontSize: isMobile ? "3rem" : "4rem" }}>🔒</Typography>
             <Typography variant={isMobile ? "h6" : "h5"} sx={{ color: "white", fontWeight: "bold", textAlign: "center" }}>
@@ -50,8 +51,9 @@ export default function TicketsModal({ open, onClose, isMobile, isAuthenticated,
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            height: "80%",
+            flex: 1,
             gap: 3,
+            p: 4
           }}>
             <Typography variant="h2" sx={{ fontSize: isMobile ? "3rem" : "4rem" }}>⚠️</Typography>
             <Typography variant={isMobile ? "h6" : "h5"} sx={{ color: "white", fontWeight: "bold", textAlign: "center" }}>
@@ -64,12 +66,14 @@ export default function TicketsModal({ open, onClose, isMobile, isAuthenticated,
         ) : (
           /* ── Show own accreditation ── */
           <>
-            <Box sx={titleContainerSx}>
-              <Typography variant={isMobile ? "h5" : "h4"} sx={{ color: "white", fontWeight: "bold", backgroundColor: "rgba(0,0,0,0.5)", padding: "8px", borderRadius: "4px", textAlign: "center" }}>
-                🔖 Tu acreditación digital, <span style={{ color: "#F363FA" }}>{accreditation.name}</span>!
+            <Box sx={{ ...titleContainerSx, position: 'relative', top: 0, mt: 0, mx: 0, marginBottom: 0, flexShrink: 0 }}>
+              <Typography variant={isMobile ? "h5" : "h4"} sx={{ ...titleTextSx, display: "flex", gap: "12px", alignItems: "center", textAlign: "left" }}>
+                <span style={{ flexShrink: 0 }}>🔖</span>
+                <span>Tu acreditación digital, <span style={{ color: "#F363FA" }}>{accreditation.name}</span>!</span>
               </Typography>
             </Box>
-            <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", padding: "8px", flex: 1, minHeight: 0 }}>
+            <Box sx={{ overflowY: 'auto', flex: 1, padding: isMobile ? "20px" : "32px", pt: "20px", display: "flex", flexDirection: "column", alignItems: "center" }}>
+              <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", padding: "8px", flex: 1, minHeight: 0 }}>
               <img
                 src={accreditation.src}
                 alt={`Acreditación ${accreditation.name}`}
@@ -84,9 +88,10 @@ export default function TicketsModal({ open, onClose, isMobile, isAuthenticated,
                 }}
               />
             </Box>
-            <Typography variant="body2" sx={{ color: "rgba(255,255,255,0.4)", textAlign: "center", mt: 1 }}>
-              Descarga la imagen para mostrarla en la entrada.
-            </Typography>
+              <Typography variant="body2" sx={{ color: "rgba(255,255,255,0.4)", textAlign: "center", mt: 1 }}>
+                Descarga la imagen para mostrarla en la entrada.
+              </Typography>
+            </Box>
           </>
         )}
       </Box>

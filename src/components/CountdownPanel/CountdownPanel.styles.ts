@@ -10,7 +10,7 @@ export const mobilePaperStyle: CSSProperties = {
   textAlign: "right",
   paddingRight: "30px",
   borderRadius: "16px",
-  boxShadow: "0 4px 20px rgba(255, 64, 129, 0.4)",
+  boxShadow: "0 4px 15px rgba(0, 0, 0, 0.4)",
 };
 
 export const desktopPaperStyle: CSSProperties = {
@@ -19,7 +19,7 @@ export const desktopPaperStyle: CSSProperties = {
   color: "white",
   textAlign: "center",
   borderRadius: "16px",
-  boxShadow: "0 4px 20px rgba(255, 64, 129, 0.4)",
+  boxShadow: "0 4px 15px rgba(0, 0, 0, 0.4)",
 };
 
 export const typographyStyle: CSSProperties = { fontSize: "1.5rem", fontWeight: "bold" };

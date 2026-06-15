@@ -12,5 +12,5 @@ export const coverBoxSx = (cover: string, positionStyle: any) => ({
   alignItems: "center",
   justifyContent: "center"
 });
-export const titleTextSx = { color: "white", fontWeight: "bold", textTransform: "uppercase", backgroundColor: "rgba(0, 0, 0, 0.5)", padding: "8px", borderRadius: "4px" };
+export const titleTextSx = { color: "white", fontWeight: "bold", textTransform: "uppercase", backgroundColor: "rgba(0, 0, 0, 0.5)", padding: "8px", borderRadius: "4px" , maxWidth: "calc(100% - 80px)", wordBreak: "break-word", fontSize: "clamp(1rem, 5vw, 2.2rem) !important" };
 export const descSx = { mt: 2 };

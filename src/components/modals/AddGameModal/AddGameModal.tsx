@@ -41,7 +41,7 @@ export default function AddGameModal({ open, onClose, onAddGame }: AddGameModalP
 
   return (
     <Modal open={open} onClose={handleClose} sx={{ zIndex: 99999 }}>
-      <Box style={modalBoxStyle}>
+      <Box style={modalBoxStyle} className="liquid-glass">
         <div onClick={handleClose} style={closeButtonStyle}>✕</div>
         <Typography variant="h6" gutterBottom>Añadir nuevo juego</Typography>
 

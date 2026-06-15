@@ -10,7 +10,7 @@ interface ResetDataModalProps {
 export default function ResetDataModal({ open, onClose, onReset }: ResetDataModalProps) {
   return (
     <Modal open={open} onClose={onClose} sx={{ zIndex: 99999 }}>
-      <Box sx={modalBoxSx}>
+      <Box sx={modalBoxSx} className="liquid-glass">
         <div onClick={onClose} style={closeButtonStyle}>✕</div>
         <Typography variant="body1">¿Seguro que deseas borrar los datos guardados?</Typography>
         <Button variant="contained" color="primary" fullWidth onClick={onReset} style={buttonStyle}>Borrar datos</Button>

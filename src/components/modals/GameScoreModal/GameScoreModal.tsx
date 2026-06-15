@@ -70,7 +70,7 @@ export default function GameScoreModal({
   return (
     <>
       <Modal open={open} onClose={onClose} sx={{ zIndex: 99999 }}>
-        <Box sx={{ ...modalBoxSx, maxHeight: "90vh", overflowY: "auto" }}>
+        <Box sx={{ ...modalBoxSx, maxHeight: "90vh", overflowY: "auto" }} className="liquid-glass">
           <div onClick={onClose} style={closeButtonStyle}>✕</div>
           {selectedGame && (
             <>

@@ -81,17 +81,15 @@ export default function ArchiveModal({
 
   return (
     <Modal open={open} onClose={onClose} style={isMobile ? { zIndex: 99999 } : undefined} sx={{ zIndex: 99999 }}>
-      <Box sx={modalBoxSx(isMobile)}>
-        <div
-          onClick={onClose}
-          style={closeButtonStyle}
-        >
-          ✕
-        </div>
-
-        <Typography variant="h5" sx={{ fontWeight: "bold", mb: 2, textAlign: "center" }}>
-          Ediciones Archivadas
-        </Typography>
+      <Box sx={{ ...modalBoxSx(isMobile), display: 'flex', flexDirection: 'column', overflow: 'hidden', padding: 0 }} className="liquid-glass">
+        <Box sx={{ display: "flex", padding: "16px", alignItems: "center", justifyContent: "center", position: "relative", top: 0, zIndex: 10, backgroundColor: "rgba(255, 255, 255, 0.04)", backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)", borderBottom: "1px solid rgba(255, 255, 255, 0.1)", marginBottom: 0, mx: 0, mt: 0, flexShrink: 0 }}>
+          <div onClick={onClose} style={{ ...closeButtonStyle, top: '16px', right: '16px', zIndex: 50 }}>✕</div>
+          <Typography variant="h5" sx={{ color: "white", fontWeight: "800", textTransform: "uppercase", letterSpacing: "2px", textShadow: "0 2px 10px rgba(0,0,0,0.5)", textAlign: "center", maxWidth: "calc(100% - 80px)", wordBreak: "break-word", fontSize: "clamp(1rem, 5vw, 2.2rem) !important" }}>
+            Ediciones Archivadas
+          </Typography>
+        </Box>
+        
+        <Box sx={{ overflowY: 'auto', flex: 1, padding: isMobile ? "20px" : "32px", pt: "20px" }}>
 
         {/* Create archive — admin only */}
         {isAuthenticated && hasData && (
@@ -142,12 +140,12 @@ export default function ArchiveModal({
               {archives.map((archive) => (
                 <ListItem
                   key={archive.id}
+                  className="liquid-glass-card"
                   sx={{
-                    bgcolor: "#2a2a2a",
-                    borderRadius: 1,
-                    mb: 1,
+                    mb: 1.5,
                     py: 1.5,
-                    "&:hover": { bgcolor: "#333" },
+                    px: 2,
+                    border: "1px solid rgba(255, 255, 255, 0.1)",
                   }}
                   secondaryAction={
                     <Box sx={{ display: "flex", gap: 0.5 }}>
@@ -190,6 +188,7 @@ export default function ArchiveModal({
               ))}
             </List>
           )}
+        </Box>
         </Box>
       </Box>
     </Modal>

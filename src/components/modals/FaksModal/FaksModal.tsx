@@ -76,27 +76,33 @@ export default function FaksModal({ open, onClose, isMobile }: FaksModalProps) {
 
   return (
     <Modal open={open} onClose={onClose} style={isMobile ? { zIndex: 99999 } : undefined} sx={{ zIndex: 99999 }}>
-      <Box sx={modalBoxSx(isMobile)}>
-        <div onClick={onClose} style={closeButtonStyle}>✕</div>
-        <Box sx={titleContainerSx}>
-          <Typography variant={titleVariant} sx={titleTextSx}>💀 FAKs  LESTEDO LAN PARTY</Typography>
+      <Box sx={{ ...modalBoxSx(isMobile), display: 'flex', flexDirection: 'column', overflow: 'hidden', padding: 0 }} className="liquid-glass">
+        <Box sx={{ ...titleContainerSx, position: 'relative', top: 0, mt: 0, mx: 0, marginBottom: 0, flexShrink: 0 }}>
+          <div onClick={onClose} style={{ ...closeButtonStyle, top: '16px', right: '16px' }}>✕</div>
+          <Typography variant={titleVariant} sx={{ ...titleTextSx, display: "flex", gap: "12px", alignItems: "flex-start", textAlign: "left" }}>
+            <span style={{ flexShrink: 0 }}>💀</span>
+            <span>FAKS LESTEDO LAN PARTY</span>
+          </Typography>
         </Box>
 
-        {faqItems.map((item, index) => (
-          <div key={index}>
-            <Typography sx={questionSx(questionPl, questionPr)}>
-              {item.icon} <b>{item.question}</b><br/>
-            </Typography>
-            <Typography sx={answerSx(paddingLeft, paddingRight)}>
-              {item.answer}
-            </Typography>
-            {item.rules && item.rules.map((rule, ruleIndex) => (
-              <Typography key={ruleIndex} sx={answerSx(paddingLeft, paddingRight)}>
-                - {rule}
+        <Box sx={{ overflowY: 'auto', flex: 1, padding: isMobile ? "20px" : "32px", pt: "10px" }}>
+          {faqItems.map((item, index) => (
+            <div key={index}>
+              <Typography sx={{ ...questionSx(questionPl, questionPr), display: "flex", gap: "8px", alignItems: "flex-start" }}>
+                <span style={{ flexShrink: 0 }}>{item.icon}</span>
+                <b>{item.question}</b>
               </Typography>
-            ))}
-          </div>
-        ))}
+              <Typography sx={answerSx(paddingLeft, paddingRight)}>
+                {item.answer}
+              </Typography>
+              {item.rules && item.rules.map((rule, ruleIndex) => (
+                <Typography key={ruleIndex} sx={answerSx(paddingLeft, paddingRight)}>
+                  - {rule}
+                </Typography>
+              ))}
+            </div>
+          ))}
+        </Box>
       </Box>
     </Modal>
   );

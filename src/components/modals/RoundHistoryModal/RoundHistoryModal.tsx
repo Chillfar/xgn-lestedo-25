@@ -32,7 +32,7 @@ export default function RoundHistoryModal({ open, onClose, users }: RoundHistory
 
   return (
     <Modal open={open} onClose={onClose} sx={{ zIndex: 99999 }}>
-      <Box sx={modalBoxSx}>
+      <Box sx={modalBoxSx} className="liquid-glass">
         {/* Header */}
         <Box sx={{
           px: 3, py: 2,

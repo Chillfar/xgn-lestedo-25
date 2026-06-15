@@ -10,11 +10,16 @@ interface TimetableModalProps {
 export default function TimetableModal({ open, onClose, isMobile }: TimetableModalProps) {
   return (
     <Modal open={open} onClose={onClose} style={isMobile ? { zIndex: 99999 } : undefined} sx={{ zIndex: 99999 }}>
-      <Box sx={modalBoxSx(isMobile)}>
-        <div onClick={onClose} style={closeButtonStyle}>✕</div>
-        <Box sx={headerSx}>
-          <Typography variant={isMobile ? "h4" : "h3"} sx={titleTextSx}>🕒 HORARIOS</Typography>
+      <Box sx={{ ...modalBoxSx(isMobile), display: 'flex', flexDirection: 'column', overflow: 'hidden', padding: 0 }} className="liquid-glass">
+        <Box sx={{ ...headerSx, position: 'relative', top: 0, mt: 0, mx: 0, marginBottom: 0, flexShrink: 0 }}>
+          <div onClick={onClose} style={{ ...closeButtonStyle, top: '16px', right: '16px' }}>✕</div>
+          <Typography variant={isMobile ? "h4" : "h3"} sx={{ ...titleTextSx, display: "flex", gap: "12px", alignItems: "center" }}>
+            <span style={{ flexShrink: 0 }}>🕒</span>
+            <span>HORARIOS</span>
+          </Typography>
         </Box>
+        
+        <Box sx={{ overflowY: 'auto', flex: 1, padding: isMobile ? "20px" : "32px", pt: "10px" }}>
         
         {/* Viernes */}
         <Typography variant="h5" sx={daySx}>📅 Viernes</Typography>
@@ -118,6 +123,7 @@ export default function TimetableModal({ open, onClose, isMobile }: TimetableMod
             <li>Entrega de trofeo al MVP de la LAN (más puntos en juegos y minijuegos)</li>
           </ul>
         </Typography>
+        </Box>
       </Box>
     </Modal>
   );
