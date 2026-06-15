@@ -1,6 +1,6 @@
 import { CSSProperties } from "react";
 
-export const paperStyle: CSSProperties = { padding: "16px", backgroundColor: "#1e1e1e", color: "white", position: "relative", height: "100%", display: "flex", flexDirection: "column", boxSizing: "border-box" };
+export const paperStyle: CSSProperties = { padding: "16px", backgroundColor: "#1e1e1e", color: "white", position: "relative", height: "100%", display: "flex", flexDirection: "column", boxSizing: "border-box", borderRadius: "8px" };
 export const headerContainerStyle: CSSProperties = { position: "relative", display: "flex", justifyContent: "flex-end", alignItems: "center", marginBottom: "16px", minHeight: "36px" };
 export const titleStyle: CSSProperties = { position: "absolute", left: 0, right: 0, textAlign: "center", cursor: "grab", margin: 0 };
 export const adminButtonsContainerStyle: CSSProperties = { display: "flex", gap: "8px", position: "relative", zIndex: 10 };
