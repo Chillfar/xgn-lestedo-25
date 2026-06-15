@@ -1,4 +1,3 @@
-import { Rnd } from "react-rnd";
 import { Paper, Typography, Grid, Card, CardContent, Button } from "@mui/material";
 import { Game } from "../../constants/initialData";
 import { paperStyle, buttonStyle, gridContainerStyle, cardStyle, imageStyle, typographyStyle, mobileContainerStyle } from "./GamePanel.styles";
@@ -14,21 +13,13 @@ interface GamePanelProps {
 }
 
 export default function GamePanel({ games, activeGame, playedGames, isMobile, isAuthenticated, onSelectGame, onAddGameClick }: GamePanelProps) {
-  const rndProps = isMobile
-    ? { x: 0, y: 840, width: "92%", height: "auto" }
-    : { x: 1510, y: 120, width: "19%", height: "auto" };
-
-  const rndOptions = isMobile
-    ? { enableResizing: false, disableDragging: true }
-    : {};
-
-  const currentPaperStyle = isMobile ? paperStyle : paperStyle;
+  const currentPaperStyle = paperStyle;
 
   const content = (
     <>
       <Paper style={currentPaperStyle}>
         <Typography variant="h5" gutterBottom>Selecciona un juego para puntuar</Typography>
-        <Button className="cancel-drag" variant="contained" color="secondary" onClick={onAddGameClick} style={{ ...buttonStyle, visibility: isAuthenticated ? "visible" : "hidden" }}>
+        <Button variant="contained" color="secondary" onClick={onAddGameClick} style={{ ...buttonStyle, visibility: isAuthenticated ? "visible" : "hidden" }}>
           Añadir Nuevo Juego
         </Button>
         <Grid container spacing={2} style={gridContainerStyle} className="game-grid-container">
@@ -41,7 +32,6 @@ export default function GamePanel({ games, activeGame, playedGames, isMobile, is
             return (
               <Grid item xs={6} key={index}>
                 <Card 
-                  className={isPlayed ? "" : "cancel-drag"} 
                   onClick={() => {
                     if (!isPlayed) onSelectGame(game);
                   }} 
@@ -66,13 +56,13 @@ export default function GamePanel({ games, activeGame, playedGames, isMobile, is
     </>
   );
 
-  return isMobile ? (
-    <div style={mobileContainerStyle}>
-      {content}
-    </div>
-  ) : (
-    <Rnd default={rndProps} {...rndOptions} cancel="button, .cancel-drag">
-      {content}
-    </Rnd>
-  );
+  if (isMobile) {
+    return (
+      <div style={mobileContainerStyle}>
+        {content}
+      </div>
+    );
+  }
+
+  return content;
 }

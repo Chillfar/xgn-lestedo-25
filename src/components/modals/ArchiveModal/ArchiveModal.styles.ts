@@ -19,5 +19,5 @@ export const modalBoxSx = (isMobile: boolean) => ({
 });
 
 export const closeButtonStyle: CSSProperties = { position: "absolute", top: "10px", right: "15px", cursor: "pointer", fontSize: "1.2rem", zIndex: 50, color: "white" };
-export const viewIconStyle: CSSProperties = { fontSize: "1rem" };
-export const deleteIconStyle: CSSProperties = { fontSize: "1rem" };
+export const viewIconStyle: CSSProperties = { fontSize: "1.5rem" };
+export const deleteIconStyle: CSSProperties = { fontSize: "1.5rem" };

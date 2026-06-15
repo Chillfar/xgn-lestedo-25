@@ -138,7 +138,7 @@ export default function ArchiveModal({
               No hay ediciones archivadas todavía.
             </Typography>
           ) : (
-            <List dense>
+            <List>
               {archives.map((archive) => (
                 <ListItem
                   key={archive.id}
@@ -146,6 +146,7 @@ export default function ArchiveModal({
                     bgcolor: "#2a2a2a",
                     borderRadius: 1,
                     mb: 1,
+                    py: 1.5,
                     "&:hover": { bgcolor: "#333" },
                   }}
                   secondaryAction={
@@ -156,7 +157,7 @@ export default function ArchiveModal({
                           onLoadArchive(archive.id);
                           onClose();
                         }}
-                        sx={{ color: "#4fc3f7" }}
+                        sx={{ color: "#4fc3f7", p: 1.5 }}
                         title="Ver edición"
                       >
                         <span style={viewIconStyle}>👁</span>
@@ -166,7 +167,7 @@ export default function ArchiveModal({
                           edge="end"
                           onClick={() => handleDelete(archive.id)}
                           disabled={deletingId === archive.id}
-                          sx={{ color: "#ef5350" }}
+                          sx={{ color: "#ef5350", p: 1.5 }}
                           title="Eliminar"
                         >
                           {deletingId === archive.id ? (

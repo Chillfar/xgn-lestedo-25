@@ -1,4 +1,3 @@
-import { Rnd } from "react-rnd";
 import { containerStyle } from "./QuotesBanner.styles";
 
 interface QuotesBannerProps {
@@ -7,14 +6,12 @@ interface QuotesBannerProps {
 
 export default function QuotesBanner({ quote }: QuotesBannerProps) {
   return (
-    <Rnd default={{ x: 224, y: 30, width: "60%", height: "auto" }} enableResizing={false} disableDragging={true}>
-      <div className="flex flex-col items-center justify-center" style={containerStyle}>
-        {quote && (
-          <div className="panel-container">
-            <div className="panel-text">{quote}</div>
-          </div>
-        )}
-      </div>
-    </Rnd>
+    <div className="flex flex-col items-center justify-center" style={{ ...containerStyle, position: "relative", width: "100%", height: "100%", zIndex: 50, pointerEvents: "none" }}>
+      {quote && (
+        <div className="panel-container" style={{ pointerEvents: "auto" }}>
+          <div className="panel-text">{quote}</div>
+        </div>
+      )}
+    </div>
   );
 }

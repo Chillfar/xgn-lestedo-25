@@ -1,5 +1,4 @@
 import { useAuth } from "../../contexts/AuthContext";
-import { Rnd } from "react-rnd";
 import NetworkStatus from "./NetworkStatus";
 import {
   authButtonStyle,
@@ -8,10 +7,7 @@ import {
   mobileLogoStyle,
   mobileRightSideStyle,
   topPinkLine,
-  desktopHeaderContainer,
-  desktopLogoContainer,
   desktopLogoStyle,
-  desktopWidgetContainer,
   desktopNavRow,
   desktopBottomRightWidget
 } from "./Header.styles";
@@ -22,9 +18,11 @@ interface HeaderProps {
   onLoginClick: () => void;
   children?: React.ReactNode;
   bottomRightWidget?: React.ReactNode;
+  leftWidget?: React.ReactNode;
+  centerWidget?: React.ReactNode;
 }
 
-export default function Header({ isMobile, isAuthenticated, onLoginClick, children, bottomRightWidget }: HeaderProps) {
+export default function Header({ isMobile, isAuthenticated, onLoginClick, children, bottomRightWidget, leftWidget, centerWidget }: HeaderProps) {
   const { currentUser, logout } = useAuth();
 
   const authButton = !!currentUser ? (
@@ -55,28 +53,41 @@ export default function Header({ isMobile, isAuthenticated, onLoginClick, childr
   return (
     <>
       <div style={topPinkLine}></div>
-      <div style={desktopHeaderContainer}>
-        <div style={desktopLogoContainer}>
+      <div style={{
+        display: "flex",
+        alignItems: "flex-start",
+        justifyContent: "space-between",
+        marginBottom: "-60px",
+        position: "relative",
+      }}>
+        {/* Logo */}
+        <div style={{ marginLeft: "25px", position: "relative", zIndex: 9998 }}>
           <img src="/xgn-lestedo-25/logo_party_hd-removebg-preview.png" alt="Logo" style={desktopLogoStyle} />
         </div>
-      </div>
 
-      {!isMobile && (
-        <Rnd default={{ x: 1510, y: 5, width: "19%", height: "auto" }} enableResizing={false} disableDragging={true} style={{ zIndex: 9999 }}>
-          <div style={desktopWidgetContainer}>
-            <div style={desktopNavRow}>
-              <NetworkStatus />
-              {children}
-              {authButton}
-            </div>
-            {bottomRightWidget && (
-              <div style={desktopBottomRightWidget}>
-                {bottomRightWidget}
-              </div>
-            )}
+        {/* Center widget (QuotesBanner) placed absolutely to span behind Logo and Countdown */}
+        {centerWidget && (
+          <div style={{ position: "absolute", top: "40px", left: "125px", right: "15px", height: "80px", zIndex: 50, pointerEvents: "none" }}>
+            {centerWidget}
           </div>
-        </Rnd>
-      )}
+        )}
+
+        {/* Nav widget — right side */}
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", position: "relative", zIndex: 9999, marginTop: "12px" }}>
+          <div style={desktopNavRow}>
+            {leftWidget}
+            <NetworkStatus />
+            {children}
+            {authButton}
+          </div>
+          {bottomRightWidget && (
+            <div style={desktopBottomRightWidget}>
+              {bottomRightWidget}
+            </div>
+          )}
+        </div>
+      </div>
     </>
   );
 }
+

@@ -23,4 +23,4 @@ export const desktopLogoStyle: CSSProperties = { maxWidth: "200px", marginTop: "
 
 export const desktopWidgetContainer: CSSProperties = { display: "flex", flexDirection: "column", alignItems: "flex-end" };
 export const desktopNavRow: CSSProperties = { display: "flex", alignItems: "center", gap: "10px" };
-export const desktopBottomRightWidget: CSSProperties = { marginTop: "8px", width: "100%" };
+export const desktopBottomRightWidget: CSSProperties = { marginTop: "8px", alignSelf: "flex-end" };

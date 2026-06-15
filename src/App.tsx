@@ -104,7 +104,7 @@ export default function GameDashboard() {
     setVideoCountdownModalOpen,
     videoInaugurationModalOpen,
     setVideoInaugurationModalOpen
-  } = useCountdown("2025-05-10T20:59:00");
+  } = useCountdown("2026-10-09T22:00:00");
   const { gifUrl, fetchRandomGif } = useRandomGif();
   const quote = useRandomQuote(geekQuotes);
 
@@ -240,7 +240,7 @@ export default function GameDashboard() {
   ) : null;
 
   return (
-    <Container maxWidth={false}>
+    <Container maxWidth={false} sx={{ height: isMobile ? "auto" : "100vh", display: "flex", flexDirection: "column", overflow: isMobile ? "visible" : "hidden" }}>
       <Header
         isMobile={isMobile}
         isAuthenticated={isAuthenticated}
@@ -250,39 +250,57 @@ export default function GameDashboard() {
             viewingArchive ? ArchiveBanner : <CountdownPanel countdown={countdown} isMobile={false} />
           ) : undefined
         }
-      >
-
-        <NavButton icon="qr" onClick={() => setOpenTicketsModal(true)} />
-        <NavButton label="Horarios" onClick={() => setOpenTimetableModal(true)} />
-        <NavButton label="Mapa" onClick={() => setOpenMapModal(true)} />
-        <NavButton label="FAKs" onClick={() => setOpenFaksModal(true)} />
-        {!!currentUser && (
+        leftWidget={!viewingArchive && (
+          !isMobile ? (
             <div style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '12px'
+              gap: '8px',
+              background: 'linear-gradient(135deg, rgba(243,99,250,0.18), rgba(79,195,247,0.12))',
+              border: '1px solid rgba(243,99,250,0.45)',
+              borderRadius: '24px',
+              padding: '5px 14px 5px 10px',
+              boxShadow: '0 0 12px rgba(243,99,250,0.25)',
+              whiteSpace: 'nowrap',
+              flexShrink: 0,
             }}>
+              <span style={{ fontSize: '1rem' }}>🎮</span>
+              <span style={{
+                color: '#F363FA',
+                fontSize: '0.82rem',
+                fontWeight: 800,
+                letterSpacing: '0.05em',
+                textTransform: 'uppercase',
+              }}>Ronda {round + 1}</span>
               {activeGame && (
-                <div style={{
+                <span style={{
                   color: '#4fc3f7',
-                  fontSize: '0.85rem',
+                  fontSize: '0.75rem',
                   fontWeight: 'bold',
-                  background: 'rgba(79, 195, 247, 0.1)',
-                  padding: '4px 12px',
-                  borderRadius: '20px',
-                  border: '1px solid rgba(79, 195, 247, 0.3)',
+                  background: 'rgba(79,195,247,0.12)',
+                  padding: '2px 8px',
+                  borderRadius: '12px',
+                  border: '1px solid rgba(79,195,247,0.3)',
+                  marginLeft: '4px',
                 }}>
-                  En juego: {activeGame}
-                </div>
+                  {activeGame}
+                </span>
               )}
-              <div className="round-badge">Ronda {round + 1}</div>
-              <NavButton label="Ediciones" onClick={() => setOpenArchiveModal(true)} />
             </div>
+          ) : undefined
+        )}
+        centerWidget={!isMobile ? <QuotesBanner quote={quote} /> : undefined}
+      >
+
+        {!!currentUser && <NavButton icon="qr" onClick={() => setOpenTicketsModal(true)} />}
+        <NavButton label="Horarios" onClick={() => setOpenTimetableModal(true)} />
+        <NavButton label="Mapa" onClick={() => setOpenMapModal(true)} />
+        <NavButton label="FAKs" onClick={() => setOpenFaksModal(true)} />
+
+        {!!currentUser && (
+          <NavButton label="Ediciones" onClick={() => setOpenArchiveModal(true)} />
         )}
       </Header>
-
-      {/* Quote banner — desktop only */}
-      {!isMobile && <QuotesBanner quote={quote} />}
 
       {/* Archive viewing banner — mobile only (on desktop it sits in the header widget) */}
       {isMobile && ArchiveBanner}
@@ -291,7 +309,13 @@ export default function GameDashboard() {
       <FaksModal open={openFaksModal} onClose={() => setOpenFaksModal(false)} isMobile={isMobile} />
       <MapModal open={openMapModal} onClose={() => setOpenMapModal(false)} isMobile={isMobile} />
       <TimetableModal open={openTimetableModal} onClose={() => setOpenTimetableModal(false)} isMobile={isMobile} />
-      <TicketsModal open={openTicketsModal} onClose={() => setOpenTicketsModal(false)} isMobile={isMobile} />
+      <TicketsModal
+        open={openTicketsModal}
+        onClose={() => setOpenTicketsModal(false)}
+        isMobile={isMobile}
+        isAuthenticated={isAuthenticated}
+        authenticatedPlayerId={authenticatedPlayerId}
+      />
 
       {/* Video modals */}
       <CountdownVideoModal open={videoCountdownModalOpen} onClose={() => setVideoCountdownModalOpen(false)} />
@@ -301,34 +325,98 @@ export default function GameDashboard() {
       <LoginModal open={openLoginModal} onClose={() => setOpenLoginModal(false)} isMobile={isMobile} />
 
       {/* Main panels */}
-      <RankingPanel
-        users={usersData}
-        games={games}
-        isMobile={isMobile}
-        isAuthenticated={isReadOnly ? false : isAdmin}
-        onUserClick={setSelectedUser}
-        onResetClick={() => setOpenResetModal(true)}
-        onArchiveClick={() => setOpenArchiveModal(true)}
-      />
+      {isMobile ? (
+        /* ── Mobile: panels stack vertically ── */
+        <>
+          <RankingPanel
+            users={usersData}
+            games={games}
+            isMobile={isMobile}
+            isAuthenticated={isReadOnly ? false : isAdmin}
+            onUserClick={setSelectedUser}
+            onResetClick={() => setOpenResetModal(true)}
+            onArchiveClick={() => setOpenArchiveModal(true)}
+          />
+          <ChartPanel chartData={chartData} isMobile={isMobile} isAuthenticated={isReadOnly ? false : isAuthenticated} onNextRound={handleNextRound} users={usersData} />
+          <SpotifyPanel isMobile={isMobile} />
+          <GamePanel
+            games={games}
+            activeGame={activeGame}
+            playedGames={playedGames}
+            onSelectGame={isReadOnly ? () => {} : handleSelectGame}
+            isMobile={isMobile}
+            isAuthenticated={isReadOnly ? false : isAdmin}
+            onAddGameClick={() => setOpenNewGameModal(true)}
+          />
+          <VideosPanel isMobile={isMobile} />
+          <LocationPanel isMobile={isMobile} />
+        </>
+      ) : (
+        /* ── Desktop: CSS Grid ── */
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "5fr 3fr 1.3fr 2.5fr",
+          gridTemplateRows: "minmax(0, 55fr) minmax(0, 45fr)",
+          gap: "16px",
+          alignItems: "stretch",
+          flex: 1,
+          minHeight: 0,
+          paddingBottom: "16px",
+        }}>
+          {/* Row 1, Col 1 — Ranking */}
+          <div style={{ gridColumn: "1", gridRow: "1", minWidth: 0, minHeight: 0, height: "100%" }}>
+            <RankingPanel
+              users={usersData}
+              games={games}
+              isMobile={isMobile}
+              isAuthenticated={isReadOnly ? false : isAdmin}
+              onUserClick={setSelectedUser}
+              onResetClick={() => setOpenResetModal(true)}
+              onArchiveClick={() => setOpenArchiveModal(true)}
+            />
+          </div>
 
-      <ChartPanel chartData={chartData} isMobile={isMobile} isAuthenticated={isReadOnly ? false : isAuthenticated} onNextRound={handleNextRound} users={usersData} />
+          {/* Row 1, Col 2 — Chart */}
+          <div style={{ gridColumn: "2", gridRow: "1", minWidth: 0, minHeight: 0, height: "100%" }}>
+            <ChartPanel chartData={chartData} isMobile={isMobile} isAuthenticated={isReadOnly ? false : isAuthenticated} onNextRound={handleNextRound} users={usersData} />
+          </div>
 
-      {!isMobile && <GiphyPanel gifUrl={gifUrl} onClickGif={fetchRandomGif} />}
+          {/* Col 3 — Giphy and Location (spans both rows) */}
+          <div style={{ gridColumn: "3", gridRow: "1 / 3", minWidth: 0, minHeight: 0, height: "100%", display: "flex", flexDirection: "column", gap: "16px" }}>
+            <div style={{ width: "100%", aspectRatio: "1 / 1" }}>
+              <GiphyPanel gifUrl={gifUrl} onClickGif={fetchRandomGif} />
+            </div>
+            <div style={{ flex: 1, minHeight: 0 }}>
+              <LocationPanel isMobile={isMobile} />
+            </div>
+          </div>
 
-      <SpotifyPanel isMobile={isMobile} />
+          {/* Row 1-2, Col 4 — Game Panel (spans both rows) */}
+          <div style={{ gridColumn: "4", gridRow: "1 / 3", minWidth: 0, minHeight: 0, height: "100%" }}>
+            <GamePanel
+              games={games}
+              activeGame={activeGame}
+              playedGames={playedGames}
+              onSelectGame={isReadOnly ? () => {} : handleSelectGame}
+              isMobile={isMobile}
+              isAuthenticated={isReadOnly ? false : isAdmin}
+              onAddGameClick={() => setOpenNewGameModal(true)}
+            />
+          </div>
 
-      <GamePanel
-        games={games}
-        activeGame={activeGame}
-        playedGames={playedGames}
-        onSelectGame={isReadOnly ? () => {} : handleSelectGame}
-        isMobile={isMobile}
-        isAuthenticated={isReadOnly ? false : isAdmin}
-        onAddGameClick={() => setOpenNewGameModal(true)}
-      />
+          {/* Row 2, Col 1 — Videos */}
+          <div style={{ gridColumn: "1", gridRow: "2", minWidth: 0, minHeight: 0, height: "100%" }}>
+            <VideosPanel isMobile={isMobile} />
+          </div>
 
-      <VideosPanel isMobile={isMobile} />
-      <LocationPanel isMobile={isMobile} />
+          {/* Row 2, Col 2 — Spotify */}
+          <div style={{ gridColumn: "2", gridRow: "2", minWidth: 0, minHeight: 0, height: "100%" }}>
+            <SpotifyPanel isMobile={isMobile} />
+          </div>
+
+
+        </div>
+      )}
 
       {/* Action modals */}
       <GameScoreModal

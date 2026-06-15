@@ -1,11 +1,11 @@
 import { CSSProperties } from "react";
 
-export const paperStyle: CSSProperties = { padding: "16px", backgroundColor: "#1e1e1e", color: "white", position: "relative" };
+export const paperStyle: CSSProperties = { padding: "16px", backgroundColor: "#1e1e1e", color: "white", position: "relative", height: "100%", display: "flex", flexDirection: "column", boxSizing: "border-box" };
 export const headerContainerStyle: CSSProperties = { position: "relative", display: "flex", justifyContent: "flex-end", alignItems: "center", marginBottom: "16px", minHeight: "36px" };
 export const titleStyle: CSSProperties = { position: "absolute", left: 0, right: 0, textAlign: "center", cursor: "grab", margin: 0 };
 export const adminButtonsContainerStyle: CSSProperties = { display: "flex", gap: "8px", position: "relative", zIndex: 10 };
 export const adminButtonStyle: CSSProperties = { color: "white" };
-export const tableContainerStyle: CSSProperties = { overflow: "auto", maxHeight: "350px", width: "100%", scrollbarWidth: "none" };
+export const tableContainerStyle: CSSProperties = { overflow: "auto", flex: 1, width: "100%", scrollbarWidth: "none", minHeight: 0 };
 export const headerCellStyle: CSSProperties = { color: "white", whiteSpace: "nowrap" };
 export const stickyHeaderCellStyle: CSSProperties = { color: "white", whiteSpace: "nowrap", position: "sticky", left: 0, zIndex: 3, backgroundColor: "#1e1e1e" };
 export const firstPlaceStyle: CSSProperties = { backgroundColor: "rgba(255, 215, 0, 0.1)" };

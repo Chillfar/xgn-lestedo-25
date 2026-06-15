@@ -1,4 +1,3 @@
-import { Rnd } from "react-rnd";
 import { iframeStyle, mobileContainerStyle } from "./SpotifyPanel.styles";
 const SPOTIFY_EMBED_URL = "https://open.spotify.com/embed/playlist/3YvgAU67nQK5XoaIP0aqSd?utm_source=generator";
 
@@ -7,13 +6,6 @@ interface SpotifyPanelProps {
 }
 
 export default function SpotifyPanel({ isMobile }: SpotifyPanelProps) {
-  const rndProps = isMobile
-    ? { x: 0, y: 1900, width: "92%", height: "auto" }
-    : { x: 820, y: 480, width: "24%", height: "auto" };
-
-  const rndOptions = isMobile
-    ? { enableResizing: false, disableDragging: true }
-    : {};
 
   const content = (
     <>
@@ -21,7 +13,8 @@ export default function SpotifyPanel({ isMobile }: SpotifyPanelProps) {
         style={iframeStyle}
         src={SPOTIFY_EMBED_URL}
         width="100%"
-        height="376"
+        height={isMobile ? "376" : "100%"}
+        style={{ ...iframeStyle, minHeight: isMobile ? undefined : "352px" }}
         allowFullScreen
         allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
         loading="lazy"
@@ -29,13 +22,13 @@ export default function SpotifyPanel({ isMobile }: SpotifyPanelProps) {
     </>
   );
 
-  return isMobile ? (
-    <div style={mobileContainerStyle}>
-      {content}
-    </div>
-  ) : (
-    <Rnd default={rndProps} {...rndOptions}>
-      {content}
-    </Rnd>
-  );
+  if (isMobile) {
+    return (
+      <div style={mobileContainerStyle}>
+        {content}
+      </div>
+    );
+  }
+
+  return content;
 }

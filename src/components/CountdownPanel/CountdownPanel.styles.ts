@@ -1,7 +1,7 @@
 import { CSSProperties } from "react";
 
 export const mobileContainerStyle: CSSProperties = { width: "100%", marginBottom: "20px" };
-export const desktopContainerStyle: CSSProperties = { width: "100%", zIndex: 9990 };
+export const desktopContainerStyle: CSSProperties = { width: "320px", zIndex: 9990 };
 
 export const mobilePaperStyle: CSSProperties = {
   padding: "16px",

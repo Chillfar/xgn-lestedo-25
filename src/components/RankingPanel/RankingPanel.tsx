@@ -1,4 +1,3 @@
-import { Rnd } from "react-rnd";
 import { Paper, Typography, Table, TableHead, TableRow, TableCell, TableBody, Button, Tooltip } from "@mui/material";
 import { Game, User } from "../../constants/initialData";
 import {
@@ -21,14 +20,6 @@ interface RankingPanelProps {
 }
 
 export default function RankingPanel({ users, games, isMobile, isAuthenticated, onUserClick, onResetClick, onArchiveClick }: RankingPanelProps) {
-  const rndProps = isMobile
-    ? { x: 0, y: 100, width: "92%", height: "auto" }
-    : { x: 40, y: 120, width: "40%", height: "auto" };
-
-  const rndOptions = isMobile
-    ? { enableResizing: false, disableDragging: true }
-    : {};
-
   const hasData = users.some(u =>
     (u.history && u.history.length > 0) ||
     Object.values(u.scores).some(s => s > 0)
@@ -48,7 +39,6 @@ export default function RankingPanel({ users, games, isMobile, isAuthenticated, 
       <Paper style={paperStyle}>
         <div style={headerContainerStyle}>
           <Typography
-            className="drag-handle"
             style={titleStyle}
             variant="h5"
           >
@@ -106,7 +96,7 @@ export default function RankingPanel({ users, games, isMobile, isAuthenticated, 
                 const hasPoints = totalScore > 0;
                 return (
                   <TableRow key={user.id} style={index === 0 && hasPoints ? firstPlaceStyle : undefined}>
-                    <TableCell className="cancel-drag" style={getStickyFirstPlaceCellStyle(index, hasPoints)} onClick={() => onUserClick(user)}>
+                    <TableCell style={getStickyFirstPlaceCellStyle(index, hasPoints)} onClick={() => onUserClick(user)}>
                       {hasPoints ? (positionMedals[index] || `${index + 1}.`) : ""} {user.name}
                     </TableCell>
                     {games.map(game => (
@@ -128,13 +118,14 @@ export default function RankingPanel({ users, games, isMobile, isAuthenticated, 
     </>
   );
 
-  return isMobile ? (
-    <div style={mobileContainerStyle}>
-      {content}
-    </div>
-  ) : (
-    <Rnd default={rndProps} {...rndOptions} cancel="button, .admin-buttons, .cancel-drag">
-      {content}
-    </Rnd>
-  );
+  if (isMobile) {
+    return (
+      <div style={mobileContainerStyle}>
+        {content}
+      </div>
+    );
+  }
+
+  return content;
 }
+
