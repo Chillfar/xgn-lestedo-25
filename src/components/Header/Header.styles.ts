@@ -13,8 +13,8 @@ export const loginButtonStyle: CSSProperties = {
 };
 
 export const mobileHeaderContainer: CSSProperties = { width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", position: "relative", zIndex: 9999 };
-export const mobileLogoStyle: CSSProperties = { maxWidth: "80px", marginTop: "-12px" };
-export const mobileRightSideStyle: CSSProperties = { display: "flex", alignItems: "center", gap: "5px", flexWrap: "wrap", justifyContent: "flex-end" };
+export const mobileLogoStyle: CSSProperties = { maxWidth: "80px", marginTop: "-12px", transform: "scale(1.35) translateY(12px)", transformOrigin: "left center" };
+export const mobileRightSideStyle: CSSProperties = { display: "flex", alignItems: "center", gap: "5px", flexWrap: "wrap", justifyContent: "flex-end", margin: "10px 0" };
 
 export const topPinkLine: CSSProperties = { width: "100%", height: "2px", backgroundColor: "#F363FA", position: "fixed", top: 0, left: 0, zIndex: 10000 };
 export const desktopHeaderContainer: CSSProperties = { display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "30px", position: "relative" };

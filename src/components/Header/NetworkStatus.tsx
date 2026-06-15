@@ -31,6 +31,8 @@ interface NetworkStatusProps {
 }
 
 export default function NetworkStatus({ isMobile = false }: NetworkStatusProps) {
+  if (isMobile) return null;
+
   const { status, latencyMs } = useNetworkPing(5000);
   const config = STATUS_CONFIG[status];
 
