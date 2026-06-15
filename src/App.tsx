@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Container } from "@mui/material";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
 import "./App.css";
@@ -52,6 +52,49 @@ import ArchiveModal from "./components/modals/ArchiveModal/ArchiveModal";
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 export default function GameDashboard() {
+  // Liquid Glass: interactive mouse-following refraction
+  useEffect(() => {
+    let currentPanel: HTMLElement | null = null;
+    let currentCard: HTMLElement | null = null;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const el = e.target as HTMLElement;
+
+      // ── Panels ──
+      const panel = el.closest('.liquid-glass') as HTMLElement | null;
+      if (currentPanel && currentPanel !== panel) {
+        currentPanel.classList.remove('liquid-glass--hover');
+      }
+      currentPanel = panel;
+      if (panel) {
+        const rect = panel.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        panel.style.setProperty('--mouse-x', `${x}%`);
+        panel.style.setProperty('--mouse-y', `${y}%`);
+        panel.classList.add('liquid-glass--hover');
+      }
+
+      // ── Cards ──
+      const card = el.closest('.liquid-glass-card') as HTMLElement | null;
+      if (currentCard && currentCard !== card) {
+        currentCard.classList.remove('liquid-glass-card--hover');
+      }
+      currentCard = card;
+      if (card) {
+        const rect = card.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        card.style.setProperty('--mouse-x', `${x}%`);
+        card.style.setProperty('--mouse-y', `${y}%`);
+        card.classList.add('liquid-glass-card--hover');
+      }
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+    return () => document.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
   // Auth
   const { isAuthenticated, isAdmin, currentUser } = useAuth();
 
@@ -357,7 +400,7 @@ export default function GameDashboard() {
           display: "grid",
           gridTemplateColumns: "5fr 3fr 1.3fr 2.5fr",
           gridTemplateRows: "minmax(0, 55fr) minmax(0, 45fr)",
-          gap: "16px",
+          gap: "20px",
           alignItems: "stretch",
           flex: 1,
           minHeight: 0,

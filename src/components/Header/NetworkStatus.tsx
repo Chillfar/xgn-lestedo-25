@@ -39,12 +39,14 @@ export default function NetworkStatus({ isMobile = false }: NetworkStatusProps) 
   const containerStyle: CSSProperties = {
     display: "inline-flex",
     alignItems: "center",
-    gap: isMobile ? "5px" : "7px",
-    padding: isMobile ? "4px 8px" : "4px 12px",
-    borderRadius: "4px",
-    backgroundColor: "rgba(30, 30, 30, 0.8)",
-    border: "1px solid #9A26AE",
-    fontSize: isMobile ? "0.75rem" : "0.9rem",
+    gap: "7px",
+    padding: "4px 12px",
+    borderRadius: "8px",
+    backgroundColor: "rgba(30, 30, 30, 0.6)",
+    backdropFilter: "blur(8px)",
+    WebkitBackdropFilter: "blur(8px)",
+    border: "1px solid rgba(154, 38, 174, 0.6)",
+    fontSize: "0.85rem",
     color: "white",
     letterSpacing: "0.3px",
     whiteSpace: "nowrap",
@@ -53,8 +55,8 @@ export default function NetworkStatus({ isMobile = false }: NetworkStatusProps) 
     userSelect: "none",
     boxSizing: "border-box",
     height: "32px",
-    fontWeight: "bold",
-    transition: "all 0.2s",
+    fontWeight: 600,
+    transition: "all 0.25s ease",
   };
 
   const dotStyle: CSSProperties = {

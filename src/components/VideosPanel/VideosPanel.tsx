@@ -12,7 +12,7 @@ export default function VideosPanel({ isMobile }: VideosPanelProps) {
 
   const content = (
     <>
-      <Paper style={currentPaperStyle}>
+      <Paper style={currentPaperStyle} className="liquid-glass">
         <Typography variant="h5" gutterBottom>Party Vídeos</Typography>
         <div style={{ flex: 1, minHeight: 0 }}>
           <iframe

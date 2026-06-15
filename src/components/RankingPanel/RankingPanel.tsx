@@ -36,7 +36,7 @@ export default function RankingPanel({ users, games, isMobile, isAuthenticated, 
 
   const content = (
     <>
-      <Paper style={paperStyle}>
+      <Paper style={paperStyle} className="liquid-glass">
         <div style={headerContainerStyle}>
           <Typography
             style={titleStyle}

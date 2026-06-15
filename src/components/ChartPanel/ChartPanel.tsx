@@ -20,7 +20,7 @@ export default function ChartPanel({ chartData, isMobile, isAuthenticated, onNex
 
   const content = (
     <>
-      <Paper style={paperStyle}>
+      <Paper style={paperStyle} className="liquid-glass">
         <Typography variant="h5" gutterBottom>Evolución de Puntos</Typography>
         <div style={{ flex: 1, minHeight: 0, position: "relative" }}>
           <Line data={chartData} options={{ maintainAspectRatio: false }} />

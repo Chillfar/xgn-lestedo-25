@@ -17,7 +17,7 @@ export default function GamePanel({ games, activeGame, playedGames, isMobile, is
 
   const content = (
     <>
-      <Paper style={currentPaperStyle}>
+      <Paper style={currentPaperStyle} className="liquid-glass">
         <Typography variant="h5" gutterBottom>Selecciona un juego para puntuar</Typography>
         <Button variant="contained" color="secondary" onClick={onAddGameClick} style={{ ...buttonStyle, visibility: isAuthenticated ? "visible" : "hidden" }}>
           Añadir Nuevo Juego
@@ -39,9 +39,10 @@ export default function GamePanel({ games, activeGame, playedGames, isMobile, is
                     ...cardStyle, 
                     opacity: isPlayed ? 0.4 : 1,
                     cursor: isPlayed ? 'not-allowed' : 'pointer',
-                    border: isActive ? '2px solid #4fc3f7' : cardStyle.border,
+                    border: isActive ? '2px solid #4fc3f7' : undefined,
                     filter: isPlayed ? 'grayscale(100%)' : 'none'
                   }}
+                  className={`liquid-glass-card ${!isPlayed ? "game-card-hover" : ""}`}
                 >
                   <CardContent>
                     <img src={game.cover} alt={game.name} style={imageStyle} loading="lazy" />

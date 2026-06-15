@@ -10,7 +10,7 @@ export default function CountdownPanel({ countdown, isMobile }: CountdownPanelPr
   if (isMobile) {
     return (
       <div style={mobileContainerStyle}>
-        <Paper style={mobilePaperStyle}>
+        <Paper style={mobilePaperStyle} className="liquid-glass">
           <Typography variant="h6" style={typographyStyle}>{countdown}</Typography>
         </Paper>
       </div>
@@ -19,7 +19,7 @@ export default function CountdownPanel({ countdown, isMobile }: CountdownPanelPr
 
   return (
     <div style={desktopContainerStyle}>
-      <Paper style={desktopPaperStyle}>
+      <Paper style={desktopPaperStyle} className="liquid-glass">
         <Typography variant="h6" style={typographyStyle}>{countdown}</Typography>
       </Paper>
     </div>

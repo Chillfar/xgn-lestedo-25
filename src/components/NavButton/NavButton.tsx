@@ -14,6 +14,7 @@ export default function NavButton({ label, icon, onClick }: NavButtonProps) {
     <div 
       onClick={onClick} 
       style={getNavButtonStyle(isIcon)}
+      className="nav-btn"
     >
       {isIcon ? <IoQrCodeOutline /> : label}
     </div>
