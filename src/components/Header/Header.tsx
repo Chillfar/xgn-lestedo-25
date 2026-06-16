@@ -67,7 +67,7 @@ export default function Header({ isMobile, isAuthenticated, onLoginClick, childr
 
         {/* Center widget (QuotesBanner) placed absolutely to span behind Logo and Countdown */}
         {centerWidget && (
-          <div style={{ position: "absolute", top: "40px", left: "125px", right: "60px", height: "80px", zIndex: 50, pointerEvents: "none" }}>
+          <div style={{ position: "absolute", top: "50px", left: "125px", right: "60px", height: "80px", zIndex: 50, pointerEvents: "none" }}>
             {centerWidget}
           </div>
         )}
