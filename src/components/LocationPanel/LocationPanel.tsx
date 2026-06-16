@@ -13,7 +13,7 @@ export default function LocationPanel({ isMobile }: LocationPanelProps) {
   const content = (
     <>
       <Paper style={paperStyle} className="liquid-glass">
-        <Typography variant="h5" gutterBottom>Ubicación</Typography>
+        <Typography variant="h5" gutterBottom sx={{ cursor: "default" }}>Ubicación</Typography>
         <div style={{ flex: 1, minHeight: 0 }}>
           <iframe
             title="Ubicación"

@@ -8,7 +8,7 @@ export const modalBoxSx = {
   backdropFilter: "blur(20px)",
   border: "1px solid rgba(255, 255, 255, 0.1)"
 };
-export const closeButtonStyle: CSSProperties = { position: "absolute", top: "15px", right: "20px", cursor: "pointer", fontSize: "1.5rem", zIndex: 50, color: "rgba(255,255,255,0.6)" };
+export const closeButtonStyle: CSSProperties = { position: "absolute", top: "15px", right: "15px", cursor: "pointer", fontSize: "1.2rem", zIndex: 50, color: "white", background: "rgba(0, 0, 0, 0.5)", backdropFilter: "blur(4px)", width: "32px", height: "32px", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "50%", transition: "all 0.2s" };
 export const primaryActionSx = {
   mt: 3, mb: 1,
   width: "100%",

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Container } from "@mui/material";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
 import "./App.css";
@@ -122,7 +122,43 @@ export default function GameDashboard() {
   const [viewingArchive, setViewingArchive] = useState<{ id: string; label: string; snapshot: ArchiveSnapshot } | null>(null);
 
   // Resolve which data to show: archived or live
-  const usersData = viewingArchive ? viewingArchive.snapshot.users : liveUsers;
+  const usersDataRaw = viewingArchive ? viewingArchive.snapshot.users : liveUsers;
+  
+  const usersData = useMemo(() => {
+    if (!usersDataRaw || usersDataRaw.length === 0) return usersDataRaw;
+
+    const maxRounds = Math.max(0, ...usersDataRaw.map(u => u.history?.length || 0));
+    if (maxRounds <= 1) return usersDataRaw;
+
+    let firstValidIndex = 0;
+    for (let i = 0; i < maxRounds; i++) {
+      const sum = usersDataRaw.reduce((acc, u) => acc + (u.history?.[i] || 0), 0);
+      if (sum > 0) {
+        firstValidIndex = i;
+        break;
+      }
+    }
+
+    let lastValidIndex = maxRounds - 1;
+    for (let i = maxRounds - 1; i > firstValidIndex; i--) {
+      const sum = usersDataRaw.reduce((acc, u) => acc + (u.history?.[i] || 0), 0);
+      const prevSum = usersDataRaw.reduce((acc, u) => acc + (u.history?.[i - 1] || 0), 0);
+      if (sum > prevSum) {
+        lastValidIndex = i;
+        break;
+      }
+    }
+
+    if (firstValidIndex === 0 && lastValidIndex === maxRounds - 1) {
+      return usersDataRaw;
+    }
+
+    return usersDataRaw.map(u => ({
+      ...u,
+      history: u.history ? u.history.slice(firstValidIndex, lastValidIndex + 1) : []
+    }));
+  }, [usersDataRaw]);
+  
   const games = viewingArchive ? viewingArchive.snapshot.games : liveGames;
   const isReadOnly = !!viewingArchive;
 
@@ -247,37 +283,48 @@ export default function GameDashboard() {
 
 
   const ArchiveBanner = viewingArchive ? (
-    <div style={{
-      width: "100%",
-      padding: "10px 20px",
-      background: "linear-gradient(135deg, #4fc3f7, #0288d1)",
-      color: "white",
-      borderRadius: "8px",
-      marginBottom: isMobile ? "16px" : "0",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "space-between",
-      boxSizing: "border-box",
-      boxShadow: !isMobile ? "0 4px 10px rgba(2, 136, 209, 0.5)" : "none",
-    }}>
-      <span style={{ fontWeight: "bold", fontSize: "1rem" }}>
-        Viendo edición: {viewingArchive.label}
-      </span>
-      <button
-        onClick={handleExitArchiveView}
-        style={{
-          background: "rgba(255,255,255,0.2)",
-          border: "1px solid white",
-          color: "white",
-          padding: "6px 16px",
-          borderRadius: "4px",
-          cursor: "pointer",
-          fontWeight: "bold",
-          fontSize: "0.85rem",
-        }}
-      >
-        Volver a En Vivo
-      </button>
+    <div style={{ width: isMobile ? "100%" : "max-content", zIndex: 9990 }}>
+      <div style={{
+        padding: "16px",
+        background: "linear-gradient(135deg, #4fc3f7, #0288d1)",
+        color: "white",
+        borderRadius: "16px",
+        marginBottom: isMobile ? "20px" : "0",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        boxSizing: "border-box",
+        boxShadow: "0 4px 15px rgba(0, 0, 0, 0.4)",
+        cursor: "default",
+        height: isMobile ? "auto" : "74px"
+      }}>
+        <span style={{ 
+          fontWeight: "bold", 
+          fontSize: "1rem", 
+          whiteSpace: "nowrap", 
+        }}>
+          Viendo edición: {viewingArchive.label}
+        </span>
+        <button
+          onClick={handleExitArchiveView}
+          style={{
+            background: "rgba(255,255,255,0.2)",
+            border: "1px solid white",
+            color: "white",
+            padding: "6px 10px",
+            borderRadius: "8px",
+            cursor: "pointer",
+            fontWeight: "bold",
+            fontSize: "0.75rem",
+            marginLeft: "12px",
+            transition: "all 0.2s",
+            whiteSpace: "nowrap",
+            flexShrink: 0
+          }}
+        >
+          Volver a En Vivo
+        </button>
+      </div>
     </div>
   ) : null;
 
@@ -376,10 +423,17 @@ export default function GameDashboard() {
             isMobile={isMobile}
             isAuthenticated={isReadOnly ? false : isAdmin}
             onUserClick={setSelectedUser}
+            onNextRoundClick={() => setOpenNextRoundModal(true)}
+          />
+          <ChartPanel 
+            chartData={chartData} 
+            isMobile={isMobile} 
+            isAuthenticated={isReadOnly ? false : isAuthenticated} 
+            isAdmin={isReadOnly ? false : isAdmin}
             onResetClick={() => setOpenResetModal(true)}
             onArchiveClick={() => setOpenArchiveModal(true)}
+            users={usersData} 
           />
-          <ChartPanel chartData={chartData} isMobile={isMobile} isAuthenticated={isReadOnly ? false : isAuthenticated} onNextRound={() => setOpenNextRoundModal(true)} users={usersData} />
           <SpotifyPanel isMobile={isMobile} />
           <GamePanel
             games={games}
@@ -413,14 +467,21 @@ export default function GameDashboard() {
               isMobile={isMobile}
               isAuthenticated={isReadOnly ? false : isAdmin}
               onUserClick={setSelectedUser}
-              onResetClick={() => setOpenResetModal(true)}
-              onArchiveClick={() => setOpenArchiveModal(true)}
+              onNextRoundClick={() => setOpenNextRoundModal(true)}
             />
           </div>
 
           {/* Row 1, Col 2 — Chart */}
           <div style={{ gridColumn: "2", gridRow: "1", minWidth: 0, minHeight: 0, height: "100%" }}>
-            <ChartPanel chartData={chartData} isMobile={isMobile} isAuthenticated={isReadOnly ? false : isAuthenticated} onNextRound={() => setOpenNextRoundModal(true)} users={usersData} />
+            <ChartPanel 
+              chartData={chartData} 
+              isMobile={isMobile} 
+              isAuthenticated={isReadOnly ? false : isAuthenticated} 
+              isAdmin={isReadOnly ? false : isAdmin}
+              onResetClick={() => setOpenResetModal(true)}
+              onArchiveClick={() => setOpenArchiveModal(true)}
+              users={usersData} 
+            />
           </div>
 
           {/* Col 3 — Giphy and Location (spans both rows) */}
@@ -498,7 +559,7 @@ export default function GameDashboard() {
         onClose={() => setOpenArchiveModal(false)}
         archives={archives}
         isAuthenticated={isAdmin}
-        hasData={liveUsers.some(u => (u.history && u.history.length > 0) || Object.values(u.scores).some(s => s > 0))}
+        hasData={liveUsers.some(u => (u.history && u.history.length > 1) || Object.values(u.scores).some(s => s > 0))}
         onCreateArchive={handleCreateArchive}
         onLoadArchive={handleLoadArchive}
         onDeleteArchive={deleteArchive}

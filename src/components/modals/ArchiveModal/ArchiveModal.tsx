@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import { Archive } from "../../../hooks/useFirestoreArchives";
 import { modalBoxSx, closeButtonStyle, viewIconStyle, deleteIconStyle } from "./ArchiveModal.styles";
+import { MdVisibility, MdDelete } from "react-icons/md";
 
 interface ArchiveModalProps {
   open: boolean;
@@ -158,7 +159,7 @@ export default function ArchiveModal({
                         sx={{ color: "#4fc3f7", p: 1.5 }}
                         title="Ver edición"
                       >
-                        <span style={viewIconStyle}>👁</span>
+                        <MdVisibility style={{ fontSize: "1.5rem" }} />
                       </IconButton>
                       {isAuthenticated && (
                         <IconButton
@@ -171,7 +172,7 @@ export default function ArchiveModal({
                           {deletingId === archive.id ? (
                             <CircularProgress size={18} color="inherit" />
                           ) : (
-                            <span style={deleteIconStyle}>🗑</span>
+                            <MdDelete style={{ fontSize: "1.5rem" }} />
                           )}
                         </IconButton>
                       )}

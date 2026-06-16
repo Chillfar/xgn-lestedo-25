@@ -2,8 +2,8 @@ import { Paper, Typography, Table, TableHead, TableRow, TableCell, TableBody, Bu
 import { Game, User } from "../../constants/initialData";
 import {
   paperStyle, headerContainerStyle, titleStyle, adminButtonsContainerStyle,
-  adminButtonStyle, tableContainerStyle, headerCellStyle, stickyHeaderCellStyle, firstPlaceStyle,
-  scoreCellStyle, totalScoreCellStyle, mobileContainerStyle, getStickyFirstPlaceCellStyle,
+  adminButtonStyle, primaryAdminButtonStyle, tableContainerStyle, headerCellStyle, stickyHeaderCellStyle, stickyRightHeaderCellStyle, firstPlaceStyle,
+  scoreCellStyle, totalScoreCellStyle, mobileContainerStyle, getStickyFirstPlaceCellStyle, getStickyRightTotalScoreCellStyle,
   predictionCellStyle, predictionHeaderCellStyle,
 } from "./RankingPanel.styles";
 
@@ -15,13 +15,12 @@ interface RankingPanelProps {
   isMobile: boolean;
   isAuthenticated: boolean;
   onUserClick: (user: User) => void;
-  onResetClick: () => void;
-  onArchiveClick?: () => void;
+  onNextRoundClick?: () => void;
 }
 
-export default function RankingPanel({ users, games, isMobile, isAuthenticated, onUserClick, onResetClick, onArchiveClick }: RankingPanelProps) {
+export default function RankingPanel({ users, games, isMobile, isAuthenticated, onUserClick, onNextRoundClick }: RankingPanelProps) {
   const hasData = users.some(u =>
-    (u.history && u.history.length > 0) ||
+    (u.history && u.history.length > 1) ||
     Object.values(u.scores).some(s => s > 0)
   );
 
@@ -45,22 +44,16 @@ export default function RankingPanel({ users, games, isMobile, isAuthenticated, 
             Ranking
           </Typography>
 
-          {isAuthenticated && hasData && (
+          {isAuthenticated && (
             <div style={adminButtonsContainerStyle}>
-              {onArchiveClick && (
+              {onNextRoundClick && (
                 <Button
-                  sx={adminButtonStyle}
-                  onClick={onArchiveClick}
+                  sx={primaryAdminButtonStyle}
+                  onClick={onNextRoundClick}
                 >
-                  {isMobile ? "💾" : "Archivar"}
+                  {isMobile ? "►" : "Siguiente Ronda"}
                 </Button>
               )}
-              <Button
-                sx={adminButtonStyle}
-                onClick={onResetClick}
-              >
-                {isMobile ? "↻" : "Resetear datos"}
-              </Button>
             </div>
           )}
         </div>
@@ -79,7 +72,7 @@ export default function RankingPanel({ users, games, isMobile, isAuthenticated, 
                     <TableCell style={predictionHeaderCellStyle}><strong>🎯</strong></TableCell>
                   </Tooltip>
                 )}
-                <TableCell style={headerCellStyle}><strong>Total</strong></TableCell>
+                <TableCell style={stickyRightHeaderCellStyle}><strong>Total</strong></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -101,7 +94,7 @@ export default function RankingPanel({ users, games, isMobile, isAuthenticated, 
                         {predPts > 0 ? `+${predPts}` : "—"}
                       </TableCell>
                     )}
-                    <TableCell style={totalScoreCellStyle}>{totalScore}</TableCell>
+                    <TableCell style={getStickyRightTotalScoreCellStyle(index, hasPoints)}>{totalScore}</TableCell>
                   </TableRow>
                 );
               })}

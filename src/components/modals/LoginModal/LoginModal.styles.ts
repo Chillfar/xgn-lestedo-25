@@ -18,7 +18,7 @@ export const modalBoxSx = (isMobile: boolean) => ({
   scrollbarColor: "#F363FA #1e1e1e"
 });
 
-export const closeButtonStyle: CSSProperties = { position: "absolute", top: "10px", right: "15px", cursor: "pointer", fontSize: "1.2rem", zIndex: 50, color: "white" };
+export const closeButtonStyle: CSSProperties = { position: "absolute", top: "15px", right: "15px", cursor: "pointer", fontSize: "1.2rem", zIndex: 50, color: "white", background: "rgba(0, 0, 0, 0.5)", backdropFilter: "blur(4px)", width: "32px", height: "32px", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "50%", transition: "all 0.2s" };
 export const titleContainerSx = { display: "flex", padding: "16px", alignItems: "center", justifyContent: "center", position: "sticky", top: "-32px", zIndex: 10, backgroundColor: "rgba(255, 255, 255, 0.04)", backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)", borderBottom: "1px solid rgba(255, 255, 255, 0.1)", marginBottom: "24px", mx: "-32px", mt: "-32px" };
 export const titleTextSx = { color: "white", fontWeight: "800", textTransform: "uppercase", letterSpacing: "2px", textShadow: "0 2px 10px rgba(0,0,0,0.5)", textAlign: "center" as const , maxWidth: "calc(100% - 80px)", wordBreak: "break-word", fontSize: "clamp(1rem, 5vw, 2.2rem) !important" };
 export const alertSx = { mb: 2, backgroundColor: "#2a1a1a", color: "#ff6b6b" };

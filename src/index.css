@@ -14,3 +14,8 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* Evitar que aparezca el borde blanco de "foco" al hacer click en los Modales */
+.MuiBox-root:focus {
+  outline: none !important;
+}

@@ -18,6 +18,6 @@ export const modalBoxSx = (isMobile: boolean) => ({
   flexDirection: "column",
 });
 
-export const closeButtonStyle: CSSProperties = { position: "absolute", top: "10px", right: "15px", cursor: "pointer", fontSize: "1.2rem", zIndex: 50, color: "white" };
+export const closeButtonStyle: CSSProperties = { position: "absolute", top: "15px", right: "15px", cursor: "pointer", fontSize: "1.2rem", zIndex: 50, color: "white", background: "rgba(0, 0, 0, 0.5)", backdropFilter: "blur(4px)", width: "32px", height: "32px", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "50%", transition: "all 0.2s" };
 export const viewIconStyle: CSSProperties = { fontSize: "1.5rem" };
 export const deleteIconStyle: CSSProperties = { fontSize: "1.5rem" };

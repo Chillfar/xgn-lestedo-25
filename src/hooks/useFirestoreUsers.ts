@@ -37,7 +37,11 @@ export default function useFirestoreUsers() {
       }
 
       const usersData = snapshot.docs
-        .map((d: QueryDocumentSnapshot) => d.data() as User)
+        .map((d: QueryDocumentSnapshot) => {
+          const u = d.data() as User;
+          if (!u.history || u.history.length === 0) u.history = [0];
+          return u;
+        })
         .sort((a, b) => {
           const totalA = Object.values(a.scores).reduce((acc, s) => acc + s, 0);
           const totalB = Object.values(b.scores).reduce((acc, s) => acc + s, 0);

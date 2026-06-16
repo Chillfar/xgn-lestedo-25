@@ -33,13 +33,13 @@ export const initialGames: Game[] = [
 
 export const initialUsers: User[] = [
   { id: 1, name: "Chillfar", rol: "Rol: Informático de guardia y DJ espiritual del grupo.", description: "El hacker de la LAN y alma de fiesta digital. Fan del Fortnite, amante del software libre (y del no tan libre también). Su lema: \"Si se puede crackear, se puede disfrutar\". Sueña con vivir en Ibiza, entre beats de house y scripts en Python. Tiene más pelis en el disco duro que Netflix en la nube.",
-    cover: '/xgn-lestedo-25/roxo.JPG', scores: {}, history: [], predictionPoints: 0 },
+    cover: '/xgn-lestedo-25/roxo.JPG', scores: {}, history: [0], predictionPoints: 0 },
   { id: 2, name: "El Noyas", rol: "Rol: Embajador de Nintendo y evangelizador oficial de la Switch.", description: "Francotirador honorífico del grupo… aunque el blanco suele salir ileso por pura suerte. Fan incondicional de Nintendo, especialmente de Zelda: si no ha hablado de Hyrule hoy, es que está enfermo. En misión personal para que todos se compren la Switch 2 (\"porque esta vez sí que va a ser la buena\"). Apunta con el sniper como Link con los ojos vendados, pero eso sí, con estilo.",
-    cover: '/xgn-lestedo-25/noyas.JPG', scores: {}, history: [], predictionPoints: 0 },
+    cover: '/xgn-lestedo-25/noyas.JPG', scores: {}, history: [0], predictionPoints: 0 },
   { id: 3, name: "Goku", rol: "Rol: Maestro de los Soulslike y gurú de las tecnologías de pantalla.", description: "El guerrero esporádico de la LAN, pero cuando aparece, deja el sofá para siempre. Dueño orgulloso de una PS5, sufre (y disfruta) con juegos como Dark Souls, Xenoblade y Elden Ring. No siempre se pasa por la XGN, pero a la de XGN Lestedo no falta ni loco: allí es territorio sagrado. Amante de las teles con más siglas que un cohete: si no tiene 4K, HDR10 y Dolby Vision, no es digno de sus ojos.",
-    cover: '/xgn-lestedo-25/danis.jpg', scores: {}, history: [], predictionPoints: 0 },
+    cover: '/xgn-lestedo-25/danis.jpg', scores: {}, history: [0], predictionPoints: 0 },
   { id: 4, name: "Eras", rol: "Rol: Guía oficial de excursiones y consejero gastronómico.", description: "El explorador del grupo, tanto en el juego como en la vida real. Juega al Fortnite cuando no está perdido en \"The Forest\" (literalmente). Dueño de la cuenta @gallegoviajero, conoce más rincones de Galicia que Google Maps. Experto en senderismo, comida rica y escapadas rurales con encanto. Si desaparece durante la LAN, probablemente esté buscando una ruta en Wikiloc o un pulpo á feira.",
-    cover: '/xgn-lestedo-25/pablo.JPG', scores: {}, history: [], predictionPoints: 0 }
+    cover: '/xgn-lestedo-25/pablo.JPG', scores: {}, history: [0], predictionPoints: 0 }
 ];
 
 export const userColors = {

@@ -12,7 +12,7 @@ export const modalBoxSx = {
   backdropFilter: "blur(20px)",
   border: "1px solid rgba(255, 255, 255, 0.1)"
 };
-export const closeButtonStyle: CSSProperties = { position: "absolute", top: "15px", right: "20px", cursor: "pointer", fontSize: "1.5rem", zIndex: 50, color: "rgba(255,255,255,0.6)", transition: "color 0.2s" };
+export const closeButtonStyle: CSSProperties = { position: "absolute", top: "15px", right: "15px", cursor: "pointer", fontSize: "1.2rem", zIndex: 50, color: "white", background: "rgba(0, 0, 0, 0.5)", backdropFilter: "blur(4px)", width: "32px", height: "32px", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "50%", transition: "all 0.2s" };
 export const coverBoxSx = (cover: string) => ({ backgroundImage: `url(${cover})`, backgroundSize: "cover", backgroundPosition: "center", height: "180px", borderRadius: "16px", display: "flex", alignItems: "center", justifyContent: "center", position: "relative", overflow: "hidden", mb: 3, boxShadow: "0 4px 15px rgba(0,0,0,0.3)" });
 export const titleTextSx = { color: "white", fontWeight: 800, textTransform: "uppercase", backgroundColor: "rgba(0, 0, 0, 0.65)", padding: "8px 16px", borderRadius: "12px", maxWidth: "calc(100% - 40px)", wordBreak: "break-word", fontSize: "clamp(1.2rem, 5vw, 2.5rem) !important", backdropFilter: "blur(8px)", letterSpacing: "1px" };
 export const buttonSx = {

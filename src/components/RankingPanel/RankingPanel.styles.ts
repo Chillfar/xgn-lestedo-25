@@ -16,7 +16,17 @@ export const paperStyle: CSSProperties = {
 };
 
 export const headerContainerStyle: CSSProperties = { position: "relative", display: "flex", justifyContent: "flex-end", alignItems: "center", marginBottom: "20px", minHeight: "40px" };
-export const titleStyle: CSSProperties = { position: "absolute", left: 0, right: 0, textAlign: "center", cursor: "grab", margin: 0, fontWeight: 800, letterSpacing: "1px", color: "white" };
+export const titleStyle: CSSProperties = { 
+  position: "absolute", 
+  left: 0, 
+  right: 0, 
+  textAlign: "center", 
+  cursor: "default", 
+  margin: 0, 
+  fontWeight: "normal", 
+  letterSpacing: "1px", 
+  color: "white" 
+};
 export const adminButtonsContainerStyle: CSSProperties = { display: "flex", gap: "12px", position: "relative", zIndex: 10 };
 
 export const adminButtonStyle = { 
@@ -35,6 +45,24 @@ export const adminButtonStyle = {
   }
 };
 
+export const primaryAdminButtonStyle = {
+  borderRadius: "20px",
+  background: "linear-gradient(45deg, #00FFA3, #00B8D4)",
+  color: "#0f0f13",
+  fontWeight: "bold",
+  textTransform: "none",
+  border: "none",
+  padding: "8px 20px",
+  boxShadow: "0 4px 15px rgba(0, 255, 163, 0.3)",
+  cursor: "pointer",
+  transition: "all 0.3s ease",
+  "&:hover": {
+    background: "linear-gradient(45deg, #00B8D4, #00FFA3)",
+    boxShadow: "0 6px 20px rgba(0, 255, 163, 0.5)",
+    transform: "translateY(-2px)",
+  }
+};
+
 export const tableContainerStyle: CSSProperties = { overflow: "auto", flex: 1, width: "100%", scrollbarWidth: "none", minHeight: 0 };
 export const headerCellStyle: CSSProperties = { color: "rgba(255,255,255,0.7)", whiteSpace: "nowrap", borderBottom: "1px solid rgba(255,255,255,0.1)", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.5px" };
 export const stickyHeaderCellStyle: CSSProperties = { 
@@ -44,6 +72,15 @@ export const stickyHeaderCellStyle: CSSProperties = {
   zIndex: 3, 
   backgroundColor: "#181822",
   boxShadow: "-2px 0 0 #181822"
+};
+
+export const stickyRightHeaderCellStyle: CSSProperties = { 
+  ...headerCellStyle, 
+  position: "sticky", 
+  right: -2, 
+  zIndex: 3, 
+  backgroundColor: "#181822",
+  boxShadow: "-1px 0 0 rgba(255,255,255,0.1)"
 };
 
 export const firstPlaceStyle: CSSProperties = { 
@@ -89,5 +126,22 @@ export const getStickyFirstPlaceCellStyle = (index: number, hasPoints: boolean):
     backgroundColor: bgColor,
     borderBottom: "1px solid rgba(255,255,255,0.05)",
     boxShadow: `-2px 0 0 ${bgColor}${stripeColor !== "transparent" ? `, inset 4px 0 0 ${stripeColor}` : ""}`
+  };
+};
+
+export const getStickyRightTotalScoreCellStyle = (index: number, hasPoints: boolean): CSSProperties => {
+  const isFirst = index === 0 && hasPoints;
+  const bgColor = isFirst ? "#2a2410" : "#181822";
+  
+  return {
+    color: "#4fc3f7", 
+    fontWeight: "bold", 
+    borderBottom: "1px solid rgba(255,255,255,0.05)", 
+    fontSize: "1.1rem",
+    position: "sticky",
+    right: -2,
+    zIndex: 2,
+    backgroundColor: bgColor,
+    boxShadow: "-1px 0 0 rgba(255,255,255,0.1)"
   };
 };

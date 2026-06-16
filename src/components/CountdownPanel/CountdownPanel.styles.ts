@@ -22,4 +22,4 @@ export const desktopPaperStyle: CSSProperties = {
   boxShadow: "0 4px 15px rgba(0, 0, 0, 0.4)",
 };
 
-export const typographyStyle: CSSProperties = { fontSize: "1.5rem", fontWeight: "bold" };
+export const typographyStyle: CSSProperties = { fontSize: "1.5rem", fontWeight: "bold", cursor: "default" };

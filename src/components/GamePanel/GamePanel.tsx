@@ -1,4 +1,4 @@
-import { Paper, Typography, Grid, Card, CardContent, Button } from "@mui/material";
+import { Paper, Typography, Grid, Card, CardContent, Button, Tooltip } from "@mui/material";
 import { Game } from "../../constants/initialData";
 import { paperStyle, primaryActionSx, gridContainerStyle, cardStyle, imageStyle, typographyStyle, mobileContainerStyle } from "./GamePanel.styles";
 
@@ -18,7 +18,7 @@ export default function GamePanel({ games, activeGame, playedGames, isMobile, is
   const content = (
     <>
       <Paper style={currentPaperStyle} className="liquid-glass">
-        <Typography variant="h5" gutterBottom>Selecciona un juego para puntuar</Typography>
+        <Typography variant="h5" gutterBottom sx={{ cursor: "default" }}>Selecciona un juego para puntuar</Typography>
         <Button variant="contained" onClick={onAddGameClick} sx={{ ...primaryActionSx, visibility: isAuthenticated ? "visible" : "hidden" }}>
           Añadir Nuevo Juego
         </Button>
@@ -31,24 +31,31 @@ export default function GamePanel({ games, activeGame, playedGames, isMobile, is
 
             return (
               <Grid item xs={6} key={index}>
-                <Card 
-                  onClick={() => {
-                    if (!isPlayed) onSelectGame(game);
-                  }} 
-                  style={{
-                    ...cardStyle, 
-                    opacity: isPlayed ? 0.4 : 1,
-                    cursor: isPlayed ? 'not-allowed' : 'pointer',
-                    border: isActive ? '2px solid #4fc3f7' : undefined,
-                    filter: isPlayed ? 'grayscale(100%)' : 'none'
-                  }}
-                  className={`liquid-glass-card ${!isPlayed ? "game-card-hover" : ""}`}
+                <Tooltip
+                  title={isPlayed ? "Este juego ya ha sido jugado y puntuado" : ""}
+                  placement="top"
+                  arrow
+                  disableHoverListener={!isPlayed}
                 >
-                  <CardContent>
-                    <img src={game.cover} alt={game.name} style={imageStyle} loading="lazy" />
-                    <Typography variant="body1" style={typographyStyle}>{game.name}</Typography>
-                  </CardContent>
-                </Card>
+                  <Card 
+                    onClick={() => {
+                      if (!isPlayed) onSelectGame(game);
+                    }} 
+                    style={{
+                      ...cardStyle, 
+                      opacity: isPlayed ? 0.4 : 1,
+                      cursor: isPlayed ? 'not-allowed' : 'pointer',
+                      border: isActive ? '2px solid #4fc3f7' : undefined,
+                      filter: isPlayed ? 'grayscale(100%)' : 'none'
+                    }}
+                    className={`liquid-glass-card ${!isPlayed ? "game-card-hover" : ""}`}
+                  >
+                    <CardContent>
+                      <img src={game.cover} alt={game.name} style={imageStyle} loading="lazy" />
+                      <Typography variant="body1" style={typographyStyle}>{game.name}</Typography>
+                    </CardContent>
+                  </Card>
+                </Tooltip>
               </Grid>
             );
           })}
