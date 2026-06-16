@@ -1,6 +1,6 @@
 import { Paper, Typography, Grid, Card, CardContent, Button } from "@mui/material";
 import { Game } from "../../constants/initialData";
-import { paperStyle, buttonStyle, gridContainerStyle, cardStyle, imageStyle, typographyStyle, mobileContainerStyle } from "./GamePanel.styles";
+import { paperStyle, primaryActionSx, gridContainerStyle, cardStyle, imageStyle, typographyStyle, mobileContainerStyle } from "./GamePanel.styles";
 
 interface GamePanelProps {
   games: Game[];
@@ -19,7 +19,7 @@ export default function GamePanel({ games, activeGame, playedGames, isMobile, is
     <>
       <Paper style={currentPaperStyle} className="liquid-glass">
         <Typography variant="h5" gutterBottom>Selecciona un juego para puntuar</Typography>
-        <Button variant="contained" color="secondary" onClick={onAddGameClick} style={{ ...buttonStyle, visibility: isAuthenticated ? "visible" : "hidden" }}>
+        <Button variant="contained" onClick={onAddGameClick} sx={{ ...primaryActionSx, visibility: isAuthenticated ? "visible" : "hidden" }}>
           Añadir Nuevo Juego
         </Button>
         <Grid container spacing={2} style={gridContainerStyle} className="game-grid-container">

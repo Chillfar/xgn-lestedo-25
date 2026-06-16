@@ -1,5 +1,5 @@
 import { Modal, Box, Typography, Button } from "@mui/material";
-import { modalBoxSx, closeButtonStyle, buttonStyle } from "./ResetDataModal.styles";
+import { modalBoxSx, closeButtonStyle, primaryActionSx } from "./ResetDataModal.styles";
 
 interface ResetDataModalProps {
   open: boolean;
@@ -13,7 +13,7 @@ export default function ResetDataModal({ open, onClose, onReset }: ResetDataModa
       <Box sx={modalBoxSx} className="liquid-glass">
         <div onClick={onClose} style={closeButtonStyle}>✕</div>
         <Typography variant="body1">¿Seguro que deseas borrar los datos guardados?</Typography>
-        <Button variant="contained" color="primary" fullWidth onClick={onReset} style={buttonStyle}>Borrar datos</Button>
+        <Button variant="contained" fullWidth onClick={onReset} sx={primaryActionSx}>Borrar datos</Button>
       </Box>
     </Modal>
   );

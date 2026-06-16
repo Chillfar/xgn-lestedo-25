@@ -21,7 +21,7 @@ import { resolvePredictions as firestoreResolvePredictions } from "./hooks/useFi
 
 
 // Components
-import IntroVideo from "./components/IntroVideo/IntroVideo";
+
 import Header from "./components/Header/Header";
 import QuotesBanner from "./components/QuotesBanner/QuotesBanner";
 import CountdownPanel from "./components/CountdownPanel/CountdownPanel";
@@ -48,6 +48,7 @@ import CountdownVideoModal from "./components/modals/CountdownVideoModal/Countdo
 import InaugurationVideoModal from "./components/modals/InaugurationVideoModal/InaugurationVideoModal";
 import LoginModal from "./components/modals/LoginModal/LoginModal";
 import ArchiveModal from "./components/modals/ArchiveModal/ArchiveModal";
+import NextRoundModal from "./components/modals/NextRoundModal/NextRoundModal";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -128,7 +129,7 @@ export default function GameDashboard() {
   // UI state
   const [selectedGame, setSelectedGame] = useState<Game | null>(null);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+
   const [showConfetti, setShowConfetti] = useState(false);
   const [openNewGameModal, setOpenNewGameModal] = useState(false);
   const [openResetModal, setOpenResetModal] = useState(false);
@@ -138,6 +139,7 @@ export default function GameDashboard() {
   const [openTicketsModal, setOpenTicketsModal] = useState(false);
   const [openLoginModal, setOpenLoginModal] = useState(false);
   const [openArchiveModal, setOpenArchiveModal] = useState(false);
+  const [openNextRoundModal, setOpenNextRoundModal] = useState(false);
 
   // Custom hooks
   const { isMobile } = useWindowSize();
@@ -175,7 +177,7 @@ export default function GameDashboard() {
   };
 
   const handleNextRound = async () => {
-    if (!window.confirm("¿Avanzar a la siguiente ronda?")) return;
+    setOpenNextRoundModal(false);
     
     let winnersData: { winnerIds: number[], rewards: Record<number, number> } | undefined;
 
@@ -242,10 +244,7 @@ export default function GameDashboard() {
     })) : []
   };
 
-  // Intro screen
-  if (loading) {
-    return <IntroVideo onSkip={() => setLoading(false)} />;
-  }
+
 
   const ArchiveBanner = viewingArchive ? (
     <div style={{
@@ -380,7 +379,7 @@ export default function GameDashboard() {
             onResetClick={() => setOpenResetModal(true)}
             onArchiveClick={() => setOpenArchiveModal(true)}
           />
-          <ChartPanel chartData={chartData} isMobile={isMobile} isAuthenticated={isReadOnly ? false : isAuthenticated} onNextRound={handleNextRound} users={usersData} />
+          <ChartPanel chartData={chartData} isMobile={isMobile} isAuthenticated={isReadOnly ? false : isAuthenticated} onNextRound={() => setOpenNextRoundModal(true)} users={usersData} />
           <SpotifyPanel isMobile={isMobile} />
           <GamePanel
             games={games}
@@ -421,7 +420,7 @@ export default function GameDashboard() {
 
           {/* Row 1, Col 2 — Chart */}
           <div style={{ gridColumn: "2", gridRow: "1", minWidth: 0, minHeight: 0, height: "100%" }}>
-            <ChartPanel chartData={chartData} isMobile={isMobile} isAuthenticated={isReadOnly ? false : isAuthenticated} onNextRound={handleNextRound} users={usersData} />
+            <ChartPanel chartData={chartData} isMobile={isMobile} isAuthenticated={isReadOnly ? false : isAuthenticated} onNextRound={() => setOpenNextRoundModal(true)} users={usersData} />
           </div>
 
           {/* Col 3 — Giphy and Location (spans both rows) */}
@@ -504,6 +503,12 @@ export default function GameDashboard() {
         onLoadArchive={handleLoadArchive}
         onDeleteArchive={deleteArchive}
         isMobile={isMobile}
+      />
+
+      <NextRoundModal
+        open={openNextRoundModal}
+        onClose={() => setOpenNextRoundModal(false)}
+        onConfirm={handleNextRound}
       />
     </Container>
   );

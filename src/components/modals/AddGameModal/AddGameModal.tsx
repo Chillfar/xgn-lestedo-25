@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Modal, Box, Typography, TextField, Button } from "@mui/material";
-import { modalBoxStyle, closeButtonStyle, textFieldStyle, previewImageStyle, addButtonStyle } from "./AddGameModal.styles";
+import { modalBoxStyle, closeButtonStyle, textFieldSx, inputLabelSx, previewImageStyle, addButtonStyle } from "./AddGameModal.styles";
 
 interface AddGameModalProps {
   open: boolean;
@@ -47,23 +47,25 @@ export default function AddGameModal({ open, onClose, onAddGame }: AddGameModalP
 
         {error && <Typography color="error" variant="body2" gutterBottom>{error}</Typography>}
 
-        <TextField
-          label="Nombre del juego"
-          fullWidth
-          margin="normal"
-          value={newGameName}
-          onChange={(e) => { setNewGameName(e.target.value); setError(""); }}
-          style={textFieldStyle}
-        />
+        <Box sx={{ width: "100%", mb: 2 }}>
+          <Typography sx={inputLabelSx}>Nombre del juego</Typography>
+          <TextField
+            fullWidth
+            value={newGameName}
+            onChange={(e) => { setNewGameName(e.target.value); setError(""); }}
+            sx={textFieldSx}
+          />
+        </Box>
 
-        <TextField
-          label="URL de la portada"
-          fullWidth
-          margin="normal"
-          value={newGameCover}
-          onChange={(e) => { setNewGameCover(e.target.value); setError(""); }}
-          style={textFieldStyle}
-        />
+        <Box sx={{ width: "100%", mb: 2 }}>
+          <Typography sx={inputLabelSx}>URL de la portada</Typography>
+          <TextField
+            fullWidth
+            value={newGameCover}
+            onChange={(e) => { setNewGameCover(e.target.value); setError(""); }}
+            sx={textFieldSx}
+          />
+        </Box>
 
         {newGameCover && !error && (
           <Box mt={2} mb={2} textAlign="center">
@@ -77,7 +79,7 @@ export default function AddGameModal({ open, onClose, onAddGame }: AddGameModalP
           </Box>
         )}
 
-        <Button variant="contained" color="primary" fullWidth onClick={handleAdd} style={addButtonStyle}>
+        <Button variant="contained" fullWidth onClick={handleAdd} sx={addButtonStyle}>
           Agregar Juego
         </Button>
       </Box>

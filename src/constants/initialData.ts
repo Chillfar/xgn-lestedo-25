@@ -43,10 +43,10 @@ export const initialUsers: User[] = [
 ];
 
 export const userColors = {
-  Chillfar: "#FF5733",
-  "El Noyas": "#33FF57",
-  Goku: "#3357FF",
-  Eras: "#F3FF33"
+  Chillfar: "#FF3366", // Neon Pink/Rose
+  "El Noyas": "#00FFA3", // Mint Green
+  Goku: "#3399FF", // Azure Blue
+  Eras: "#FFD700" // Gold
 };
 
 /**

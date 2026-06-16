@@ -49,20 +49,14 @@ export default function RankingPanel({ users, games, isMobile, isAuthenticated, 
             <div style={adminButtonsContainerStyle}>
               {onArchiveClick && (
                 <Button
-                  variant="outlined"
-                  color="secondary"
-                  size="small"
-                  style={isMobile ? adminButtonStyle : {}}
+                  sx={adminButtonStyle}
                   onClick={onArchiveClick}
                 >
                   {isMobile ? "💾" : "Archivar"}
                 </Button>
               )}
               <Button
-                variant="outlined"
-                color="secondary"
-                size="small"
-                style={isMobile ? adminButtonStyle : {}}
+                sx={adminButtonStyle}
                 onClick={onResetClick}
               >
                 {isMobile ? "↻" : "Resetear datos"}

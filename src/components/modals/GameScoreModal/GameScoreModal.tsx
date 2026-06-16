@@ -1,6 +1,6 @@
 import { useState, SyntheticEvent } from "react";
 import { Modal, Box, Typography, Button, Snackbar, Alert } from "@mui/material";
-import { Game, User } from "../../../constants/initialData";
+import { Game, User, userColors } from "../../../constants/initialData";
 import { modalBoxSx, closeButtonStyle, coverBoxSx, titleTextSx, buttonSx } from "./GameScoreModal.styles";
 import PredictionsSection from "./PredictionsSection";
 import useFirestorePredictions from "../../../hooks/useFirestorePredictions";
@@ -89,21 +89,47 @@ export default function GameScoreModal({
                 </Typography>
               )}
 
-              {isAuthenticated && selectedGame && !playedGames.includes(selectedGame.name) && (!activeGame || activeGame === selectedGame.name) && users.map(user => (
-                <Button
-                  key={user.id}
-                  variant="contained"
-                  color="primary"
-                  fullWidth
-                  sx={buttonSx}
-                  onClick={() => handleAssignPoints(user.id, user.name)}
-                >
-                  {user.name} +10 Puntos
-                </Button>
-              ))}
+              {isAuthenticated && selectedGame && !playedGames.includes(selectedGame.name) && (!activeGame || activeGame === selectedGame.name) && (
+                <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2, mb: 3 }}>
+                  {users.map(user => {
+                    const baseColor = userColors[user.name as keyof typeof userColors] || "#4fc3f7";
+                    return (
+                      <Button
+                        key={user.id}
+                        variant="contained"
+                        fullWidth
+                        sx={{
+                          ...buttonSx,
+                          background: `linear-gradient(135deg, ${baseColor}cc, ${baseColor})`,
+                          color: "#fff",
+                          fontWeight: 800,
+                          fontSize: "1rem",
+                          textTransform: "none",
+                          borderRadius: "16px",
+                          boxShadow: `0 4px 15px ${baseColor}40`,
+                          transition: "all 0.2s ease-in-out",
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          py: 1.5,
+                          "&:hover": {
+                            transform: "scale(1.05)",
+                            boxShadow: `0 6px 20px ${baseColor}80`,
+                            background: `linear-gradient(135deg, ${baseColor}, ${baseColor}ee)`,
+                          }
+                        }}
+                        onClick={() => handleAssignPoints(user.id, user.name)}
+                      >
+                        <span style={{ fontSize: '1.4rem', lineHeight: 1 }}>+10</span>
+                        <span style={{ fontSize: '0.9rem', opacity: 0.9 }}>{user.name}</span>
+                      </Button>
+                    );
+                  })}
+                </Box>
+              )}
 
               {isAdmin && (
-                <Button variant="contained" color="secondary" fullWidth sx={buttonSx} onClick={handleDelete}>
+                <Button variant="contained" fullWidth sx={buttonSx} onClick={handleDelete}>
                   Quitar juego
                 </Button>
               )}
