@@ -3,7 +3,8 @@ import { CSSProperties } from "react";
 export const modalBoxSx = (isMobile: boolean) => ({
   position: "absolute", top: "50%", left: "50%",
   transform: "translate(-50%, -50%)",
-  width: isMobile ? "80%" : 520,
+  width: isMobile ? "400px" : 520,
+  maxWidth: "95vw",
   bgcolor: "#1e1e1e", color: "white",
   boxShadow: 24, p: 3,
   borderRadius: 2,

@@ -34,18 +34,18 @@ export const addButtonStyle = {
   mt: 3,
   width: "100%",
   borderRadius: "24px",
-  background: "linear-gradient(45deg, #FF3366, #F363FA)",
-  color: "white",
+  background: "linear-gradient(45deg, #00FFA3, #00B8D4)",
+  color: "#0f0f13",
   fontWeight: "bold",
   textTransform: "none",
   border: "none",
   padding: "10px 16px",
-  boxShadow: "0 4px 15px rgba(243,99,250,0.4)",
+  boxShadow: "0 4px 15px rgba(0, 255, 163, 0.3)",
   cursor: "pointer",
   transition: "all 0.3s ease",
   "&:hover": {
-    background: "linear-gradient(45deg, #F363FA, #FF3366)",
-    boxShadow: "0 6px 20px rgba(243,99,250,0.6)",
+    background: "linear-gradient(45deg, #00B8D4, #00FFA3)",
+    boxShadow: "0 6px 20px rgba(0, 255, 163, 0.5)",
     transform: "translateY(-2px)",
   }
 };

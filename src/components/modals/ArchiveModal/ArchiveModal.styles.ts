@@ -5,7 +5,7 @@ export const modalBoxSx = (isMobile: boolean) => ({
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: isMobile ? "60%" : 500,
+  width: isMobile ? "400px" : 500,
   maxWidth: "95vw",
   height: "auto",
   maxHeight: "85vh",
