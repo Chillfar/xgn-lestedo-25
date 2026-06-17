@@ -58,8 +58,12 @@ export default function GameDashboard() {
     let currentPanel: HTMLElement | null = null;
     let currentCard: HTMLElement | null = null;
 
-    const handleMouseMove = (e: MouseEvent) => {
-      const el = e.target as HTMLElement;
+    let pointerX = window.innerWidth / 2;
+    let pointerY = window.innerHeight / 2;
+
+    const updateElements = (x: number, y: number) => {
+      const el = document.elementFromPoint(x, y) as HTMLElement | null;
+      if (!el) return;
 
       // ── Panels ──
       const panel = el.closest('.liquid-glass') as HTMLElement | null;
@@ -69,10 +73,10 @@ export default function GameDashboard() {
       currentPanel = panel;
       if (panel) {
         const rect = panel.getBoundingClientRect();
-        const x = ((e.clientX - rect.left) / rect.width) * 100;
-        const y = ((e.clientY - rect.top) / rect.height) * 100;
-        panel.style.setProperty('--mouse-x', `${x}%`);
-        panel.style.setProperty('--mouse-y', `${y}%`);
+        const px = ((x - rect.left) / rect.width) * 100;
+        const py = ((y - rect.top) / rect.height) * 100;
+        panel.style.setProperty('--mouse-x', `${px}%`);
+        panel.style.setProperty('--mouse-y', `${py}%`);
         panel.classList.add('liquid-glass--hover');
       }
 
@@ -84,16 +88,46 @@ export default function GameDashboard() {
       currentCard = card;
       if (card) {
         const rect = card.getBoundingClientRect();
-        const x = ((e.clientX - rect.left) / rect.width) * 100;
-        const y = ((e.clientY - rect.top) / rect.height) * 100;
-        card.style.setProperty('--mouse-x', `${x}%`);
-        card.style.setProperty('--mouse-y', `${y}%`);
+        const cx = ((x - rect.left) / rect.width) * 100;
+        const cy = ((y - rect.top) / rect.height) * 100;
+        card.style.setProperty('--mouse-x', `${cx}%`);
+        card.style.setProperty('--mouse-y', `${cy}%`);
         card.classList.add('liquid-glass-card--hover');
       }
     };
 
+    const handleMouseMove = (e: MouseEvent) => {
+      pointerX = e.clientX;
+      pointerY = e.clientY;
+      updateElements(pointerX, pointerY);
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        pointerX = e.touches[0].clientX;
+        pointerY = e.touches[0].clientY;
+        updateElements(pointerX, pointerY);
+      }
+    };
+
+    const handleScroll = () => {
+      // Re-calculate the effect using the last known pointer position (mouse or touch).
+      // On mobile, if no touch has happened, it uses the center of the screen.
+      updateElements(pointerX, pointerY);
+    };
+
     document.addEventListener('mousemove', handleMouseMove);
-    return () => document.removeEventListener('mousemove', handleMouseMove);
+    document.addEventListener('touchmove', handleTouchMove, { passive: true });
+    document.addEventListener('touchstart', handleTouchMove, { passive: true });
+    // Also use capturing for scroll so we catch scroll events from any scrollable container (like modals)
+    window.addEventListener('scroll', handleScroll, { passive: true, capture: true });
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('touchmove', handleTouchMove);
+      document.removeEventListener('touchstart', handleTouchMove);
+      window.removeEventListener('scroll', handleScroll, { capture: true });
+    };
   }, []);
 
   // Auth
@@ -452,7 +486,7 @@ export default function GameDashboard() {
         <div style={{
           display: "grid",
           gridTemplateColumns: "5fr 3fr 1.3fr 2.5fr",
-          gridTemplateRows: "minmax(0, 55fr) minmax(0, 45fr)",
+          gridTemplateRows: "minmax(0, 55fr) minmax(352px, 45fr)",
           gap: "20px",
           alignItems: "stretch",
           flex: 1,
@@ -513,7 +547,7 @@ export default function GameDashboard() {
           </div>
 
           {/* Row 2, Col 2 — Spotify */}
-          <div style={{ gridColumn: "2", gridRow: "2", minWidth: 0, minHeight: 0, height: "100%" }}>
+          <div style={{ gridColumn: "2", gridRow: "2", minWidth: 0, minHeight: 0, display: "flex", flexDirection: "column" }}>
             <SpotifyPanel isMobile={isMobile} />
           </div>
 

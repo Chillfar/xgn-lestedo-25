@@ -14,6 +14,7 @@ export const authButtonStyle: CSSProperties = {
   height: "32px",
   display: "flex",
   alignItems: "center",
+  justifyContent: "center",
   boxSizing: "border-box",
   transition: "all 0.25s ease",
   letterSpacing: "0.02em",
@@ -31,6 +32,7 @@ export const loginButtonStyle: CSSProperties = {
   height: "32px",
   display: "flex",
   alignItems: "center",
+  justifyContent: "center",
   boxSizing: "border-box",
   transition: "all 0.25s ease",
   letterSpacing: "0.02em",
@@ -39,7 +41,7 @@ export const loginButtonStyle: CSSProperties = {
 
 export const mobileHeaderContainer: CSSProperties = { width: "100%", display: "flex", alignItems: "flex-start", justifyContent: "space-between", position: "relative", zIndex: 9999, gap: "12px" };
 export const mobileLogoStyle: CSSProperties = { width: "110px", maxWidth: "110px", marginTop: "12px", marginBottom: "-24px", position: "relative", zIndex: 1000 };
-export const mobileRightSideStyle: CSSProperties = { display: "flex", alignItems: "flex-start", gap: "6px", flexWrap: "wrap", justifyContent: "flex-end", marginTop: "12px", flex: 1 };
+export const mobileRightSideStyle: CSSProperties = { display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "6px", marginTop: "12px", flex: 1, width: "100%" };
 
 export const topPinkLine: CSSProperties = { width: "100%", height: "2px", background: "linear-gradient(90deg, #F363FA, #4fc3f7, #F363FA)", position: "fixed", top: 0, left: 0, zIndex: 10000 };
 export const desktopHeaderContainer: CSSProperties = { display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "30px", position: "relative" };

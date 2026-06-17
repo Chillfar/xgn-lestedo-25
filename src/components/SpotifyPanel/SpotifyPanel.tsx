@@ -8,18 +8,15 @@ interface SpotifyPanelProps {
 export default function SpotifyPanel({ isMobile }: SpotifyPanelProps) {
 
   const content = (
-    <>
+    <div style={{ display: "flex", flex: 1, width: "100%", height: isMobile ? "376px" : "100%" }}>
       <iframe
-        style={iframeStyle}
+        style={{ ...iframeStyle, width: "100%", height: "100%", flex: 1 }}
         src={SPOTIFY_EMBED_URL}
-        width="100%"
-        height={isMobile ? "376" : "100%"}
-        style={{ ...iframeStyle, minHeight: isMobile ? undefined : "352px" }}
         allowFullScreen
         allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
         loading="lazy"
       ></iframe>
-    </>
+    </div>
   );
 
   if (isMobile) {
