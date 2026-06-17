@@ -3,10 +3,10 @@ import { modalBoxSx, closeButtonStyle, titleContainerSx, titleTextSx } from "./T
 
 /** Maps player ID → accreditation image filename and player name */
 const playerAccreditations: Record<number, { src: string; name: string }> = {
-  1: { src: "/xgn-lestedo-25/acreditacion-chillfar.jpg", name: "Chillfar" },
-  2: { src: "/xgn-lestedo-25/acreditacion-noyas.jpg",   name: "El Noyas" },
-  3: { src: "/xgn-lestedo-25/acreditacion-goku.jpg",    name: "Goku" },
-  4: { src: "/xgn-lestedo-25/acreditacion-eras.jpg",    name: "Eras" },
+  1: { src: "/lan-party/acreditacion-chillfar.jpg", name: "Chillfar" },
+  2: { src: "/lan-party/acreditacion-noyas.jpg", name: "El Noyas" },
+  3: { src: "/lan-party/acreditacion-goku.jpg", name: "Goku" },
+  4: { src: "/lan-party/acreditacion-eras.jpg", name: "Eras" },
 };
 
 interface TicketsModalProps {
@@ -74,20 +74,20 @@ export default function TicketsModal({ open, onClose, isMobile, isAuthenticated,
             </Box>
             <Box sx={{ overflowY: 'auto', flex: 1, padding: isMobile ? "20px" : "32px", pt: "20px", display: "flex", flexDirection: "column", alignItems: "center" }}>
               <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", padding: "8px", flex: 1, minHeight: 0 }}>
-              <img
-                src={accreditation.src}
-                alt={`Acreditación ${accreditation.name}`}
-                style={{
-                  maxWidth: "100%",
-                  maxHeight: "55vh",
-                  width: "auto",
-                  height: "auto",
-                  objectFit: "contain",
-                  borderRadius: "12px",
-                  boxShadow: "0 8px 32px rgba(243, 99, 250, 0.4)",
-                }}
-              />
-            </Box>
+                <img
+                  src={accreditation.src}
+                  alt={`Acreditación ${accreditation.name}`}
+                  style={{
+                    maxWidth: "100%",
+                    maxHeight: "55vh",
+                    width: "auto",
+                    height: "auto",
+                    objectFit: "contain",
+                    borderRadius: "12px",
+                    boxShadow: "0 8px 32px rgba(243, 99, 250, 0.4)",
+                  }}
+                />
+              </Box>
               <Typography variant="body2" sx={{ color: "rgba(255,255,255,0.4)", textAlign: "center", mt: 1 }}>
                 Descarga la imagen para mostrarla en la entrada.
               </Typography>

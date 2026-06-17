@@ -39,7 +39,7 @@ export default function Header({ isMobile, isAuthenticated, onLoginClick, childr
     return (
       <div style={mobileHeaderContainer}>
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          <img src="/xgn-lestedo-25/logo_party_hd-removebg-preview.png" alt="Logo" style={mobileLogoStyle} />
+          <img src="/lan-party/logo_party_hd-removebg-preview.png" alt="Logo" style={mobileLogoStyle} />
           <NetworkStatus isMobile />
         </div>
         <div style={mobileRightSideStyle}>
@@ -62,7 +62,7 @@ export default function Header({ isMobile, isAuthenticated, onLoginClick, childr
       }}>
         {/* Logo */}
         <div style={{ marginLeft: "25px", position: "relative", zIndex: 9998 }}>
-          <img src="/xgn-lestedo-25/logo_party_hd-removebg-preview.png" alt="Logo" style={desktopLogoStyle} />
+          <img src="/lan-party/logo_party_hd-removebg-preview.png" alt="Logo" style={desktopLogoStyle} />
         </div>
 
         {/* Center widget (QuotesBanner) placed absolutely to span behind Logo and Countdown */}
