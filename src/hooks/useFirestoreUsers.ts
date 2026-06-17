@@ -40,6 +40,14 @@ export default function useFirestoreUsers() {
         .map((d: QueryDocumentSnapshot) => {
           const u = d.data() as User;
           if (!u.history || u.history.length === 0) u.history = [0];
+          
+          const initial = initialUsers.find(init => init.id === u.id);
+          if (initial) {
+            u.cover = initial.cover;
+            u.rol = initial.rol;
+            u.description = initial.description;
+            u.name = initial.name;
+          }
           return u;
         })
         .sort((a, b) => {

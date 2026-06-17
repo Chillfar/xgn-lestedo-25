@@ -108,7 +108,7 @@ export const getCellStyle = (index: number, hasPoints: boolean): CSSProperties =
   boxShadow: "-2px 0 0 #181822"
 });
 
-export const getStickyFirstPlaceCellStyle = (index: number, hasPoints: boolean): CSSProperties => {
+export const getStickyFirstPlaceCellStyle = (index: number, hasPoints: boolean, isLoggedIn: boolean): CSSProperties => {
   const isFirst = index === 0 && hasPoints;
   const isSecond = index === 1 && hasPoints;
   const isThird = index === 2 && hasPoints;
@@ -117,7 +117,7 @@ export const getStickyFirstPlaceCellStyle = (index: number, hasPoints: boolean):
   
   return {
     color: "white",
-    cursor: "pointer",
+    cursor: isLoggedIn ? "pointer" : "default",
     fontWeight: (index < 3 && hasPoints) ? "bold" : "normal",
     whiteSpace: "nowrap",
     position: "sticky",

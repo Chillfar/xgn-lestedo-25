@@ -456,6 +456,7 @@ export default function GameDashboard() {
             games={games}
             isMobile={isMobile}
             isAuthenticated={isReadOnly ? false : isAdmin}
+            isLoggedIn={isAuthenticated}
             onUserClick={setSelectedUser}
             onNextRoundClick={() => setOpenNextRoundModal(true)}
           />
@@ -500,6 +501,7 @@ export default function GameDashboard() {
               games={games}
               isMobile={isMobile}
               isAuthenticated={isReadOnly ? false : isAdmin}
+              isLoggedIn={isAuthenticated}
               onUserClick={setSelectedUser}
               onNextRoundClick={() => setOpenNextRoundModal(true)}
             />

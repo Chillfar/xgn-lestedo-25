@@ -14,11 +14,12 @@ interface RankingPanelProps {
   games: Game[];
   isMobile: boolean;
   isAuthenticated: boolean;
+  isLoggedIn: boolean;
   onUserClick: (user: User) => void;
   onNextRoundClick?: () => void;
 }
 
-export default function RankingPanel({ users, games, isMobile, isAuthenticated, onUserClick, onNextRoundClick }: RankingPanelProps) {
+export default function RankingPanel({ users, games, isMobile, isAuthenticated, isLoggedIn, onUserClick, onNextRoundClick }: RankingPanelProps) {
   const hasData = users.some(u =>
     (u.history && u.history.length > 1) ||
     Object.values(u.scores).some(s => s > 0)
@@ -83,7 +84,7 @@ export default function RankingPanel({ users, games, isMobile, isAuthenticated, 
                 const hasPoints = totalScore > 0;
                 return (
                   <TableRow key={user.id} style={index === 0 && hasPoints ? firstPlaceStyle : undefined}>
-                    <TableCell style={getStickyFirstPlaceCellStyle(index, hasPoints)} onClick={() => onUserClick(user)}>
+                    <TableCell style={getStickyFirstPlaceCellStyle(index, hasPoints, isLoggedIn)} onClick={() => isLoggedIn && onUserClick(user)}>
                       {hasPoints ? (positionMedals[index] || `${index + 1}.`) : ""} {user.name}
                     </TableCell>
                     {games.map(game => (
