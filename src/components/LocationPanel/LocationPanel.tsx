@@ -1,7 +1,7 @@
 import { Paper, Typography } from "@mui/material";
 import { paperStyle, mobileContainerStyle, iframeStyle } from "./LocationPanel.styles";
 
-const MAPS_EMBED_URL = "https://www.google.com/maps/embed/v1/place?key=AIzaSyCQp9lnjB31CyDBNg49fo4oz15n976iz2Q&q=42.7058978448091,-8.244838598951503";
+const MAPS_EMBED_URL = "https://maps.google.com/maps?q=42.7058978448091,-8.244838598951503&hl=es&z=15&output=embed";
 
 interface LocationPanelProps {
   isMobile: boolean;
