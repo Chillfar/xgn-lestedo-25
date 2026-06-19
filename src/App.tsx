@@ -455,7 +455,7 @@ export default function GameDashboard() {
             users={usersData}
             games={games}
             isMobile={isMobile}
-            isAuthenticated={isReadOnly ? false : isAdmin}
+            isAuthenticated={isReadOnly ? false : isAuthenticated}
             isLoggedIn={isAuthenticated}
             onUserClick={setSelectedUser}
             onNextRoundClick={() => setOpenNextRoundModal(true)}
@@ -476,7 +476,7 @@ export default function GameDashboard() {
             playedGames={playedGames}
             onSelectGame={isReadOnly ? () => {} : handleSelectGame}
             isMobile={isMobile}
-            isAuthenticated={isReadOnly ? false : isAdmin}
+            isAuthenticated={isReadOnly ? false : isAuthenticated}
             onAddGameClick={() => setOpenNewGameModal(true)}
           />
           <VideosPanel isMobile={isMobile} />
@@ -500,7 +500,7 @@ export default function GameDashboard() {
               users={usersData}
               games={games}
               isMobile={isMobile}
-              isAuthenticated={isReadOnly ? false : isAdmin}
+              isAuthenticated={isReadOnly ? false : isAuthenticated}
               isLoggedIn={isAuthenticated}
               onUserClick={setSelectedUser}
               onNextRoundClick={() => setOpenNextRoundModal(true)}
@@ -538,7 +538,7 @@ export default function GameDashboard() {
               playedGames={playedGames}
               onSelectGame={isReadOnly ? () => {} : handleSelectGame}
               isMobile={isMobile}
-              isAuthenticated={isReadOnly ? false : isAdmin}
+              isAuthenticated={isReadOnly ? false : isAuthenticated}
               onAddGameClick={() => setOpenNewGameModal(true)}
             />
           </div>

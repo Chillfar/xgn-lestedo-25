@@ -63,9 +63,9 @@ export const userColors = {
  */
 export const emailToPlayerId: Record<string, number> = {
   "chillfar@gmail.com": 1,  // Chillfar
-  // "noyas@gmail.com": 2,   // El Noyas  ← añadir email real
-  // "goku@gmail.com": 3,    // Goku      ← añadir email real
-  // "eras@gmail.com": 4,    // Eras      ← añadir email real
+  "noyas@gmail.com": 2,     // El Noyas
+  "goku@gmail.com": 3,      // Goku
+  "eras@gmail.com": 4,      // Eras
 };
 
 export const geekQuotes = [

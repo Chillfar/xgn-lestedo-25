@@ -68,43 +68,31 @@ export default function PredictionsSection({
     }} />
   );
 
-  // ─── Not authenticated ───────────────────────────────────────────────────
-  if (!isAuthenticated) {
-    return (
-      <Box sx={{ mt: 3 }}>
-        {Divider}
-        <Typography variant="body2" sx={{
-          color: "rgba(255,255,255,0.35)",
-          textAlign: "center",
-          fontSize: "0.75rem",
-          letterSpacing: "0.06em",
-        }}>
-          🎯 Predicciones — inicia sesión para participar
-        </Typography>
-      </Box>
-    );
-  }
+  const cannotVote = !isAuthenticated || authenticatedPlayerId === null;
 
-  // ─── Logged in but email not mapped to a player ──────────────────────────
-  if (authenticatedPlayerId === null) {
-    return (
-      <Box sx={{ mt: 3 }}>
-        {Divider}
-        <Typography variant="body2" sx={{
-          color: "rgba(255,255,255,0.35)",
-          textAlign: "center",
-          fontSize: "0.75rem",
-          letterSpacing: "0.06em",
-        }}>
-          🎯 Tu cuenta no está vinculada a ningún jugador
-        </Typography>
-      </Box>
-    );
-  }
+  const getWarningMessage = () => {
+    if (!isAuthenticated) return "🎯 Predicciones — inicia sesión para participar";
+    if (authenticatedPlayerId === null) return "🎯 Tu cuenta no está vinculada a ningún jugador";
+    return null;
+  };
+
+  const warningMessage = getWarningMessage();
 
   return (
     <Box sx={{ mt: 3 }}>
       {Divider}
+
+      {warningMessage && (
+        <Typography variant="body2" sx={{
+          color: "rgba(255,255,255,0.35)",
+          textAlign: "center",
+          fontSize: "0.75rem",
+          letterSpacing: "0.06em",
+          mb: 2,
+        }}>
+          {warningMessage}
+        </Typography>
+      )}
 
       {/* Header */}
       <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 1.5 }}>
@@ -131,7 +119,7 @@ export default function PredictionsSection({
       </Box>
 
       {/* ── Prediction picker (not yet voted) ── */}
-      {!hasPredicted && !isResolved ? (
+      {!cannotVote && !hasPredicted && !isResolved ? (
         <Box sx={{ display: "flex", flexDirection: "column", gap: 0.8 }}>
           {/* Reward hint */}
           <Box sx={{
@@ -204,7 +192,7 @@ export default function PredictionsSection({
           {probabilities.map(({ user, probability }) => {
             const color = userColors[user.name as keyof typeof userColors] || "#fff";
             const isMyVote = myVote === user.id;
-            const isWinner = isResolved && predictions?.winnerId === user.id;
+            const isWinner = isResolved && predictions?.winnerIds?.includes(user.id);
             const predictedCorrectly = isResolved && isMyVote && isWinner;
             const predictedWrong = isResolved && isMyVote && !isWinner;
             const voteCount = voteCounts[user.id] || 0;
