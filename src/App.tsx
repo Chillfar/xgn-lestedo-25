@@ -135,7 +135,7 @@ export default function GameDashboard() {
 
   // Resolve which player (from the fixed player list) the logged-in user is
   const authenticatedPlayerId: number | null =
-    currentUser?.email ? (emailToPlayerId[currentUser.email] ?? null) : null;
+    currentUser?.email ? (emailToPlayerId[currentUser.email.toLowerCase()] ?? null) : null;
 
   // Firestore state (replaces localStorage)
   const { games: liveGames, addGame, removeGame } = useFirestoreGames();
@@ -157,7 +157,7 @@ export default function GameDashboard() {
 
   // Resolve which data to show: archived or live
   const usersDataRaw = viewingArchive ? viewingArchive.snapshot.users : liveUsers;
-  
+
   const usersData = useMemo(() => {
     if (!usersDataRaw || usersDataRaw.length === 0) return usersDataRaw;
 
@@ -192,7 +192,7 @@ export default function GameDashboard() {
       history: u.history ? u.history.slice(firstValidIndex, lastValidIndex + 1) : []
     }));
   }, [usersDataRaw]);
-  
+
   const games = viewingArchive ? viewingArchive.snapshot.games : liveGames;
   const isReadOnly = !!viewingArchive;
 
@@ -248,7 +248,7 @@ export default function GameDashboard() {
 
   const handleNextRound = async () => {
     setOpenNextRoundModal(false);
-    
+
     let winnersData: { winnerIds: number[], rewards: Record<number, number> } | undefined;
 
     if (activeGame) {
@@ -256,7 +256,7 @@ export default function GameDashboard() {
       const maxScore = Math.max(...liveUsers.map(u => u.scores[activeGame] || 0));
       if (maxScore > 0) {
         const winnerIds = liveUsers.filter(u => (u.scores[activeGame] || 0) === maxScore).map(u => u.id);
-        
+
         try {
           const rewards = await firestoreResolvePredictions(activeGame, winnerIds);
           const rewardCount = Object.keys(rewards || {}).length;
@@ -332,10 +332,10 @@ export default function GameDashboard() {
         cursor: "default",
         height: isMobile ? "auto" : "74px"
       }}>
-        <span style={{ 
-          fontWeight: "bold", 
-          fontSize: "1rem", 
-          whiteSpace: "nowrap", 
+        <span style={{
+          fontWeight: "bold",
+          fontSize: "1rem",
+          whiteSpace: "nowrap",
         }}>
           Viendo edición: {viewingArchive.label}
         </span>
@@ -460,21 +460,21 @@ export default function GameDashboard() {
             onUserClick={setSelectedUser}
             onNextRoundClick={() => setOpenNextRoundModal(true)}
           />
-          <ChartPanel 
-            chartData={chartData} 
-            isMobile={isMobile} 
-            isAuthenticated={isReadOnly ? false : isAuthenticated} 
+          <ChartPanel
+            chartData={chartData}
+            isMobile={isMobile}
+            isAuthenticated={isReadOnly ? false : isAuthenticated}
             isAdmin={isReadOnly ? false : isAdmin}
             onResetClick={() => setOpenResetModal(true)}
             onArchiveClick={() => setOpenArchiveModal(true)}
-            users={usersData} 
+            users={usersData}
           />
           <SpotifyPanel isMobile={isMobile} />
           <GamePanel
             games={games}
             activeGame={activeGame}
             playedGames={playedGames}
-            onSelectGame={isReadOnly ? () => {} : handleSelectGame}
+            onSelectGame={isReadOnly ? () => { } : handleSelectGame}
             isMobile={isMobile}
             isAuthenticated={isReadOnly ? false : isAuthenticated}
             onAddGameClick={() => setOpenNewGameModal(true)}
@@ -509,14 +509,14 @@ export default function GameDashboard() {
 
           {/* Row 1, Col 2 — Chart */}
           <div style={{ gridColumn: "2", gridRow: "1", minWidth: 0, minHeight: 0, height: "100%" }}>
-            <ChartPanel 
-              chartData={chartData} 
-              isMobile={isMobile} 
-              isAuthenticated={isReadOnly ? false : isAuthenticated} 
+            <ChartPanel
+              chartData={chartData}
+              isMobile={isMobile}
+              isAuthenticated={isReadOnly ? false : isAuthenticated}
               isAdmin={isReadOnly ? false : isAdmin}
               onResetClick={() => setOpenResetModal(true)}
               onArchiveClick={() => setOpenArchiveModal(true)}
-              users={usersData} 
+              users={usersData}
             />
           </div>
 
@@ -536,7 +536,7 @@ export default function GameDashboard() {
               games={games}
               activeGame={activeGame}
               playedGames={playedGames}
-              onSelectGame={isReadOnly ? () => {} : handleSelectGame}
+              onSelectGame={isReadOnly ? () => { } : handleSelectGame}
               isMobile={isMobile}
               isAuthenticated={isReadOnly ? false : isAuthenticated}
               onAddGameClick={() => setOpenNewGameModal(true)}
