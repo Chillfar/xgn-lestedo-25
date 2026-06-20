@@ -25,9 +25,13 @@ export interface User {
 }
 
 export const initialGames: Game[] = [
-  { name: "Fortnite", cover: "https://i.3djuegos.com/juegos/8298/fortnite/fotos/ficha/fortnite-5154590.webp" },
+  { name: "Bomberman", cover: "https://m.media-amazon.com/images/I/81qwNA2+baL.jpg" },
   { name: "Fifa", cover: "https://i.3djuegos.com/juegos/19862/ea_sports_fc_25/fotos/ficha/ea_sports_fc_25-5908048.jpg" },
+  { name: "Fortnite", cover: "https://i.3djuegos.com/juegos/8298/fortnite/fotos/ficha/fortnite-5154590.webp" },
+  { name: "GT 7", cover: "https://blog.latam.playstation.com/tachyon/sites/3/2022/03/a730b12243d5c8f700aae0df31c9d33ba53f945d.jpeg" },
+  { name: "Injustice", cover: "https://upload.wikimedia.org/wikipedia/en/f/f8/Injustice_Gods_Among_Us_Cover_Art.jpg" },
   { name: "Mario Kart", cover: "https://i.3djuegos.com/juegos/14356/mario_kart_8_switch/fotos/ficha/mario_kart_8_switch-3611054.jpg" },
+  { name: "Mario Party", cover: "https://m.media-amazon.com/images/I/81EzN0PFG6L._AC_UF1000,1000_QL80_.jpg" },
   { name: "Street Fighter", cover: "https://i.3djuegos.com/juegos/18376/fotos/ficha/-5775675.webp" }
 ];
 

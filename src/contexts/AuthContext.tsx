@@ -60,7 +60,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const value: AuthContextType = {
     currentUser,
     isAuthenticated: !!currentUser,
-    isAdmin: !!currentUser && currentUser.email === ADMIN_EMAIL,
+    isAdmin: !!currentUser && !!currentUser.email && currentUser.email.toLowerCase() === ADMIN_EMAIL,
     loading,
     login,
     logout,

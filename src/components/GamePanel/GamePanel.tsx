@@ -39,12 +39,12 @@ export default function GamePanel({ games, activeGame, playedGames, isMobile, is
                 >
                   <Card 
                     onClick={() => {
-                      if (!isPlayed) onSelectGame(game);
+                      onSelectGame(game);
                     }} 
                     style={{
                       ...cardStyle, 
-                      opacity: isPlayed ? 0.4 : 1,
-                      cursor: isPlayed ? 'not-allowed' : 'pointer',
+                      opacity: isPlayed ? 0.7 : 1,
+                      cursor: 'pointer',
                       border: isActive ? '2px solid #4fc3f7' : undefined,
                       filter: isPlayed ? 'grayscale(100%)' : 'none'
                     }}

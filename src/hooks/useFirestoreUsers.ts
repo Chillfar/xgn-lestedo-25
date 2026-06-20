@@ -8,6 +8,7 @@ import {
   writeBatch,
   QueryDocumentSnapshot,
   increment,
+  getDocs,
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { User, initialUsers, initialGames } from "../constants/initialData";
@@ -104,7 +105,7 @@ export default function useFirestoreUsers() {
     const userData = snap.data() as User;
     const newScore = (userData.scores[gameName] || 0) + 10;
     const newTotal =
-      Object.values(userData.scores).reduce((acc, s) => acc + s, 0) + 10;
+      Object.values(userData.scores).reduce((acc, s) => acc + s, 0) + (userData.predictionPoints || 0) + 10;
     const updatedHistory = [...userData.history];
     updatedHistory[round] = newTotal;
 
@@ -134,7 +135,9 @@ export default function useFirestoreUsers() {
 
     // Snapshot current totals into each user's history
     for (const user of users) {
-      const total = Object.values(user.scores).reduce((acc, s) => acc + s, 0);
+      const gameTotal = Object.values(user.scores).reduce((acc, s) => acc + s, 0);
+      const newPredPoints = (winnersData && winnersData.rewards[user.id]) ? winnersData.rewards[user.id] : 0;
+      const total = gameTotal + (user.predictionPoints || 0) + newPredPoints;
       const updatedHistory = [...user.history, total];
       batch.update(doc(db, "users", String(user.id)), {
         history: updatedHistory,
