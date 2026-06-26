@@ -66,10 +66,10 @@ export const userColors = {
  * Update these values to match the actual accounts of each player.
  */
 export const emailToPlayerId: Record<string, number> = {
-  "chillfar@gmail.com": 1,  // Chillfar
-  "noyas@gmail.com": 2,     // El Noyas
-  "goku@gmail.com": 3,      // Goku
-  "eras@gmail.com": 4,      // Eras
+  "chillfar@gmail.com": 1,           // Chillfar
+  "davidnoyapardo@gmail.com": 2,     // El Noyas
+  "danielfd86@gmail.com": 3,         // Goku
+  "erasbrion@gmail.com": 4,          // Eras
 };
 
 export const geekQuotes = [
