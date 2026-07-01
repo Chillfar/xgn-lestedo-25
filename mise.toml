@@ -1,0 +1,5 @@
+[env]
+# Define variables de entorno generales si fuesen necesarias
+
+[tools]
+node = "20"

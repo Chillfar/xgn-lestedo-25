@@ -64,5 +64,11 @@
     "vitest": "^4.1.8"
   },
   "homepage": "https://chillfar.github.io/lan-party/",
-  "proxy": "http://localhost:5000"
+  "proxy": "http://localhost:5000",
+  "packageManager": "yarn@4.17.0",
+  "dependenciesMeta": {
+    "vite@8.1.1": {
+      "unplugged": true
+    }
+  }
 }
