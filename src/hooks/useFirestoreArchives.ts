@@ -10,7 +10,7 @@ import {
   QueryDocumentSnapshot,
 } from "firebase/firestore";
 import { db } from "../firebase";
-import { Game, User } from "../constants/initialData";
+import { Game, User, initialUsers } from "../constants/initialData";
 
 export interface Archive {
   id: string;
@@ -99,7 +99,17 @@ export default function useFirestoreArchives() {
 
     const usersSnap = await getDocs(collection(db, "archives", archiveId, "users"));
     const users = usersSnap.docs
-      .map((d) => d.data() as User)
+      .map((d) => {
+        const u = d.data() as User;
+        const initial = initialUsers.find(init => init.id === u.id);
+        if (initial) {
+          u.cover = initial.cover;
+          u.rol = initial.rol;
+          u.description = initial.description;
+          u.name = initial.name;
+        }
+        return u;
+      })
       .sort((a, b) => {
         const totalA = Object.values(a.scores).reduce((acc, s) => acc + s, 0);
         const totalB = Object.values(b.scores).reduce((acc, s) => acc + s, 0);

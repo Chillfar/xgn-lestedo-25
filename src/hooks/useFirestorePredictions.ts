@@ -104,7 +104,7 @@ export async function resolvePredictions(gameName: string, winnerIds: number[]):
 
   const rewards: Record<number, number> = {};
   for (const [predictorId, predictedId] of Object.entries(data.votes || {})) {
-    if (winnerIds.includes(predictedId)) {
+    if (winnerIds.includes(predictedId as number)) {
       rewards[parseInt(predictorId, 10)] = 5;
     }
   }

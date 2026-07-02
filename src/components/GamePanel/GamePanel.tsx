@@ -10,9 +10,10 @@ interface GamePanelProps {
   isAuthenticated: boolean;
   onSelectGame: (game: Game) => void;
   onAddGameClick: () => void;
+  isReadOnly?: boolean;
 }
 
-export default function GamePanel({ games, activeGame, playedGames, isMobile, isAuthenticated, onSelectGame, onAddGameClick }: GamePanelProps) {
+export default function GamePanel({ games, activeGame, playedGames, isMobile, isAuthenticated, onSelectGame, onAddGameClick, isReadOnly }: GamePanelProps) {
   const currentPaperStyle = paperStyle;
 
   const content = (
@@ -26,16 +27,22 @@ export default function GamePanel({ games, activeGame, playedGames, isMobile, is
           <style>{`.game-grid-container::-webkit-scrollbar { display: none; }`}</style>
           {games.map((game, index) => {
             const isPlayed = playedGames.includes(game.name);
+            const isArchived = !!isReadOnly;
+            const visuallyPlayed = isPlayed || isArchived;
             const isActive = activeGame === game.name;
             const isLockedOut = activeGame && !isActive; // If there's an active game and this isn't it, we might still let them view it, but GameScoreModal will block points.
+
+            let tooltipText = "";
+            if (isArchived) tooltipText = "Esta edición está archivada y no se puede puntuar";
+            else if (isPlayed) tooltipText = "Este juego ya ha sido jugado y puntuado";
 
             return (
               <Grid item xs={6} key={index}>
                 <Tooltip
-                  title={isPlayed ? "Este juego ya ha sido jugado y puntuado" : ""}
+                  title={tooltipText}
                   placement="top"
                   arrow
-                  disableHoverListener={!isPlayed}
+                  disableHoverListener={!visuallyPlayed}
                 >
                   <Card 
                     onClick={() => {
@@ -43,12 +50,12 @@ export default function GamePanel({ games, activeGame, playedGames, isMobile, is
                     }} 
                     style={{
                       ...cardStyle, 
-                      opacity: isPlayed ? 0.7 : 1,
+                      opacity: visuallyPlayed ? 0.7 : 1,
                       cursor: 'pointer',
                       border: isActive ? '2px solid #4fc3f7' : undefined,
-                      filter: isPlayed ? 'grayscale(100%)' : 'none'
+                      filter: visuallyPlayed ? 'grayscale(100%)' : 'none'
                     }}
-                    className={`liquid-glass-card ${!isPlayed ? "game-card-hover" : ""}`}
+                    className={`liquid-glass-card ${!visuallyPlayed ? "game-card-hover" : ""}`}
                   >
                     <CardContent>
                       <img src={game.cover} alt={game.name} style={imageStyle} loading="lazy" />

@@ -13,7 +13,9 @@ export const primaryActionSx = {
   mt: 3, mb: 1,
   width: "100%",
   borderRadius: "24px",
-  background: "linear-gradient(45deg, #00FFA3, #00B8D4)",
+  background: "linear-gradient(45deg, #00FFA3, #00B8D4, #00FFA3)",
+  backgroundSize: "200% auto",
+  backgroundPosition: "0% center",
   color: "#0f0f13",
   fontWeight: "bold",
   textTransform: "none",
@@ -21,9 +23,9 @@ export const primaryActionSx = {
   padding: "10px 16px",
   boxShadow: "0 4px 15px rgba(0, 255, 163, 0.3)",
   cursor: "pointer",
-  transition: "all 0.3s ease",
+  transition: "all 0.4s ease",
   "&:hover": {
-    background: "linear-gradient(45deg, #00B8D4, #00FFA3)",
+    backgroundPosition: "100% center",
     boxShadow: "0 6px 20px rgba(0, 255, 163, 0.5)",
     transform: "translateY(-2px)",
   }

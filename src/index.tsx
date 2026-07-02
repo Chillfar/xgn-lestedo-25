@@ -4,6 +4,7 @@ import './index.css';
 import GameDashboard from './App';
 import reportWebVitals from './reportWebVitals';
 import { AuthProvider } from './contexts/AuthContext';
+import { XgnThemeProvider } from './contexts/ThemeContext';
 
 import { ThemeProvider, createTheme, CssBaseline } from '@mui/material';
 
@@ -24,9 +25,11 @@ root.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <AuthProvider>
-        <GameDashboard />
-      </AuthProvider>
+      <XgnThemeProvider>
+        <AuthProvider>
+          <GameDashboard />
+        </AuthProvider>
+      </XgnThemeProvider>
     </ThemeProvider>
   </React.StrictMode>
 );

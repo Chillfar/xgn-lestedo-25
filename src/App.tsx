@@ -8,6 +8,7 @@ import { Game, User, userColors, geekQuotes, emailToPlayerId } from "./constants
 
 // Auth
 import { useAuth } from "./contexts/AuthContext";
+import { useXgnTheme } from "./contexts/ThemeContext";
 
 // Hooks
 import useFirestoreGames from "./hooks/useFirestoreGames";
@@ -16,7 +17,8 @@ import useFirestoreArchives, { ArchiveSnapshot } from "./hooks/useFirestoreArchi
 import useWindowSize from "./hooks/useWindowSize";
 import useCountdown from "./hooks/useCountdown";
 import useRandomGif from "./hooks/useRandomGif";
-import useRandomQuote from "./hooks/useRandomQuote";
+import useBanterPhrases from "./hooks/useBanterPhrases";
+import useSoundEffects from "./hooks/useSoundEffects";
 import { resolvePredictions as firestoreResolvePredictions } from "./hooks/useFirestorePredictions";
 
 
@@ -49,6 +51,7 @@ import InaugurationVideoModal from "./components/modals/InaugurationVideoModal/I
 import LoginModal from "./components/modals/LoginModal/LoginModal";
 import ArchiveModal from "./components/modals/ArchiveModal/ArchiveModal";
 import NextRoundModal from "./components/modals/NextRoundModal/NextRoundModal";
+import RoundPodiumModal from "./components/modals/RoundPodiumModal/RoundPodiumModal";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -144,6 +147,7 @@ export default function GameDashboard() {
     round,
     activeGame,
     playedGames,
+    historyLabels: liveHistoryLabels,
     loading: usersLoading,
     assignPoints,
     nextRound,
@@ -196,6 +200,15 @@ export default function GameDashboard() {
   const games = viewingArchive ? viewingArchive.snapshot.games : liveGames;
   const isReadOnly = !!viewingArchive;
 
+  // Theme & sound
+  const { isDark, toggleTheme } = useXgnTheme();
+  const [isMuted, setIsMuted] = useState(() => localStorage.getItem('xgn_muted') === 'true');
+  const toggleMute = () => setIsMuted(prev => {
+    const next = !prev;
+    localStorage.setItem('xgn_muted', String(next));
+    return next;
+  });
+
   // UI state
   const [selectedGame, setSelectedGame] = useState<Game | null>(null);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
@@ -210,6 +223,9 @@ export default function GameDashboard() {
   const [openLoginModal, setOpenLoginModal] = useState(false);
   const [openArchiveModal, setOpenArchiveModal] = useState(false);
   const [openNextRoundModal, setOpenNextRoundModal] = useState(false);
+  const [openPodiumModal, setOpenPodiumModal] = useState(false);
+  // Snapshot of users at the moment the podium is triggered (before nextRound mutates state)
+  const [podiumSnapshot, setPodiumSnapshot] = useState<User[]>([]);
 
   // Custom hooks
   const { isMobile } = useWindowSize();
@@ -221,7 +237,8 @@ export default function GameDashboard() {
     setVideoInaugurationModalOpen
   } = useCountdown("2026-10-09T22:00:00");
   const { gifUrl, fetchRandomGif } = useRandomGif();
-  const quote = useRandomQuote(geekQuotes);
+  const sounds = useSoundEffects(isMuted);
+  const { phrases: bannerQuotes } = useBanterPhrases(liveUsers, activeGame, geekQuotes);
 
 
   // Handlers
@@ -229,6 +246,7 @@ export default function GameDashboard() {
     if (!selectedGame) return;
     try {
       await assignPoints(userId, selectedGame.name);
+      sounds.playPointAssigned();
       setShowConfetti(true);
       setTimeout(() => setShowConfetti(false), 3000);
     } catch (err: any) {
@@ -271,6 +289,15 @@ export default function GameDashboard() {
     }
 
     await nextRound(winnersData);
+    sounds.playRoundWon();
+  };
+
+  /** Called by NextRoundModal confirm — show podium FIRST, advance round from podium */
+  const handleOpenPodium = () => {
+    setOpenNextRoundModal(false);
+    setPodiumSnapshot([...liveUsers]);
+    setOpenPodiumModal(true);
+    sounds.playPodiumReveal();
   };
 
   const handleResetData = async () => {
@@ -304,8 +331,20 @@ export default function GameDashboard() {
   };
 
   // Chart data
+  // historyLabels[i] = name of the game played that produced history[i+1]
+  // For archives, historyLabels isn't stored, so fall back to "Ronda N"
+  const historyLabels = isReadOnly ? [] : liveHistoryLabels;
+
+  const chartLabels = Array.isArray(usersData) && usersData.length > 0
+    ? usersData[0].history.map((_, index) => {
+        if (index === 0) return "Inicio";
+        const gameName = historyLabels[index - 1];
+        return gameName ?? `Ronda ${index}`;
+      })
+    : [];
+
   const chartData = {
-    labels: Array.isArray(usersData) && usersData.length > 0 ? usersData[0].history.map((_, index) => `Ronda ${index + 1}`) : [],
+    labels: chartLabels,
     datasets: Array.isArray(usersData) ? usersData.map(user => ({
       label: user.name,
       data: user.history || [],
@@ -412,7 +451,7 @@ export default function GameDashboard() {
             </div>
           ) : undefined
         )}
-        centerWidget={!isMobile ? <QuotesBanner quote={quote} /> : undefined}
+        centerWidget={!isMobile ? <QuotesBanner quotes={bannerQuotes} /> : undefined}
       >
 
         {!!currentUser && <NavButton icon="qr" onClick={() => setOpenTicketsModal(true)} />}
@@ -423,6 +462,44 @@ export default function GameDashboard() {
         {!!currentUser && (
           <NavButton label="Ediciones" onClick={() => setOpenArchiveModal(true)} />
         )}
+
+        {/* Theme toggle */}
+        <button
+          onClick={toggleTheme}
+          className="nav-btn"
+          title={isDark ? "Modo claro" : "Modo oscuro"}
+          style={{
+            background: "rgba(255,255,255,0.07)",
+            border: "1px solid rgba(255,255,255,0.2)",
+            borderRadius: "8px",
+            padding: "5px 10px",
+            cursor: "pointer",
+            fontSize: "1rem",
+            lineHeight: 1,
+            color: "inherit",
+          }}
+        >
+          {isDark ? "☀️" : "🌙"}
+        </button>
+
+        {/* Mute toggle */}
+        <button
+          onClick={toggleMute}
+          className="nav-btn"
+          title={isMuted ? "Activar sonido" : "Silenciar"}
+          style={{
+            background: "rgba(255,255,255,0.07)",
+            border: "1px solid rgba(255,255,255,0.2)",
+            borderRadius: "8px",
+            padding: "5px 10px",
+            cursor: "pointer",
+            fontSize: "1rem",
+            lineHeight: 1,
+            color: "inherit",
+          }}
+        >
+          {isMuted ? "🔇" : "🔊"}
+        </button>
       </Header>
 
       {/* Archive viewing banner — mobile only (on desktop it sits in the header widget) */}
@@ -478,6 +555,7 @@ export default function GameDashboard() {
             isMobile={isMobile}
             isAuthenticated={isReadOnly ? false : isAuthenticated}
             onAddGameClick={() => setOpenNewGameModal(true)}
+            isReadOnly={isReadOnly}
           />
           <VideosPanel isMobile={isMobile} />
           <LocationPanel isMobile={isMobile} />
@@ -540,6 +618,7 @@ export default function GameDashboard() {
               isMobile={isMobile}
               isAuthenticated={isReadOnly ? false : isAuthenticated}
               onAddGameClick={() => setOpenNewGameModal(true)}
+              isReadOnly={isReadOnly}
             />
           </div>
 
@@ -576,6 +655,8 @@ export default function GameDashboard() {
         open={!!selectedUser}
         onClose={() => setSelectedUser(null)}
         user={selectedUser}
+        allUsers={usersData}
+        historyLabels={historyLabels}
       />
 
       <AddGameModal
@@ -605,7 +686,18 @@ export default function GameDashboard() {
       <NextRoundModal
         open={openNextRoundModal}
         onClose={() => setOpenNextRoundModal(false)}
-        onConfirm={handleNextRound}
+        onConfirm={handleOpenPodium}
+      />
+
+      <RoundPodiumModal
+        open={openPodiumModal}
+        onConfirm={() => {
+          setOpenPodiumModal(false);
+          handleNextRound();
+        }}
+        users={podiumSnapshot}
+        round={round}
+        activeGameName={activeGame}
       />
     </Container>
   );

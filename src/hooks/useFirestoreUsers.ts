@@ -22,6 +22,7 @@ export default function useFirestoreUsers() {
   const [round, setRound] = useState(0);
   const [activeGame, setActiveGame] = useState<string | null>(null);
   const [playedGames, setPlayedGames] = useState<string[]>([]);
+  const [historyLabels, setHistoryLabels] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Listen to users collection
@@ -70,13 +71,14 @@ export default function useFirestoreUsers() {
 
     const unsubscribe = onSnapshot(roundRef, (snap) => {
       if (!snap.exists()) {
-        setDoc(roundRef, { value: 0, activeGame: null, playedGames: [] });
+        setDoc(roundRef, { value: 0, activeGame: null, playedGames: [], historyLabels: [] });
         return;
       }
       const data = snap.data();
       setRound(data.value ?? 0);
       setActiveGame(data.activeGame ?? null);
       setPlayedGames(data.playedGames ?? []);
+      setHistoryLabels(data.historyLabels ?? []);
     });
 
     return unsubscribe;
@@ -127,10 +129,14 @@ export default function useFirestoreUsers() {
 
     // Update round counter, add active game to played games, clear active game
     const newPlayedGames = activeGame ? [...playedGames, activeGame] : playedGames;
+    // historyLabels[i] stores the game name that was played to produce history[i+1]
+    const roundLabel = activeGame ?? `Ronda ${round + 1}`;
+    const newHistoryLabels = [...historyLabels, roundLabel];
     batch.set(doc(db, "state", "round"), { 
       value: newRound,
       activeGame: null,
-      playedGames: newPlayedGames
+      playedGames: newPlayedGames,
+      historyLabels: newHistoryLabels,
     });
 
     // Snapshot current totals into each user's history
@@ -199,5 +205,5 @@ export default function useFirestoreUsers() {
     await batch.commit();
   };
 
-  return { users, round, activeGame, playedGames, loading, assignPoints, nextRound, resetData, addPredictionPoints };
+  return { users, round, activeGame, playedGames, historyLabels, loading, assignPoints, nextRound, resetData, addPredictionPoints };
 }

@@ -14,12 +14,14 @@ export const modalBoxSx = {
 };
 export const closeButtonStyle: CSSProperties = { position: "absolute", top: "15px", right: "15px", cursor: "pointer", fontSize: "1.2rem", zIndex: 50, color: "white", background: "rgba(0, 0, 0, 0.5)", backdropFilter: "blur(4px)", width: "32px", height: "32px", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "50%", transition: "all 0.2s" };
 export const coverBoxSx = (cover: string) => ({ backgroundImage: `url(${cover})`, backgroundSize: "cover", backgroundPosition: "center", height: "180px", borderRadius: "16px", display: "flex", alignItems: "center", justifyContent: "center", position: "relative", overflow: "hidden", mb: 3, boxShadow: "0 4px 15px rgba(0,0,0,0.3)" });
-export const titleTextSx = { color: "white", fontWeight: 800, textTransform: "uppercase", backgroundColor: "rgba(0, 0, 0, 0.65)", padding: "8px 16px", borderRadius: "12px", maxWidth: "calc(100% - 40px)", wordBreak: "break-word", fontSize: "clamp(1.2rem, 5vw, 2.5rem) !important", backdropFilter: "blur(8px)", letterSpacing: "1px" };
+export const titleTextSx = { color: "var(--modal-title-color, white)", fontWeight: 800, textTransform: "uppercase", backgroundColor: "var(--modal-title-bg, rgba(0, 0, 0, 0.65))", padding: "8px 16px", borderRadius: "12px", maxWidth: "calc(100% - 40px)", wordBreak: "break-word", fontSize: "clamp(1.2rem, 5vw, 2.5rem) !important", backdropFilter: "blur(8px)", letterSpacing: "1px" };
 export const buttonSx = {
   mt: 2, mb: 2,
   width: "100%",
   borderRadius: "24px",
-  background: "linear-gradient(45deg, #00FFA3, #00B8D4)",
+  background: "linear-gradient(45deg, #00FFA3, #00B8D4, #00FFA3)",
+  backgroundSize: "200% auto",
+  backgroundPosition: "0% center",
   color: "#0f0f13",
   fontWeight: "bold",
   textTransform: "none",
@@ -27,9 +29,9 @@ export const buttonSx = {
   padding: "10px 16px",
   boxShadow: "0 4px 15px rgba(0, 255, 163, 0.3)",
   cursor: "pointer",
-  transition: "all 0.3s ease",
+  transition: "all 0.4s ease",
   "&:hover": {
-    background: "linear-gradient(45deg, #00B8D4, #00FFA3)",
+    backgroundPosition: "100% center",
     boxShadow: "0 6px 20px rgba(0, 255, 163, 0.5)",
     transform: "translateY(-2px)",
   }

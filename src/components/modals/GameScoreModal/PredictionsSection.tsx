@@ -260,7 +260,43 @@ export default function PredictionsSection({
               </Box>
             );
           })}
+
+          {/* ── Public vote breakdown ── */}
+          {predictions && Object.keys(predictions.votes).length > 0 && (
+            <Box sx={{ mt: 1.5, pt: 1.5, borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+              <Typography variant="body2" sx={{
+                color: "rgba(255,255,255,0.35)",
+                fontSize: "0.62rem",
+                textTransform: "uppercase",
+                letterSpacing: "0.08em",
+                mb: 1,
+              }}>
+                👁️ Quién apostó por quién
+              </Typography>
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
+                {Object.entries(predictions.votes).map(([predictorId, predictedId]) => {
+                  const predictor = users.find(u => u.id === Number(predictorId));
+                  const predicted = users.find(u => u.id === Number(predictedId));
+                  if (!predictor || !predicted) return null;
+                  const predictorColor = userColors[predictor.name as keyof typeof userColors] || "#fff";
+                  const predictedColor = userColors[predicted.name as keyof typeof userColors] || "#fff";
+                  const isCorrect = isResolved && predictions.winnerIds?.includes(Number(predictedId));
+                  return (
+                    <Box key={predictorId} sx={{ display: "flex", alignItems: "center", gap: 0.8 }}>
+                      <span style={{ fontSize: "0.72rem", color: predictorColor, fontWeight: 600 }}>{predictor.name}</span>
+                      <span style={{ fontSize: "0.65rem", color: "rgba(255,255,255,0.3)" }}>→</span>
+                      <span style={{ fontSize: "0.72rem", color: predictedColor, fontWeight: 600 }}>{predicted.name}</span>
+                      {isResolved && (
+                        <span style={{ fontSize: "0.65rem", marginLeft: "2px" }}>{isCorrect ? "✅" : "❌"}</span>
+                      )}
+                    </Box>
+                  );
+                })}
+              </Box>
+            </Box>
+          )}
         </Box>
+
       )}
     </Box>
   );
