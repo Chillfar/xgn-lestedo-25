@@ -95,7 +95,7 @@ export const firstPlaceStyle: CSSProperties = {
 
 export const scoreCellStyle: CSSProperties = { color: "inherit", borderBottom: "1px solid rgba(255,255,255,0.05)", fontSize: "1rem" };
 export const totalScoreCellStyle: CSSProperties = { color: "#4fc3f7", fontWeight: "bold", borderBottom: "1px solid rgba(255,255,255,0.05)", fontSize: "1.1rem" };
-export const mobileContainerStyle: CSSProperties = { width: "100%", marginBottom: "20px" };
+export const mobileContainerStyle: CSSProperties = { width: "100%", marginBottom: "20px", marginTop: "16px" };
 export const predictionCellStyle: CSSProperties = { color: "#F363FA", fontWeight: 600, whiteSpace: "nowrap", borderBottom: "1px solid rgba(255,255,255,0.05)" };
 export const predictionHeaderCellStyle: CSSProperties = { ...headerCellStyle, color: "#F363FA", cursor: "help" };
 
