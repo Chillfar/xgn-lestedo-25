@@ -114,6 +114,7 @@ export default function GameDashboard() {
     };
 
     const handleScroll = () => {
+      if (window.innerWidth <= 768) return;
       // Re-calculate the effect using the last known pointer position (mouse or touch).
       // On mobile, if no touch has happened, it uses the center of the screen.
       updateElements(pointerX, pointerY);
